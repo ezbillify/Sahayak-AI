@@ -1,18 +1,33 @@
-const fs = require('fs');
-const path = require('path');
+const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
+const { DynamoDBDocumentClient, ScanCommand } = require('@aws-sdk/lib-dynamodb');
+
+const dynamoClient = new DynamoDBClient({ region: process.env.AWS_REGION });
+const docClient = DynamoDBDocumentClient.from(dynamoClient);
 
 exports.handler = async (event) => {
   try {
-    // Read forms database from file
-    const formsPath = path.join(__dirname, '../../data/forms-database.json');
-    const formsData = JSON.parse(fs.readFileSync(formsPath, 'utf8'));
+    // Get forms from DynamoDB
+    const response = await docClient.send(new ScanCommand({
+      TableName: process.env.FORMS_TABLE,
+      Limit: 100
+    }));
+
+    const forms = (response.Items || []).map(form => ({
+      id: form.formId,
+      name: form.name,
+      category: form.category,
+      authority: form.authority,
+      keywords: form.keywords || [],
+      fields: form.fields || [],
+      isCustom: form.isCustom || false
+    }));
 
     return {
       statusCode: 200,
       headers: { 'Access-Control-Allow-Origin': '*' },
       body: JSON.stringify({
-        forms: formsData.forms || [],
-        total: formsData.forms?.length || 0
+        forms,
+        total: forms.length
       })
     };
 
@@ -21,7 +36,11 @@ exports.handler = async (event) => {
     return {
       statusCode: 500,
       headers: { 'Access-Control-Allow-Origin': '*' },
-      body: JSON.stringify({ error: 'Failed to get forms' })
+      body: JSON.stringify({ 
+        error: 'Failed to get forms',
+        forms: [],
+        total: 0
+      })
     };
   }
 };
