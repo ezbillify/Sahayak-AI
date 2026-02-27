@@ -33,6 +33,7 @@ export default function Login() {
         localStorage.setItem('idToken', data.tokens.idToken)
         localStorage.setItem('refreshToken', data.tokens.refreshToken)
         localStorage.setItem('userData', JSON.stringify(data.user))
+        localStorage.setItem('userId', data.user.userId) // Store userId separately for easy access
         
         // Redirect based on user type
         if (data.user.isAdmin) {

@@ -18,9 +18,12 @@ export default function UploadDocument() {
     setResult(null)
     
     try {
-      const userData = localStorage.getItem('userData')
-      const user = userData ? JSON.parse(userData) : null
-      const userId = user?.email || 'anonymous'
+      const userId = localStorage.getItem('userId')
+      if (!userId) {
+        alert('Please login first')
+        setUploading(false)
+        return
+      }
       
       const apiUrl = import.meta.env.VITE_API_URL || 'https://yy6whjwjt1.execute-api.ap-south-1.amazonaws.com/prod'
       

@@ -42,6 +42,7 @@ exports.handler = async (event) => {
           refreshToken
         },
         user: {
+          userId: attributes.sub, // Cognito user ID
           email: attributes.email,
           name: attributes.name,
           phone: attributes.phone_number,
