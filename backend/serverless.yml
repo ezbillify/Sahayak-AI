@@ -171,6 +171,30 @@ functions:
           method: post
           cors: true
 
+  getUserCompliance:
+    handler: lambda/getUserCompliance.handler
+    events:
+      - http:
+          path: /compliance/user
+          method: get
+          cors: true
+
+  updateCompliance:
+    handler: lambda/updateCompliance.handler
+    events:
+      - http:
+          path: /compliance/update
+          method: put
+          cors: true
+
+  getUserDocuments:
+    handler: lambda/getUserDocuments.handler
+    events:
+      - http:
+          path: /documents/user
+          method: get
+          cors: true
+
   getUpcomingDeadlines:
     handler: lambda/getUpcomingDeadlines.handler
     events:

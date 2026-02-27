@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Card from '../components/Card'
 import Button from '../components/Button'
 import Badge from '../components/Badge'
@@ -8,47 +8,123 @@ import Input from '../components/Input'
 import Select from '../components/Select'
 import TextArea from '../components/TextArea'
 
+const API_URL = import.meta.env.VITE_API_URL || 'https://yy6whjwjt1.execute-api.ap-south-1.amazonaws.com/prod'
+
 export default function Compliance() {
   const [showAddModal, setShowAddModal] = useState(false)
   const [viewMode, setViewMode] = useState<'list' | 'calendar'>('list')
+  const [deadlines, setDeadlines] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [formData, setFormData] = useState({
+    title: '',
+    type: '',
+    description: '',
+    dueDate: '',
+    priority: 'medium'
+  })
 
-  const [deadlines] = useState([
-    {
-      id: '1',
-      title: 'GST Return Filing - GSTR-3B',
-      type: 'GST' as const,
-      description: 'Monthly GST return filing',
-      dueDate: new Date('2024-03-20'),
-      priority: 'high' as const,
-      status: 'pending'
-    },
-    {
-      id: '2',
-      title: 'PAN-Aadhaar Linking',
-      type: 'PAN' as const,
-      description: 'Link PAN with Aadhaar',
-      dueDate: new Date('2024-03-25'),
-      priority: 'medium' as const,
-      status: 'pending'
-    },
-    {
-      id: '3',
-      title: 'Trade License Renewal',
-      type: 'License' as const,
-      description: 'Renew trade license',
-      dueDate: new Date('2024-04-10'),
-      priority: 'low' as const,
-      status: 'pending'
+  useEffect(() => {
+    fetchCompliance()
+  }, [])
+
+  const fetchCompliance = async () => {
+    try {
+      const userId = localStorage.getItem('userId')
+      if (!userId) {
+        console.error('No userId found')
+        setLoading(false)
+        return
+      }
+
+      const res = await fetch(`${API_URL}/compliance/user?userId=${userId}`)
+      const data = await res.json()
+      
+      if (data.compliance) {
+        setDeadlines(data.compliance)
+      }
+      setLoading(false)
+    } catch (error) {
+      console.error('Error fetching compliance:', error)
+      setLoading(false)
     }
-  ])
+  }
 
-  const calendarEvents = deadlines.map(d => ({
-    id: d.id,
-    date: d.dueDate,
-    title: d.title,
-    type: d.type,
-    priority: d.priority
-  }))
+  const handleAddCompliance = async () => {
+    try {
+      const userId = localStorage.getItem('userId')
+      if (!userId) {
+        alert('Please login first')
+        return
+      }
+
+      if (!formData.title || !formData.type || !formData.dueDate) {
+        alert('Please fill all required fields')
+        return
+      }
+
+      const res = await fetch(`${API_URL}/compliance`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId,
+          ...formData
+        })
+      })
+
+      const data = await res.json()
+      
+      if (res.ok) {
+        alert('Compliance added successfully!')
+        setShowAddModal(false)
+        setFormData({
+          title: '',
+          type: '',
+          description: '',
+          dueDate: '',
+          priority: 'medium'
+        })
+        fetchCompliance() // Refresh list
+      } else {
+        alert(data.error || 'Failed to add compliance')
+      }
+    } catch (error) {
+      console.error('Error adding compliance:', error)
+      alert('Failed to add compliance')
+    }
+  }
+
+  const handleMarkComplete = async (complianceId: string) => {
+    try {
+      const res = await fetch(`${API_URL}/compliance/update`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          complianceId,
+          status: 'completed'
+        })
+      })
+
+      if (res.ok) {
+        alert('Compliance marked as complete!')
+        fetchCompliance() // Refresh list
+      } else {
+        alert('Failed to update compliance')
+      }
+    } catch (error) {
+      console.error('Error updating compliance:', error)
+      alert('Failed to update compliance')
+    }
+  }
+
+  const calendarEvents = deadlines
+    .filter((d: any) => d.status === 'pending')
+    .map((d: any) => ({
+      id: d.complianceId,
+      date: new Date(d.dueDate),
+      title: d.title,
+      type: d.type,
+      priority: d.priority
+    }))
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -79,41 +155,56 @@ export default function Compliance() {
         </div>
       </div>
 
-      {viewMode === 'list' ? (
+      {loading ? (
+        <div className="text-center py-12">
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+          <p className="mt-4 text-gray-600">Loading compliance items...</p>
+        </div>
+      ) : viewMode === 'list' ? (
         <div className="grid gap-4">
-          {deadlines.map((deadline) => (
-            <Card key={deadline.id} variant="bordered">
-              <div className="flex justify-between items-start">
-                <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-2">
-                    <h3 className="text-lg font-semibold">{deadline.title}</h3>
-                    <Badge variant={
-                      deadline.type === 'GST' ? 'primary' :
-                      deadline.type === 'PAN' ? 'info' :
-                      deadline.type === 'License' ? 'success' : 'gray'
-                    }>
-                      {deadline.type}
-                    </Badge>
-                    <Badge variant={
-                      deadline.priority === 'high' ? 'danger' :
-                      deadline.priority === 'medium' ? 'warning' : 'success'
-                    }>
-                      {deadline.priority}
-                    </Badge>
-                  </div>
-                  <p className="text-gray-600 mb-3">{deadline.description}</p>
-                  <div className="flex items-center gap-4 text-sm text-gray-500">
-                    <span>📅 Due: {deadline.dueDate.toLocaleDateString()}</span>
-                    <span>⏰ {Math.ceil((deadline.dueDate.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))} days left</span>
-                  </div>
-                </div>
-                <div className="flex gap-2">
-                  <Button size="sm" variant="secondary">View Details</Button>
-                  <Button size="sm" variant="success">Mark Complete</Button>
-                </div>
-              </div>
-            </Card>
-          ))}
+          {deadlines.filter((d: any) => d.status === 'pending').length === 0 ? (
+            <p className="text-gray-500 text-center py-12">No compliance items yet. Add one to get started!</p>
+          ) : (
+            deadlines
+              .filter((d: any) => d.status === 'pending')
+              .map((deadline: any) => {
+                const daysLeft = Math.ceil((new Date(deadline.dueDate).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))
+                return (
+                  <Card key={deadline.complianceId} variant="bordered">
+                    <div className="flex justify-between items-start">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3 mb-2">
+                          <h3 className="text-lg font-semibold">{deadline.title}</h3>
+                          <Badge variant={
+                            deadline.type === 'GST' ? 'primary' :
+                            deadline.type === 'PAN' ? 'info' :
+                            deadline.type === 'License' ? 'success' : 'gray'
+                          }>
+                            {deadline.type}
+                          </Badge>
+                          <Badge variant={
+                            deadline.priority === 'high' ? 'danger' :
+                            deadline.priority === 'medium' ? 'warning' : 'success'
+                          }>
+                            {deadline.priority}
+                          </Badge>
+                        </div>
+                        <p className="text-gray-600 mb-3">{deadline.description}</p>
+                        <div className="flex items-center gap-4 text-sm text-gray-500">
+                          <span>📅 Due: {new Date(deadline.dueDate).toLocaleDateString()}</span>
+                          <span>⏰ {daysLeft} days left</span>
+                        </div>
+                      </div>
+                      <div className="flex gap-2">
+                        <Button size="sm" variant="success" onClick={() => handleMarkComplete(deadline.complianceId)}>
+                          Mark Complete
+                        </Button>
+                      </div>
+                    </div>
+                  </Card>
+                )
+              })
+          )}
         </div>
       ) : (
         <Calendar events={calendarEvents} />
@@ -128,35 +219,51 @@ export default function Compliance() {
             <Button variant="secondary" onClick={() => setShowAddModal(false)}>
               Cancel
             </Button>
-            <Button onClick={() => setShowAddModal(false)}>
+            <Button onClick={handleAddCompliance}>
               Add Compliance
             </Button>
           </>
         }
       >
         <div className="space-y-4">
-          <Input label="Title" placeholder="e.g., GST Return Filing" required />
+          <Input 
+            label="Title" 
+            placeholder="e.g., GST Return Filing" 
+            required 
+            value={formData.title}
+            onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+          />
           
           <Select
             label="Type"
             options={[
-              { value: 'gst', label: 'GST' },
-              { value: 'pan', label: 'PAN' },
-              { value: 'license', label: 'License' },
-              { value: 'tax', label: 'Tax' },
-              { value: 'other', label: 'Other' }
+              { value: 'GST', label: 'GST' },
+              { value: 'PAN', label: 'PAN' },
+              { value: 'License', label: 'License' },
+              { value: 'Tax', label: 'Tax' },
+              { value: 'Other', label: 'Other' }
             ]}
             placeholder="Select type"
             required
+            value={formData.type}
+            onChange={(e) => setFormData({ ...formData, type: e.target.value })}
           />
 
           <TextArea
             label="Description"
             placeholder="Add details about this compliance requirement"
             rows={3}
+            value={formData.description}
+            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
           />
 
-          <Input label="Due Date" type="date" required />
+          <Input 
+            label="Due Date" 
+            type="date" 
+            required 
+            value={formData.dueDate}
+            onChange={(e) => setFormData({ ...formData, dueDate: e.target.value })}
+          />
 
           <Select
             label="Priority"
@@ -167,6 +274,8 @@ export default function Compliance() {
             ]}
             placeholder="Select priority"
             required
+            value={formData.priority}
+            onChange={(e) => setFormData({ ...formData, priority: e.target.value })}
           />
         </div>
       </Modal>
