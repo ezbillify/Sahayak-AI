@@ -13,8 +13,11 @@
     "@aws-sdk/client-dynamodb": "^3.500.0",
     "@aws-sdk/client-textract": "^3.500.0",
     "@aws-sdk/client-bedrock-runtime": "^3.500.0",
+    "@aws-sdk/client-cognito-identity-provider": "^3.500.0",
+    "@aws-sdk/client-lambda": "^3.500.0",
     "@aws-sdk/lib-dynamodb": "^3.500.0",
-    "uuid": "^9.0.1"
+    "uuid": "^9.0.1",
+    "nodemailer": "^6.9.8"
   },
   "devDependencies": {
     "@types/node": "^20.11.0",

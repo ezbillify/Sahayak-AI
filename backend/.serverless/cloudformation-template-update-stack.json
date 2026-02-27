@@ -143,6 +143,36 @@
         "LogGroupName": "/aws/lambda/sahayak-ai-backend-prod-sendReminders"
       }
     },
+    "GetAdminStatsLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/sahayak-ai-backend-prod-getAdminStats"
+      }
+    },
+    "GetAdminUsersLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/sahayak-ai-backend-prod-getAdminUsers"
+      }
+    },
+    "GetAdminDocumentsLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/sahayak-ai-backend-prod-getAdminDocuments"
+      }
+    },
+    "AddAdminFormLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/sahayak-ai-backend-prod-addAdminForm"
+      }
+    },
+    "StartAdminTrainingLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/sahayak-ai-backend-prod-startAdminTraining"
+      }
+    },
     "IamRoleLambdaExecution": {
       "Type": "AWS::IAM::Role",
       "Properties": {
@@ -292,7 +322,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/sahayak-ai-backend/prod/1772172734659-2026-02-27T06:12:14.659Z/sahayak-ai-backend.zip"
+          "S3Key": "serverless/sahayak-ai-backend/prod/1772174867045-2026-02-27T06:47:47.045Z/sahayak-ai-backend.zip"
         },
         "Handler": "lambda/auth/login.handler",
         "Runtime": "nodejs20.x",
@@ -332,7 +362,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/sahayak-ai-backend/prod/1772172734659-2026-02-27T06:12:14.659Z/sahayak-ai-backend.zip"
+          "S3Key": "serverless/sahayak-ai-backend/prod/1772174867045-2026-02-27T06:47:47.045Z/sahayak-ai-backend.zip"
         },
         "Handler": "lambda/auth/register.handler",
         "Runtime": "nodejs20.x",
@@ -372,7 +402,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/sahayak-ai-backend/prod/1772172734659-2026-02-27T06:12:14.659Z/sahayak-ai-backend.zip"
+          "S3Key": "serverless/sahayak-ai-backend/prod/1772174867045-2026-02-27T06:47:47.045Z/sahayak-ai-backend.zip"
         },
         "Handler": "lambda/auth/forgotPassword.handler",
         "Runtime": "nodejs20.x",
@@ -412,7 +442,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/sahayak-ai-backend/prod/1772172734659-2026-02-27T06:12:14.659Z/sahayak-ai-backend.zip"
+          "S3Key": "serverless/sahayak-ai-backend/prod/1772174867045-2026-02-27T06:47:47.045Z/sahayak-ai-backend.zip"
         },
         "Handler": "lambda/auth/resetPassword.handler",
         "Runtime": "nodejs20.x",
@@ -452,7 +482,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/sahayak-ai-backend/prod/1772172734659-2026-02-27T06:12:14.659Z/sahayak-ai-backend.zip"
+          "S3Key": "serverless/sahayak-ai-backend/prod/1772174867045-2026-02-27T06:47:47.045Z/sahayak-ai-backend.zip"
         },
         "Handler": "lambda/uploadDocument.handler",
         "Runtime": "nodejs20.x",
@@ -492,7 +522,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/sahayak-ai-backend/prod/1772172734659-2026-02-27T06:12:14.659Z/sahayak-ai-backend.zip"
+          "S3Key": "serverless/sahayak-ai-backend/prod/1772174867045-2026-02-27T06:47:47.045Z/sahayak-ai-backend.zip"
         },
         "Handler": "lambda/processDocument.handler",
         "Runtime": "nodejs20.x",
@@ -532,7 +562,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/sahayak-ai-backend/prod/1772172734659-2026-02-27T06:12:14.659Z/sahayak-ai-backend.zip"
+          "S3Key": "serverless/sahayak-ai-backend/prod/1772174867045-2026-02-27T06:47:47.045Z/sahayak-ai-backend.zip"
         },
         "Handler": "lambda/analyzeDocument.handler",
         "Runtime": "nodejs20.x",
@@ -572,7 +602,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/sahayak-ai-backend/prod/1772172734659-2026-02-27T06:12:14.659Z/sahayak-ai-backend.zip"
+          "S3Key": "serverless/sahayak-ai-backend/prod/1772174867045-2026-02-27T06:47:47.045Z/sahayak-ai-backend.zip"
         },
         "Handler": "lambda/getDocument.handler",
         "Runtime": "nodejs20.x",
@@ -612,7 +642,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/sahayak-ai-backend/prod/1772172734659-2026-02-27T06:12:14.659Z/sahayak-ai-backend.zip"
+          "S3Key": "serverless/sahayak-ai-backend/prod/1772174867045-2026-02-27T06:47:47.045Z/sahayak-ai-backend.zip"
         },
         "Handler": "lambda/createUser.handler",
         "Runtime": "nodejs20.x",
@@ -652,7 +682,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/sahayak-ai-backend/prod/1772172734659-2026-02-27T06:12:14.659Z/sahayak-ai-backend.zip"
+          "S3Key": "serverless/sahayak-ai-backend/prod/1772174867045-2026-02-27T06:47:47.045Z/sahayak-ai-backend.zip"
         },
         "Handler": "lambda/addCompliance.handler",
         "Runtime": "nodejs20.x",
@@ -692,7 +722,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/sahayak-ai-backend/prod/1772172734659-2026-02-27T06:12:14.659Z/sahayak-ai-backend.zip"
+          "S3Key": "serverless/sahayak-ai-backend/prod/1772174867045-2026-02-27T06:47:47.045Z/sahayak-ai-backend.zip"
         },
         "Handler": "lambda/getUpcomingDeadlines.handler",
         "Runtime": "nodejs20.x",
@@ -732,7 +762,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/sahayak-ai-backend/prod/1772172734659-2026-02-27T06:12:14.659Z/sahayak-ai-backend.zip"
+          "S3Key": "serverless/sahayak-ai-backend/prod/1772174867045-2026-02-27T06:47:47.045Z/sahayak-ai-backend.zip"
         },
         "Handler": "lambda/sendReminders.handler",
         "Runtime": "nodejs20.x",
@@ -765,124 +795,374 @@
         "SendRemindersLogGroup"
       ]
     },
-    "LoginLambdaVersionk6vl7PsbpZuvxsCn1wlXjKRskukbDxby6BdDgjEJkKY": {
+    "GetAdminStatsLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/sahayak-ai-backend/prod/1772174867045-2026-02-27T06:47:47.045Z/sahayak-ai-backend.zip"
+        },
+        "Handler": "lambda/admin/getStats.handler",
+        "Runtime": "nodejs20.x",
+        "FunctionName": "sahayak-ai-backend-prod-getAdminStats",
+        "MemorySize": 512,
+        "Timeout": 30,
+        "Environment": {
+          "Variables": {
+            "DOCUMENTS_BUCKET": "sahayak-ai-documents-prod",
+            "USERS_TABLE": "sahayak-ai-users-prod",
+            "DOCUMENTS_TABLE": "sahayak-ai-documents-prod",
+            "COMPLIANCE_TABLE": "sahayak-ai-compliance-prod",
+            "FORMS_TABLE": "sahayak-ai-forms-prod",
+            "COGNITO_USER_POOL_ID": {
+              "Ref": "CognitoUserPool"
+            },
+            "COGNITO_CLIENT_ID": {
+              "Ref": "CognitoUserPoolClient"
+            }
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "GetAdminStatsLogGroup"
+      ]
+    },
+    "GetAdminUsersLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/sahayak-ai-backend/prod/1772174867045-2026-02-27T06:47:47.045Z/sahayak-ai-backend.zip"
+        },
+        "Handler": "lambda/admin/getUsers.handler",
+        "Runtime": "nodejs20.x",
+        "FunctionName": "sahayak-ai-backend-prod-getAdminUsers",
+        "MemorySize": 512,
+        "Timeout": 30,
+        "Environment": {
+          "Variables": {
+            "DOCUMENTS_BUCKET": "sahayak-ai-documents-prod",
+            "USERS_TABLE": "sahayak-ai-users-prod",
+            "DOCUMENTS_TABLE": "sahayak-ai-documents-prod",
+            "COMPLIANCE_TABLE": "sahayak-ai-compliance-prod",
+            "FORMS_TABLE": "sahayak-ai-forms-prod",
+            "COGNITO_USER_POOL_ID": {
+              "Ref": "CognitoUserPool"
+            },
+            "COGNITO_CLIENT_ID": {
+              "Ref": "CognitoUserPoolClient"
+            }
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "GetAdminUsersLogGroup"
+      ]
+    },
+    "GetAdminDocumentsLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/sahayak-ai-backend/prod/1772174867045-2026-02-27T06:47:47.045Z/sahayak-ai-backend.zip"
+        },
+        "Handler": "lambda/admin/getDocuments.handler",
+        "Runtime": "nodejs20.x",
+        "FunctionName": "sahayak-ai-backend-prod-getAdminDocuments",
+        "MemorySize": 512,
+        "Timeout": 30,
+        "Environment": {
+          "Variables": {
+            "DOCUMENTS_BUCKET": "sahayak-ai-documents-prod",
+            "USERS_TABLE": "sahayak-ai-users-prod",
+            "DOCUMENTS_TABLE": "sahayak-ai-documents-prod",
+            "COMPLIANCE_TABLE": "sahayak-ai-compliance-prod",
+            "FORMS_TABLE": "sahayak-ai-forms-prod",
+            "COGNITO_USER_POOL_ID": {
+              "Ref": "CognitoUserPool"
+            },
+            "COGNITO_CLIENT_ID": {
+              "Ref": "CognitoUserPoolClient"
+            }
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "GetAdminDocumentsLogGroup"
+      ]
+    },
+    "AddAdminFormLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/sahayak-ai-backend/prod/1772174867045-2026-02-27T06:47:47.045Z/sahayak-ai-backend.zip"
+        },
+        "Handler": "lambda/admin/addForm.handler",
+        "Runtime": "nodejs20.x",
+        "FunctionName": "sahayak-ai-backend-prod-addAdminForm",
+        "MemorySize": 512,
+        "Timeout": 30,
+        "Environment": {
+          "Variables": {
+            "DOCUMENTS_BUCKET": "sahayak-ai-documents-prod",
+            "USERS_TABLE": "sahayak-ai-users-prod",
+            "DOCUMENTS_TABLE": "sahayak-ai-documents-prod",
+            "COMPLIANCE_TABLE": "sahayak-ai-compliance-prod",
+            "FORMS_TABLE": "sahayak-ai-forms-prod",
+            "COGNITO_USER_POOL_ID": {
+              "Ref": "CognitoUserPool"
+            },
+            "COGNITO_CLIENT_ID": {
+              "Ref": "CognitoUserPoolClient"
+            }
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "AddAdminFormLogGroup"
+      ]
+    },
+    "StartAdminTrainingLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/sahayak-ai-backend/prod/1772174867045-2026-02-27T06:47:47.045Z/sahayak-ai-backend.zip"
+        },
+        "Handler": "lambda/admin/startTraining.handler",
+        "Runtime": "nodejs20.x",
+        "FunctionName": "sahayak-ai-backend-prod-startAdminTraining",
+        "MemorySize": 512,
+        "Timeout": 30,
+        "Environment": {
+          "Variables": {
+            "DOCUMENTS_BUCKET": "sahayak-ai-documents-prod",
+            "USERS_TABLE": "sahayak-ai-users-prod",
+            "DOCUMENTS_TABLE": "sahayak-ai-documents-prod",
+            "COMPLIANCE_TABLE": "sahayak-ai-compliance-prod",
+            "FORMS_TABLE": "sahayak-ai-forms-prod",
+            "COGNITO_USER_POOL_ID": {
+              "Ref": "CognitoUserPool"
+            },
+            "COGNITO_CLIENT_ID": {
+              "Ref": "CognitoUserPoolClient"
+            }
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "StartAdminTrainingLogGroup"
+      ]
+    },
+    "LoginLambdaVersionejTi4PFihwEIay6haML5yzq1DKdmNAmoi9rrvmsc4": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "LoginLambdaFunction"
         },
-        "CodeSha256": "fZ3ohWljkqbcTKeN2ocWDVqo/owU3IQZbckG/isfOKU="
+        "CodeSha256": "PmSbneEes5fPERbxb4T6Hz6HY90Gdj02jef93iSdvRU="
       }
     },
-    "RegisterLambdaVersionGfsWhtjXCpdTfHEzWYYtuHiyhLbIA0vrjQb2W05Eg": {
+    "RegisterLambdaVersiontrTmsBCpwgJDczK4AUQ9Zwswt8sFo7UnShecc2tBqsc": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "RegisterLambdaFunction"
         },
-        "CodeSha256": "fZ3ohWljkqbcTKeN2ocWDVqo/owU3IQZbckG/isfOKU="
+        "CodeSha256": "PmSbneEes5fPERbxb4T6Hz6HY90Gdj02jef93iSdvRU="
       }
     },
-    "ForgotPasswordLambdaVersionDeJWyfis91iZitQQQWHIIcTxDDJCmnRHwtpzjmTUtmc": {
+    "ForgotPasswordLambdaVersionLtXNZ6PokLmRjQhxhjc6Ii2C0Lje66W6sHiapqC1k": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "ForgotPasswordLambdaFunction"
         },
-        "CodeSha256": "fZ3ohWljkqbcTKeN2ocWDVqo/owU3IQZbckG/isfOKU="
+        "CodeSha256": "PmSbneEes5fPERbxb4T6Hz6HY90Gdj02jef93iSdvRU="
       }
     },
-    "ResetPasswordLambdaVersionwhJ7mXU26BPOKCcCNP6nV5aA0xTkgr5RgF9XSIRveo": {
+    "ResetPasswordLambdaVersion5glAdGJtVjhJTpSYC5YZqBtRykFhPP0b5eKXgf6qg": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "ResetPasswordLambdaFunction"
         },
-        "CodeSha256": "fZ3ohWljkqbcTKeN2ocWDVqo/owU3IQZbckG/isfOKU="
+        "CodeSha256": "PmSbneEes5fPERbxb4T6Hz6HY90Gdj02jef93iSdvRU="
       }
     },
-    "UploadDocumentLambdaVersionuSJBU6j8L1cMMw6ztPIa2SdzUftjKZUEbJOauOjx9Vc": {
+    "UploadDocumentLambdaVersionXPalJHmBHOmdgTwkvduEgbZgRk0KoO3EYOcrtVTSYo": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "UploadDocumentLambdaFunction"
         },
-        "CodeSha256": "fZ3ohWljkqbcTKeN2ocWDVqo/owU3IQZbckG/isfOKU="
+        "CodeSha256": "PmSbneEes5fPERbxb4T6Hz6HY90Gdj02jef93iSdvRU="
       }
     },
-    "ProcessDocumentLambdaVersiondWgySnRO2OtNyYNzlyo4Ic8f9DGeE8iCW3lA6DrGfg": {
+    "ProcessDocumentLambdaVersionIXKK4kjfNyRpvMvu7AoNYHobw5VtIQYKRBjWxB592fw": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "ProcessDocumentLambdaFunction"
         },
-        "CodeSha256": "fZ3ohWljkqbcTKeN2ocWDVqo/owU3IQZbckG/isfOKU="
+        "CodeSha256": "PmSbneEes5fPERbxb4T6Hz6HY90Gdj02jef93iSdvRU="
       }
     },
-    "AnalyzeDocumentLambdaVersionLLs3Ztrq9qPCu91AU8tRMg0FBksI237qpfAIRloUP4": {
+    "AnalyzeDocumentLambdaVersiontiCHM8fAvGKE6iBXW5J7ccs9SShyRiFL1Aeus59XqM": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "AnalyzeDocumentLambdaFunction"
         },
-        "CodeSha256": "fZ3ohWljkqbcTKeN2ocWDVqo/owU3IQZbckG/isfOKU="
+        "CodeSha256": "PmSbneEes5fPERbxb4T6Hz6HY90Gdj02jef93iSdvRU="
       }
     },
-    "GetDocumentLambdaVersion0In9jE7ShzkJTfhNWQKUm088PiuEKQjGLc2ISkC78": {
+    "GetDocumentLambdaVersion4fNOWrPhgNUqF8Bfu8fPM4AbDWOVn75IE1NCwTmvDk8": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "GetDocumentLambdaFunction"
         },
-        "CodeSha256": "fZ3ohWljkqbcTKeN2ocWDVqo/owU3IQZbckG/isfOKU="
+        "CodeSha256": "PmSbneEes5fPERbxb4T6Hz6HY90Gdj02jef93iSdvRU="
       }
     },
-    "CreateUserLambdaVersion0FnaNu56vwUKz8f7wsiLhqsZQwGGnkXxprywqycGI0": {
+    "CreateUserLambdaVersionrbebf9jjUpCSk9U8IAmjy6tTMbaenca6kS9A1k5ArI": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "CreateUserLambdaFunction"
         },
-        "CodeSha256": "fZ3ohWljkqbcTKeN2ocWDVqo/owU3IQZbckG/isfOKU="
+        "CodeSha256": "PmSbneEes5fPERbxb4T6Hz6HY90Gdj02jef93iSdvRU="
       }
     },
-    "AddComplianceLambdaVersionOm1BIp9czio3NbKxmUsfnNu7Kt8UX32Dr4FCqdvLru0": {
+    "AddComplianceLambdaVersionpAHxca8n3vTY4lgSn9qu7rgVAiR0Lqceyzq61AgrG4": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "AddComplianceLambdaFunction"
         },
-        "CodeSha256": "fZ3ohWljkqbcTKeN2ocWDVqo/owU3IQZbckG/isfOKU="
+        "CodeSha256": "PmSbneEes5fPERbxb4T6Hz6HY90Gdj02jef93iSdvRU="
       }
     },
-    "GetUpcomingDeadlinesLambdaVersion12i14GC6kDXeJcs02OH1jCcCJudJZYvg5wxDChyg": {
+    "GetUpcomingDeadlinesLambdaVersionBU6Nbn65T7UY3iHrsTuygmyezj2QkQkoTbnH6Jj0pM": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "GetUpcomingDeadlinesLambdaFunction"
         },
-        "CodeSha256": "fZ3ohWljkqbcTKeN2ocWDVqo/owU3IQZbckG/isfOKU="
+        "CodeSha256": "PmSbneEes5fPERbxb4T6Hz6HY90Gdj02jef93iSdvRU="
       }
     },
-    "SendRemindersLambdaVersionicyAxkHSDxj7JvbQk8EVwm4mUgpE8aMwMhXuu1Wi89Y": {
+    "SendRemindersLambdaVersionA2IyPCffK8TrTlIGcezPzUVD6nDjcqDZoGvPu9p3A": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "SendRemindersLambdaFunction"
         },
-        "CodeSha256": "fZ3ohWljkqbcTKeN2ocWDVqo/owU3IQZbckG/isfOKU="
+        "CodeSha256": "PmSbneEes5fPERbxb4T6Hz6HY90Gdj02jef93iSdvRU="
+      }
+    },
+    "GetAdminStatsLambdaVersionHPqNZ3e0ZNN28m6RJfkSOrekYuYcWMm0WlIqBmmOx4": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "GetAdminStatsLambdaFunction"
+        },
+        "CodeSha256": "PmSbneEes5fPERbxb4T6Hz6HY90Gdj02jef93iSdvRU="
+      }
+    },
+    "GetAdminUsersLambdaVersionUY2KJrxdovIW95OOMVjlBGGmCLkoBJ2c1rcmpyX7Yk": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "GetAdminUsersLambdaFunction"
+        },
+        "CodeSha256": "PmSbneEes5fPERbxb4T6Hz6HY90Gdj02jef93iSdvRU="
+      }
+    },
+    "GetAdminDocumentsLambdaVersionnf809k7J9iUomQQckFuCK5MxCiTTFJphoeYjhxWzQ": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "GetAdminDocumentsLambdaFunction"
+        },
+        "CodeSha256": "PmSbneEes5fPERbxb4T6Hz6HY90Gdj02jef93iSdvRU="
+      }
+    },
+    "AddAdminFormLambdaVersionc3tBxTi1fivW42tfOTkiDXCGk8jsS37UnbQ3zvXTI": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "AddAdminFormLambdaFunction"
+        },
+        "CodeSha256": "PmSbneEes5fPERbxb4T6Hz6HY90Gdj02jef93iSdvRU="
+      }
+    },
+    "StartAdminTrainingLambdaVersionHZgIwDL7qVQKiaGC0ILgb0BeYPpykKF3s5UrFG18bQQ": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "StartAdminTrainingLambdaFunction"
+        },
+        "CodeSha256": "PmSbneEes5fPERbxb4T6Hz6HY90Gdj02jef93iSdvRU="
       }
     },
     "SendRemindersEventsRuleSchedule1": {
@@ -1042,7 +1322,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/sahayak-ai-backend/prod/1772172734659-2026-02-27T06:12:14.659Z/custom-resources.zip"
+          "S3Key": "serverless/sahayak-ai-backend/prod/1772174867045-2026-02-27T06:47:47.045Z/custom-resources.zip"
         },
         "FunctionName": "sahayak-ai-backend-prod-custom-resource-existing-s3",
         "Handler": "s3/handler.handler",
@@ -1223,6 +1503,81 @@
           "Ref": "ApiGatewayResourceCompliance"
         },
         "PathPart": "upcoming",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayResourceAdmin": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "ApiGatewayRestApi",
+            "RootResourceId"
+          ]
+        },
+        "PathPart": "admin",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayResourceAdminStats": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Ref": "ApiGatewayResourceAdmin"
+        },
+        "PathPart": "stats",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayResourceAdminUsers": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Ref": "ApiGatewayResourceAdmin"
+        },
+        "PathPart": "users",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayResourceAdminDocuments": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Ref": "ApiGatewayResourceAdmin"
+        },
+        "PathPart": "documents",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayResourceAdminForms": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Ref": "ApiGatewayResourceAdmin"
+        },
+        "PathPart": "forms",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayResourceAdminTrain": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Ref": "ApiGatewayResourceAdmin"
+        },
+        "PathPart": "train",
         "RestApiId": {
           "Ref": "ApiGatewayRestApi"
         }
@@ -1672,6 +2027,231 @@
         },
         "ResourceId": {
           "Ref": "ApiGatewayResourceComplianceUpcoming"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayMethodAdminStatsOptions": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "OPTIONS",
+        "MethodResponses": [
+          {
+            "StatusCode": "200",
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Origin": true,
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true
+            },
+            "ResponseModels": {}
+          }
+        ],
+        "RequestParameters": {},
+        "Integration": {
+          "Type": "MOCK",
+          "RequestTemplates": {
+            "application/json": "{statusCode:200}"
+          },
+          "ContentHandling": "CONVERT_TO_TEXT",
+          "IntegrationResponses": [
+            {
+              "StatusCode": "200",
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'",
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'",
+                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET'"
+              },
+              "ResponseTemplates": {
+                "application/json": ""
+              }
+            }
+          ]
+        },
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceAdminStats"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayMethodAdminUsersOptions": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "OPTIONS",
+        "MethodResponses": [
+          {
+            "StatusCode": "200",
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Origin": true,
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true
+            },
+            "ResponseModels": {}
+          }
+        ],
+        "RequestParameters": {},
+        "Integration": {
+          "Type": "MOCK",
+          "RequestTemplates": {
+            "application/json": "{statusCode:200}"
+          },
+          "ContentHandling": "CONVERT_TO_TEXT",
+          "IntegrationResponses": [
+            {
+              "StatusCode": "200",
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'",
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'",
+                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET'"
+              },
+              "ResponseTemplates": {
+                "application/json": ""
+              }
+            }
+          ]
+        },
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceAdminUsers"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayMethodAdminDocumentsOptions": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "OPTIONS",
+        "MethodResponses": [
+          {
+            "StatusCode": "200",
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Origin": true,
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true
+            },
+            "ResponseModels": {}
+          }
+        ],
+        "RequestParameters": {},
+        "Integration": {
+          "Type": "MOCK",
+          "RequestTemplates": {
+            "application/json": "{statusCode:200}"
+          },
+          "ContentHandling": "CONVERT_TO_TEXT",
+          "IntegrationResponses": [
+            {
+              "StatusCode": "200",
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'",
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'",
+                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET'"
+              },
+              "ResponseTemplates": {
+                "application/json": ""
+              }
+            }
+          ]
+        },
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceAdminDocuments"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayMethodAdminFormsOptions": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "OPTIONS",
+        "MethodResponses": [
+          {
+            "StatusCode": "200",
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Origin": true,
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true
+            },
+            "ResponseModels": {}
+          }
+        ],
+        "RequestParameters": {},
+        "Integration": {
+          "Type": "MOCK",
+          "RequestTemplates": {
+            "application/json": "{statusCode:200}"
+          },
+          "ContentHandling": "CONVERT_TO_TEXT",
+          "IntegrationResponses": [
+            {
+              "StatusCode": "200",
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'",
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'",
+                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'"
+              },
+              "ResponseTemplates": {
+                "application/json": ""
+              }
+            }
+          ]
+        },
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceAdminForms"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayMethodAdminTrainOptions": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "OPTIONS",
+        "MethodResponses": [
+          {
+            "StatusCode": "200",
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Origin": true,
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true
+            },
+            "ResponseModels": {}
+          }
+        ],
+        "RequestParameters": {},
+        "Integration": {
+          "Type": "MOCK",
+          "RequestTemplates": {
+            "application/json": "{statusCode:200}"
+          },
+          "ContentHandling": "CONVERT_TO_TEXT",
+          "IntegrationResponses": [
+            {
+              "StatusCode": "200",
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'",
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'",
+                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'"
+              },
+              "ResponseTemplates": {
+                "application/json": ""
+              }
+            }
+          ]
+        },
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceAdminTrain"
         },
         "RestApiId": {
           "Ref": "ApiGatewayRestApi"
@@ -2138,7 +2718,237 @@
         "GetUpcomingDeadlinesLambdaPermissionApiGateway"
       ]
     },
-    "ApiGatewayDeployment1772172729200": {
+    "ApiGatewayMethodAdminStatsGet": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "GET",
+        "RequestParameters": {},
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceAdminStats"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "ApiKeyRequired": false,
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "GetAdminStatsLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": []
+      },
+      "DependsOn": [
+        "GetAdminStatsLambdaPermissionApiGateway"
+      ]
+    },
+    "ApiGatewayMethodAdminUsersGet": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "GET",
+        "RequestParameters": {},
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceAdminUsers"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "ApiKeyRequired": false,
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "GetAdminUsersLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": []
+      },
+      "DependsOn": [
+        "GetAdminUsersLambdaPermissionApiGateway"
+      ]
+    },
+    "ApiGatewayMethodAdminDocumentsGet": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "GET",
+        "RequestParameters": {},
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceAdminDocuments"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "ApiKeyRequired": false,
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "GetAdminDocumentsLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": []
+      },
+      "DependsOn": [
+        "GetAdminDocumentsLambdaPermissionApiGateway"
+      ]
+    },
+    "ApiGatewayMethodAdminFormsPost": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "POST",
+        "RequestParameters": {},
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceAdminForms"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "ApiKeyRequired": false,
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "AddAdminFormLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": []
+      },
+      "DependsOn": [
+        "AddAdminFormLambdaPermissionApiGateway"
+      ]
+    },
+    "ApiGatewayMethodAdminTrainPost": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "POST",
+        "RequestParameters": {},
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceAdminTrain"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "ApiKeyRequired": false,
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "StartAdminTrainingLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": []
+      },
+      "DependsOn": [
+        "StartAdminTrainingLambdaPermissionApiGateway"
+      ]
+    },
+    "ApiGatewayDeployment1772174862012": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -2157,6 +2967,11 @@
         "ApiGatewayMethodUsersOptions",
         "ApiGatewayMethodComplianceOptions",
         "ApiGatewayMethodComplianceUpcomingOptions",
+        "ApiGatewayMethodAdminStatsOptions",
+        "ApiGatewayMethodAdminUsersOptions",
+        "ApiGatewayMethodAdminDocumentsOptions",
+        "ApiGatewayMethodAdminFormsOptions",
+        "ApiGatewayMethodAdminTrainOptions",
         "ApiGatewayMethodAuthLoginPost",
         "ApiGatewayMethodAuthRegisterPost",
         "ApiGatewayMethodAuthForgotDashpasswordPost",
@@ -2166,7 +2981,12 @@
         "ApiGatewayMethodDocumentsDocumentidVarGet",
         "ApiGatewayMethodUsersPost",
         "ApiGatewayMethodCompliancePost",
-        "ApiGatewayMethodComplianceUpcomingGet"
+        "ApiGatewayMethodComplianceUpcomingGet",
+        "ApiGatewayMethodAdminStatsGet",
+        "ApiGatewayMethodAdminUsersGet",
+        "ApiGatewayMethodAdminDocumentsGet",
+        "ApiGatewayMethodAdminFormsPost",
+        "ApiGatewayMethodAdminTrainPost"
       ]
     },
     "LoginLambdaPermissionApiGateway": {
@@ -2539,6 +3359,191 @@
         }
       }
     },
+    "GetAdminStatsLambdaPermissionApiGateway": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "GetAdminStatsLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "/*/*"
+            ]
+          ]
+        }
+      }
+    },
+    "GetAdminUsersLambdaPermissionApiGateway": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "GetAdminUsersLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "/*/*"
+            ]
+          ]
+        }
+      }
+    },
+    "GetAdminDocumentsLambdaPermissionApiGateway": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "GetAdminDocumentsLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "/*/*"
+            ]
+          ]
+        }
+      }
+    },
+    "AddAdminFormLambdaPermissionApiGateway": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "AddAdminFormLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "/*/*"
+            ]
+          ]
+        }
+      }
+    },
+    "StartAdminTrainingLambdaPermissionApiGateway": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "StartAdminTrainingLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "/*/*"
+            ]
+          ]
+        }
+      }
+    },
     "CognitoUserPool": {
       "Type": "AWS::Cognito::UserPool",
       "Properties": {
@@ -2808,7 +3813,7 @@
     "LoginLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "LoginLambdaVersionk6vl7PsbpZuvxsCn1wlXjKRskukbDxby6BdDgjEJkKY"
+        "Ref": "LoginLambdaVersionejTi4PFihwEIay6haML5yzq1DKdmNAmoi9rrvmsc4"
       },
       "Export": {
         "Name": "sls-sahayak-ai-backend-prod-LoginLambdaFunctionQualifiedArn"
@@ -2817,7 +3822,7 @@
     "RegisterLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "RegisterLambdaVersionGfsWhtjXCpdTfHEzWYYtuHiyhLbIA0vrjQb2W05Eg"
+        "Ref": "RegisterLambdaVersiontrTmsBCpwgJDczK4AUQ9Zwswt8sFo7UnShecc2tBqsc"
       },
       "Export": {
         "Name": "sls-sahayak-ai-backend-prod-RegisterLambdaFunctionQualifiedArn"
@@ -2826,7 +3831,7 @@
     "ForgotPasswordLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "ForgotPasswordLambdaVersionDeJWyfis91iZitQQQWHIIcTxDDJCmnRHwtpzjmTUtmc"
+        "Ref": "ForgotPasswordLambdaVersionLtXNZ6PokLmRjQhxhjc6Ii2C0Lje66W6sHiapqC1k"
       },
       "Export": {
         "Name": "sls-sahayak-ai-backend-prod-ForgotPasswordLambdaFunctionQualifiedArn"
@@ -2835,7 +3840,7 @@
     "ResetPasswordLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "ResetPasswordLambdaVersionwhJ7mXU26BPOKCcCNP6nV5aA0xTkgr5RgF9XSIRveo"
+        "Ref": "ResetPasswordLambdaVersion5glAdGJtVjhJTpSYC5YZqBtRykFhPP0b5eKXgf6qg"
       },
       "Export": {
         "Name": "sls-sahayak-ai-backend-prod-ResetPasswordLambdaFunctionQualifiedArn"
@@ -2844,7 +3849,7 @@
     "UploadDocumentLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "UploadDocumentLambdaVersionuSJBU6j8L1cMMw6ztPIa2SdzUftjKZUEbJOauOjx9Vc"
+        "Ref": "UploadDocumentLambdaVersionXPalJHmBHOmdgTwkvduEgbZgRk0KoO3EYOcrtVTSYo"
       },
       "Export": {
         "Name": "sls-sahayak-ai-backend-prod-UploadDocumentLambdaFunctionQualifiedArn"
@@ -2853,7 +3858,7 @@
     "ProcessDocumentLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "ProcessDocumentLambdaVersiondWgySnRO2OtNyYNzlyo4Ic8f9DGeE8iCW3lA6DrGfg"
+        "Ref": "ProcessDocumentLambdaVersionIXKK4kjfNyRpvMvu7AoNYHobw5VtIQYKRBjWxB592fw"
       },
       "Export": {
         "Name": "sls-sahayak-ai-backend-prod-ProcessDocumentLambdaFunctionQualifiedArn"
@@ -2862,7 +3867,7 @@
     "AnalyzeDocumentLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "AnalyzeDocumentLambdaVersionLLs3Ztrq9qPCu91AU8tRMg0FBksI237qpfAIRloUP4"
+        "Ref": "AnalyzeDocumentLambdaVersiontiCHM8fAvGKE6iBXW5J7ccs9SShyRiFL1Aeus59XqM"
       },
       "Export": {
         "Name": "sls-sahayak-ai-backend-prod-AnalyzeDocumentLambdaFunctionQualifiedArn"
@@ -2871,7 +3876,7 @@
     "GetDocumentLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "GetDocumentLambdaVersion0In9jE7ShzkJTfhNWQKUm088PiuEKQjGLc2ISkC78"
+        "Ref": "GetDocumentLambdaVersion4fNOWrPhgNUqF8Bfu8fPM4AbDWOVn75IE1NCwTmvDk8"
       },
       "Export": {
         "Name": "sls-sahayak-ai-backend-prod-GetDocumentLambdaFunctionQualifiedArn"
@@ -2880,7 +3885,7 @@
     "CreateUserLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "CreateUserLambdaVersion0FnaNu56vwUKz8f7wsiLhqsZQwGGnkXxprywqycGI0"
+        "Ref": "CreateUserLambdaVersionrbebf9jjUpCSk9U8IAmjy6tTMbaenca6kS9A1k5ArI"
       },
       "Export": {
         "Name": "sls-sahayak-ai-backend-prod-CreateUserLambdaFunctionQualifiedArn"
@@ -2889,7 +3894,7 @@
     "AddComplianceLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "AddComplianceLambdaVersionOm1BIp9czio3NbKxmUsfnNu7Kt8UX32Dr4FCqdvLru0"
+        "Ref": "AddComplianceLambdaVersionpAHxca8n3vTY4lgSn9qu7rgVAiR0Lqceyzq61AgrG4"
       },
       "Export": {
         "Name": "sls-sahayak-ai-backend-prod-AddComplianceLambdaFunctionQualifiedArn"
@@ -2898,7 +3903,7 @@
     "GetUpcomingDeadlinesLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "GetUpcomingDeadlinesLambdaVersion12i14GC6kDXeJcs02OH1jCcCJudJZYvg5wxDChyg"
+        "Ref": "GetUpcomingDeadlinesLambdaVersionBU6Nbn65T7UY3iHrsTuygmyezj2QkQkoTbnH6Jj0pM"
       },
       "Export": {
         "Name": "sls-sahayak-ai-backend-prod-GetUpcomingDeadlinesLambdaFunctionQualifiedArn"
@@ -2907,10 +3912,55 @@
     "SendRemindersLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "SendRemindersLambdaVersionicyAxkHSDxj7JvbQk8EVwm4mUgpE8aMwMhXuu1Wi89Y"
+        "Ref": "SendRemindersLambdaVersionA2IyPCffK8TrTlIGcezPzUVD6nDjcqDZoGvPu9p3A"
       },
       "Export": {
         "Name": "sls-sahayak-ai-backend-prod-SendRemindersLambdaFunctionQualifiedArn"
+      }
+    },
+    "GetAdminStatsLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "GetAdminStatsLambdaVersionHPqNZ3e0ZNN28m6RJfkSOrekYuYcWMm0WlIqBmmOx4"
+      },
+      "Export": {
+        "Name": "sls-sahayak-ai-backend-prod-GetAdminStatsLambdaFunctionQualifiedArn"
+      }
+    },
+    "GetAdminUsersLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "GetAdminUsersLambdaVersionUY2KJrxdovIW95OOMVjlBGGmCLkoBJ2c1rcmpyX7Yk"
+      },
+      "Export": {
+        "Name": "sls-sahayak-ai-backend-prod-GetAdminUsersLambdaFunctionQualifiedArn"
+      }
+    },
+    "GetAdminDocumentsLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "GetAdminDocumentsLambdaVersionnf809k7J9iUomQQckFuCK5MxCiTTFJphoeYjhxWzQ"
+      },
+      "Export": {
+        "Name": "sls-sahayak-ai-backend-prod-GetAdminDocumentsLambdaFunctionQualifiedArn"
+      }
+    },
+    "AddAdminFormLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "AddAdminFormLambdaVersionc3tBxTi1fivW42tfOTkiDXCGk8jsS37UnbQ3zvXTI"
+      },
+      "Export": {
+        "Name": "sls-sahayak-ai-backend-prod-AddAdminFormLambdaFunctionQualifiedArn"
+      }
+    },
+    "StartAdminTrainingLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "StartAdminTrainingLambdaVersionHZgIwDL7qVQKiaGC0ILgb0BeYPpykKF3s5UrFG18bQQ"
+      },
+      "Export": {
+        "Name": "sls-sahayak-ai-backend-prod-StartAdminTrainingLambdaFunctionQualifiedArn"
       }
     },
     "ServiceEndpoint": {

@@ -15,6 +15,9 @@ provider:
     FORMS_TABLE: ${self:custom.formsTable}
     COGNITO_USER_POOL_ID: !Ref CognitoUserPool
     COGNITO_CLIENT_ID: !Ref CognitoUserPoolClient
+    EMAIL_FUNCTION_NAME: ${self:service}-${self:provider.stage}-sendEmail
+    SMTP_EMAIL: ${env:SMTP_EMAIL}
+    SMTP_PASSWORD: ${env:SMTP_PASSWORD}
   iam:
     role:
       statements:
@@ -67,6 +70,18 @@ custom:
   formsTable: sahayak-ai-forms-${self:provider.stage}
 
 functions:
+  # Email Service
+  sendEmail:
+    handler: lambda/email/sendEmail.handler
+    environment:
+      SMTP_EMAIL: ${env:SMTP_EMAIL}
+      SMTP_PASSWORD: ${env:SMTP_PASSWORD}
+    events:
+      - http:
+          path: /email/send
+          method: post
+          cors: true
+
   # Authentication Functions
   login:
     handler: lambda/auth/login.handler
