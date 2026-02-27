@@ -28,8 +28,10 @@ export default function Admin() {
   const [users, setUsers] = useState<any[]>([])
   const [documents, setDocuments] = useState<any[]>([])
   const [forms, setForms] = useState<any[]>([])
+  const [recentActivity, setRecentActivity] = useState<any[]>([])
   const [searchTerm, setSearchTerm] = useState('')
   const [statusFilter, setStatusFilter] = useState('all')
+  const [trainingStatus, setTrainingStatus] = useState('')
 
   useEffect(() => {
     // Check if user is admin
@@ -48,44 +50,61 @@ export default function Admin() {
   }, [])
 
   const fetchAdminData = async () => {
-    setLoading(true)
-    try {
-      const token = localStorage.getItem('userToken')
-      const apiUrl = import.meta.env.VITE_API_URL || 'https://yy6whjwjt1.execute-api.ap-south-1.amazonaws.com/prod'
-      
-      // Fetch stats, users, and documents in parallel
-      const [statsRes, usersRes, docsRes] = await Promise.all([
-        fetch(`${apiUrl}/admin/stats`, {
-          headers: { 'Authorization': `Bearer ${token}` }
-        }),
-        fetch(`${apiUrl}/admin/users`, {
-          headers: { 'Authorization': `Bearer ${token}` }
-        }),
-        fetch(`${apiUrl}/admin/documents`, {
-          headers: { 'Authorization': `Bearer ${token}` }
-        })
-      ])
+      setLoading(true)
+      try {
+        const token = localStorage.getItem('userToken')
+        const apiUrl = import.meta.env.VITE_API_URL || 'https://yy6whjwjt1.execute-api.ap-south-1.amazonaws.com/prod'
 
-      if (statsRes.ok) {
-        const statsData = await statsRes.json()
-        setStats(statsData)
-      }
+        // Fetch stats, users, and documents in parallel
+        const [statsRes, usersRes, docsRes] = await Promise.all([
+          fetch(`${apiUrl}/admin/stats`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+          }),
+          fetch(`${apiUrl}/admin/users`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+          }),
+          fetch(`${apiUrl}/admin/documents?status=${statusFilter}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+          })
+        ])
 
-      if (usersRes.ok) {
-        const usersData = await usersRes.json()
-        setUsers(usersData.users || [])
-      }
+        if (statsRes.ok) {
+          const statsData = await statsRes.json()
+          setStats(statsData)
+        }
 
-      if (docsRes.ok) {
-        const docsData = await docsRes.json()
-        setDocuments(docsData.documents || [])
+        if (usersRes.ok) {
+          const usersData = await usersRes.json()
+          setUsers(usersData.users || [])
+
+          // Generate recent activity from users and documents
+          const activities = []
+          if (usersData.users && usersData.users.length > 0) {
+            const recentUser = usersData.users[0]
+            activities.push({
+              type: 'user',
+              title: 'New user registration',
+              description: `${recentUser.email} joined`,
+              time: new Date(recentUser.createdDate).toLocaleString()
+            })
+          }
+          setRecentActivity(activities)
+        }
+
+        if (docsRes.ok) {
+          const docsData = await docsRes.json()
+          setDocuments(docsData.documents || [])
+        }
+
+        // Load forms from database
+        const formsData = await import('../../backend/data/forms-database.json')
+        setForms(formsData.forms || [])
+      } catch (error) {
+        console.error('Error fetching admin data:', error)
+      } finally {
+        setLoading(false)
       }
-    } catch (error) {
-      console.error('Error fetching admin data:', error)
-    } finally {
-      setLoading(false)
     }
-  }
 
   const [newForm, setNewForm] = useState({
     name: '',
@@ -112,49 +131,74 @@ export default function Admin() {
   }
 
   const handleAddForm = async () => {
-    try {
-      const token = localStorage.getItem('userToken')
-      const apiUrl = import.meta.env.VITE_API_URL || 'https://yy6whjwjt1.execute-api.ap-south-1.amazonaws.com/prod'
-      
-      const response = await fetch(`${apiUrl}/admin/forms`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify(newForm)
-      })
-
-      if (response.ok) {
-        setShowAddFormModal(false)
-        // Refresh data
-        fetchAdminData()
+      if (!newForm.name || !newForm.category || !newForm.authority) {
+        alert('Please fill in all required fields')
+        return
       }
-    } catch (error) {
-      console.error('Error adding form:', error)
+
+      try {
+        const token = localStorage.getItem('userToken')
+        const apiUrl = import.meta.env.VITE_API_URL || 'https://yy6whjwjt1.execute-api.ap-south-1.amazonaws.com/prod'
+
+        const response = await fetch(`${apiUrl}/admin/forms`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify(newForm)
+        })
+
+        const data = await response.json()
+
+        if (data.success) {
+          alert('Form added successfully!')
+          setShowAddFormModal(false)
+          setNewForm({ name: '', category: '', authority: '', keywords: '', fields: '' })
+          fetchAdminData()
+        } else {
+          alert(data.error || 'Failed to add form')
+        }
+      } catch (error) {
+        console.error('Error adding form:', error)
+        alert('Network error. Please try again.')
+      }
     }
-  }
 
   const handleTrainSystem = async () => {
-    try {
-      const token = localStorage.getItem('userToken')
-      const apiUrl = import.meta.env.VITE_API_URL || 'https://yy6whjwjt1.execute-api.ap-south-1.amazonaws.com/prod'
-      
-      const response = await fetch(`${apiUrl}/admin/train`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      })
+      setTrainingStatus('Starting training...')
+      try {
+        const token = localStorage.getItem('userToken')
+        const apiUrl = import.meta.env.VITE_API_URL || 'https://yy6whjwjt1.execute-api.ap-south-1.amazonaws.com/prod'
 
-      if (response.ok) {
-        setShowTrainingModal(false)
-        alert('Training started successfully!')
+        const response = await fetch(`${apiUrl}/admin/train`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        })
+
+        const data = await response.json()
+
+        if (data.success) {
+          setTrainingStatus(`Training started! Session ID: ${data.sessionId}. Estimated time: ${data.estimatedTime}`)
+          setTimeout(() => {
+            setShowTrainingModal(false)
+            setTrainingStatus('')
+            alert('Training completed successfully!')
+            fetchAdminData()
+          }, 3000)
+        } else {
+          setTrainingStatus('Training failed')
+          alert(data.error || 'Failed to start training')
+        }
+      } catch (error) {
+        console.error('Error starting training:', error)
+        setTrainingStatus('Network error')
+        alert('Network error. Please try again.')
       }
-    } catch (error) {
-      console.error('Error starting training:', error)
     }
-  }
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -230,27 +274,28 @@ export default function Admin() {
             <Card>
               <h3 className="text-xl font-semibold mb-4">Recent Activity</h3>
               <div className="space-y-3">
-                <div className="flex items-center justify-between py-2 border-b">
-                  <div>
-                    <p className="font-medium">New user registration</p>
-                    <p className="text-sm text-gray-600">john@example.com joined</p>
+                {recentActivity.length > 0 ? (
+                  recentActivity.map((activity, index) => (
+                    <div key={index} className="flex items-center justify-between py-2 border-b">
+                      <div>
+                        <p className="font-medium">{activity.title}</p>
+                        <p className="text-sm text-gray-600">{activity.description}</p>
+                      </div>
+                      <span className="text-sm text-gray-500">{activity.time}</span>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-gray-500 text-center py-4">No recent activity</p>
+                )}
+                {documents.length > 0 && (
+                  <div className="flex items-center justify-between py-2 border-b">
+                    <div>
+                      <p className="font-medium">Document processed</p>
+                      <p className="text-sm text-gray-600">{documents[0].formType} - {documents[0].accuracy}% accuracy</p>
+                    </div>
+                    <span className="text-sm text-gray-500">Recently</span>
                   </div>
-                  <span className="text-sm text-gray-500">2 min ago</span>
-                </div>
-                <div className="flex items-center justify-between py-2 border-b">
-                  <div>
-                    <p className="font-medium">Document processed</p>
-                    <p className="text-sm text-gray-600">Aadhaar Update Form - 96% accuracy</p>
-                  </div>
-                  <span className="text-sm text-gray-500">5 min ago</span>
-                </div>
-                <div className="flex items-center justify-between py-2">
-                  <div>
-                    <p className="font-medium">System training completed</p>
-                    <p className="text-sm text-gray-600">Model accuracy improved to 94.5%</p>
-                  </div>
-                  <span className="text-sm text-gray-500">1 hour ago</span>
-                </div>
+                )}
               </div>
             </Card>
           </div>
@@ -261,43 +306,59 @@ export default function Admin() {
           <Card>
             <div className="flex justify-between items-center mb-6">
               <h3 className="text-xl font-semibold">User Management</h3>
-              <Input placeholder="Search users..." className="w-64" />
+              <Input 
+                placeholder="Search users..." 
+                className="w-64" 
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
             </div>
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-900">Name</th>
-                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-900">Email</th>
-                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-900">Type</th>
-                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-900">Last Login</th>
-                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-900">Documents</th>
-                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-900">Status</th>
-                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-900">Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-200">
-                  {users.map((user) => (
-                    <tr key={user.id} className="hover:bg-gray-50">
-                      <td className="px-4 py-3 text-sm">{user.name}</td>
-                      <td className="px-4 py-3 text-sm">{user.email}</td>
-                      <td className="px-4 py-3 text-sm capitalize">{user.userType}</td>
-                      <td className="px-4 py-3 text-sm">{user.lastLogin}</td>
-                      <td className="px-4 py-3 text-sm">{user.documentsUploaded}</td>
-                      <td className="px-4 py-3 text-sm">
-                        <Badge variant={user.status === 'active' ? 'success' : 'secondary'}>
-                          {user.status}
-                        </Badge>
-                      </td>
-                      <td className="px-4 py-3 text-sm">
-                        <button className="text-blue-600 hover:text-blue-800 mr-3">View</button>
-                        <button className="text-red-600 hover:text-red-800">Disable</button>
-                      </td>
+            {loading ? (
+              <div className="text-center py-8">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+                <p className="text-gray-600 mt-2">Loading users...</p>
+              </div>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-4 py-3 text-left text-sm font-semibold text-gray-900">Name</th>
+                      <th className="px-4 py-3 text-left text-sm font-semibold text-gray-900">Email</th>
+                      <th className="px-4 py-3 text-left text-sm font-semibold text-gray-900">Type</th>
+                      <th className="px-4 py-3 text-left text-sm font-semibold text-gray-900">Created</th>
+                      <th className="px-4 py-3 text-left text-sm font-semibold text-gray-900">Documents</th>
+                      <th className="px-4 py-3 text-left text-sm font-semibold text-gray-900">Status</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200">
+                    {users
+                      .filter(user => 
+                        !searchTerm || 
+                        user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                        user.email.toLowerCase().includes(searchTerm.toLowerCase())
+                      )
+                      .map((user) => (
+                        <tr key={user.id} className="hover:bg-gray-50">
+                          <td className="px-4 py-3 text-sm">{user.name}</td>
+                          <td className="px-4 py-3 text-sm">{user.email}</td>
+                          <td className="px-4 py-3 text-sm capitalize">{user.userType}</td>
+                          <td className="px-4 py-3 text-sm">{new Date(user.createdDate).toLocaleDateString()}</td>
+                          <td className="px-4 py-3 text-sm">{user.documentsUploaded}</td>
+                          <td className="px-4 py-3 text-sm">
+                            <Badge variant={user.status === 'active' ? 'success' : 'secondary'}>
+                              {user.status}
+                            </Badge>
+                          </td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
+                {users.length === 0 && (
+                  <p className="text-center text-gray-500 py-8">No users found</p>
+                )}
+              </div>
+            )}
           </Card>
         )}
 
@@ -312,51 +373,70 @@ export default function Admin() {
                     { value: 'all', label: 'All Status' },
                     { value: 'processed', label: 'Processed' },
                     { value: 'processing', label: 'Processing' },
-                    { value: 'failed', label: 'Failed' }
+                    { value: 'uploaded', label: 'Uploaded' }
                   ]}
-                  value="all"
-                  onChange={() => {}}
+                  value={statusFilter}
+                  onChange={(e) => {
+                    setStatusFilter(e.target.value)
+                    fetchAdminData()
+                  }}
                 />
-                <Input placeholder="Search documents..." className="w-64" />
+                <Input 
+                  placeholder="Search documents..." 
+                  className="w-64"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
               </div>
             </div>
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-900">File Name</th>
-                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-900">User</th>
-                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-900">Form Type</th>
-                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-900">Upload Date</th>
-                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-900">Status</th>
-                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-900">Accuracy</th>
-                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-900">Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-200">
-                  {documents.map((doc) => (
-                    <tr key={doc.id} className="hover:bg-gray-50">
-                      <td className="px-4 py-3 text-sm">{doc.fileName}</td>
-                      <td className="px-4 py-3 text-sm">{doc.userName}</td>
-                      <td className="px-4 py-3 text-sm">{doc.formType}</td>
-                      <td className="px-4 py-3 text-sm">{doc.uploadDate}</td>
-                      <td className="px-4 py-3 text-sm">
-                        <Badge variant={doc.status === 'processed' ? 'success' : 'warning'}>
-                          {doc.status}
-                        </Badge>
-                      </td>
-                      <td className="px-4 py-3 text-sm">
-                        {doc.accuracy ? `${doc.accuracy}%` : '-'}
-                      </td>
-                      <td className="px-4 py-3 text-sm">
-                        <button className="text-blue-600 hover:text-blue-800 mr-3">View</button>
-                        <button className="text-green-600 hover:text-green-800">Retrain</button>
-                      </td>
+            {loading ? (
+              <div className="text-center py-8">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+                <p className="text-gray-600 mt-2">Loading documents...</p>
+              </div>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-4 py-3 text-left text-sm font-semibold text-gray-900">File Name</th>
+                      <th className="px-4 py-3 text-left text-sm font-semibold text-gray-900">User</th>
+                      <th className="px-4 py-3 text-left text-sm font-semibold text-gray-900">Form Type</th>
+                      <th className="px-4 py-3 text-left text-sm font-semibold text-gray-900">Upload Date</th>
+                      <th className="px-4 py-3 text-left text-sm font-semibold text-gray-900">Status</th>
+                      <th className="px-4 py-3 text-left text-sm font-semibold text-gray-900">Accuracy</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200">
+                    {documents
+                      .filter(doc => 
+                        !searchTerm || 
+                        doc.fileName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                        doc.formType.toLowerCase().includes(searchTerm.toLowerCase())
+                      )
+                      .map((doc) => (
+                        <tr key={doc.id} className="hover:bg-gray-50">
+                          <td className="px-4 py-3 text-sm">{doc.fileName}</td>
+                          <td className="px-4 py-3 text-sm">{doc.userName}</td>
+                          <td className="px-4 py-3 text-sm">{doc.formType}</td>
+                          <td className="px-4 py-3 text-sm">{new Date(doc.uploadDate).toLocaleDateString()}</td>
+                          <td className="px-4 py-3 text-sm">
+                            <Badge variant={doc.status === 'processed' ? 'success' : 'warning'}>
+                              {doc.status}
+                            </Badge>
+                          </td>
+                          <td className="px-4 py-3 text-sm">
+                            {doc.accuracy ? `${doc.accuracy}%` : '-'}
+                          </td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
+                {documents.length === 0 && (
+                  <p className="text-center text-gray-500 py-8">No documents found</p>
+                )}
+              </div>
+            )}
           </Card>
         )}
 
@@ -370,17 +450,51 @@ export default function Admin() {
               </Button>
             </div>
             <p className="text-gray-600 mb-4">
-              Currently managing 30+ government forms and 10+ bank forms. Add new forms to improve detection accuracy.
+              Currently managing {forms.length} forms. Add new forms to improve detection accuracy.
             </p>
-            <div className="grid md:grid-cols-2 gap-4">
+            <div className="grid md:grid-cols-3 gap-4 mb-6">
               <div className="border rounded-lg p-4">
                 <h4 className="font-semibold mb-2">Government Forms</h4>
-                <p className="text-sm text-gray-600">20 forms including Aadhaar, PAN, GST, Passport, DL, Voter ID, ITR</p>
+                <p className="text-2xl font-bold text-blue-600">
+                  {forms.filter(f => f.category === 'identity' || f.category === 'tax' || f.category === 'business').length}
+                </p>
               </div>
               <div className="border rounded-lg p-4">
                 <h4 className="font-semibold mb-2">Bank Forms</h4>
-                <p className="text-sm text-gray-600">10 forms including Account Opening, Loans, Credit Cards, FD, RD</p>
+                <p className="text-2xl font-bold text-green-600">
+                  {forms.filter(f => f.category === 'banking').length}
+                </p>
               </div>
+              <div className="border rounded-lg p-4">
+                <h4 className="font-semibold mb-2">Other Forms</h4>
+                <p className="text-2xl font-bold text-purple-600">
+                  {forms.filter(f => f.category === 'transport' || f.category === 'other').length}
+                </p>
+              </div>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-900">Form Name</th>
+                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-900">Category</th>
+                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-900">Authority</th>
+                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-900">Keywords</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200">
+                  {forms.slice(0, 10).map((form, index) => (
+                    <tr key={index} className="hover:bg-gray-50">
+                      <td className="px-4 py-3 text-sm">{form.name}</td>
+                      <td className="px-4 py-3 text-sm capitalize">{form.category}</td>
+                      <td className="px-4 py-3 text-sm">{form.authority}</td>
+                      <td className="px-4 py-3 text-sm text-gray-600">
+                        {form.keywords.slice(0, 3).join(', ')}...
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </Card>
         )}
@@ -515,15 +629,22 @@ export default function Admin() {
         <div className="space-y-4">
           <p className="text-gray-600">
             This will start a new training session using all processed documents. 
-            The system will be temporarily unavailable during training (estimated 15-30 minutes).
+            The system will analyze {documents.length} documents to improve accuracy.
           </p>
+          {trainingStatus && (
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <p className="text-sm text-blue-800">{trainingStatus}</p>
+            </div>
+          )}
           <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
             <p className="text-sm text-yellow-800">
               ⚠️ Warning: Training will use AWS Bedrock resources and may incur additional costs.
             </p>
           </div>
           <div className="flex gap-3 pt-4">
-            <Button onClick={handleTrainSystem} fullWidth>Start Training</Button>
+            <Button onClick={handleTrainSystem} fullWidth disabled={!!trainingStatus}>
+              {trainingStatus ? 'Training...' : 'Start Training'}
+            </Button>
             <Button variant="secondary" onClick={() => setShowTrainingModal(false)} fullWidth>
               Cancel
             </Button>
