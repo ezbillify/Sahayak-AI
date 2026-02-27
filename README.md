@@ -71,6 +71,12 @@ sahayak-ai/
 
 Build and deploy a functional MVP that accepts government documents (PDF/image), extracts text using Textract, analyzes with Bedrock, and returns simplified explanations in English and Hindi.
 
+## 🌐 Live Deployment
+
+- **Frontend**: https://sahayak-ai-jet.vercel.app/
+- **Backend API**: https://yy6whjwjt1.execute-api.ap-south-1.amazonaws.com/prod
+- **Region**: Asia Pacific (Mumbai/Hyderabad) - ap-south-1
+
 ## 📝 License
 
 MIT
