@@ -1,28 +1,9 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
+import type { ViewStyle, TextStyle, ImageStyle } from 'react-native';
 import { View, Text, StyleSheet, TouchableOpacity, Image, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-// Camera placeholder - install react-native-vision-camera for full functionality
-interface CameraType {
-  Constants: {
-    Type: {
-      back: string;
-      front: string;
-    };
-  };
-}
-
-const RNCamera: CameraType = {
-  Constants: {
-    Type: {
-      back: 'back',
-      front: 'front'
-    }
-  }
-};
-
 export default function CameraScreen({ navigation }: any) {
-  const cameraRef = useRef<RNCamera>(null);
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
 
   const takePicture = async () => {
@@ -76,7 +57,20 @@ export default function CameraScreen({ navigation }: any) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create<{
+  container: ViewStyle;
+  camera: ViewStyle;
+  overlay: ViewStyle;
+  instruction: TextStyle;
+  note: TextStyle;
+  controls: ViewStyle;
+  captureButton: ViewStyle;
+  captureInner: ViewStyle;
+  preview: ImageStyle;
+  actions: ViewStyle;
+  actionButton: ViewStyle;
+  actionText: TextStyle;
+}>({
   container: {
     flex: 1,
     backgroundColor: '#000',
