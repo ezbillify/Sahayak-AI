@@ -21,31 +21,64 @@ exports.handler = async (event) => {
       console.error('Error getting user details:', error);
     }
 
-    // Initiate forgot password flow
+    // Initiate forgot password flow (Cognito will send the code via its default email)
     const response = await cognitoClient.send(new ForgotPasswordCommand({
       ClientId: process.env.COGNITO_CLIENT_ID,
       Username: email
     }));
 
-    // Send custom password reset email via our email service
-    const emailService = require('../email/sendEmail');
-    const code = 'Check your email'; // Cognito sends the actual code
-    const emailTemplate = emailService.getPasswordResetEmailTemplate(code, userName);
+    // Send custom password reset email via our Gmail SMTP
+    const emailHtml = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <style>
+          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+          .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+          .content { background: #f9f9f9; padding: 30px; border-radius: 0 0 10px 10px; }
+          .button { display: inline-block; background: #667eea; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; margin: 20px 0; }
+          .footer { text-align: center; margin-top: 20px; color: #666; font-size: 12px; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="header">
+            <h1>Password Reset Request</h1>
+          </div>
+          <div class="content">
+            <p>Hi ${userName || 'there'},</p>
+            <p>We received a request to reset your password for your Sahayak AI account.</p>
+            <p>Please check your email for the verification code sent by AWS Cognito, or click the button below to reset your password:</p>
+            <div style="text-align: center;">
+              <a href="https://sahayak-ai-jet.vercel.app/forgot-password" class="button">Reset Password</a>
+            </div>
+            <p>If you didn't request this password reset, please ignore this email.</p>
+            <p>Best regards,<br>The Sahayak AI Team</p>
+          </div>
+          <div class="footer">
+            <p>© 2024 Sahayak AI. All rights reserved.</p>
+          </div>
+        </div>
+      </body>
+      </html>
+    `;
     
     try {
       await lambdaClient.send(new InvokeCommand({
-        FunctionName: process.env.EMAIL_FUNCTION_NAME,
-        InvocationType: 'Event', // Async
+        FunctionName: 'sahayak-ai-backend-prod-sendEmail',
+        InvocationType: 'Event',
         Payload: JSON.stringify({
-          to: email,
-          subject: emailTemplate.subject,
-          html: emailTemplate.html,
-          text: emailTemplate.text
+          body: JSON.stringify({
+            to: email,
+            subject: 'Reset Your Sahayak AI Password',
+            html: emailHtml,
+            text: `Hi ${userName || 'there'}, We received a request to reset your password. Please check your email for the verification code.`
+          })
         })
       }));
     } catch (emailError) {
       console.error('Error sending custom email:', emailError);
-      // Continue anyway, Cognito will send default email
     }
 
     return {

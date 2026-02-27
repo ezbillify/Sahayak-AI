@@ -27,6 +27,9 @@ export default function Admin() {
 
   const [users, setUsers] = useState<any[]>([])
   const [documents, setDocuments] = useState<any[]>([])
+  const [forms, setForms] = useState<any[]>([])
+  const [searchTerm, setSearchTerm] = useState('')
+  const [statusFilter, setStatusFilter] = useState('all')
 
   useEffect(() => {
     // Check if user is admin
