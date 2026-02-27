@@ -96,9 +96,15 @@ export default function Admin() {
           setDocuments(docsData.documents || [])
         }
 
-        // Load forms from database
-        const formsData = await import('../../backend/data/forms-database.json')
-        setForms(formsData.forms || [])
+        // Load forms from API
+        const formsRes = await fetch(`${apiUrl}/admin/forms`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        })
+        
+        if (formsRes.ok) {
+          const formsData = await formsRes.json()
+          setForms(formsData.forms || [])
+        }
       } catch (error) {
         console.error('Error fetching admin data:', error)
       } finally {

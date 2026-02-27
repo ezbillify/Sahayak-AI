@@ -224,6 +224,14 @@ functions:
           method: post
           cors: true
 
+  getAdminForms:
+    handler: lambda/admin/getForms.handler
+    events:
+      - http:
+          path: /admin/forms
+          method: get
+          cors: true
+
 resources:
   Resources:
     # Cognito User Pool
