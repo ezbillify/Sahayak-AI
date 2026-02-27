@@ -11,19 +11,26 @@ exports.handler = async (event) => {
     // Check if this is admin email
     const isAdmin = email === 'admin@ezbillify.com';
 
+    // Prepare user attributes
+    const userAttributes = [
+      { Name: 'email', Value: email },
+      { Name: 'name', Value: name },
+      { Name: 'custom:user_type', Value: userType || 'individual' },
+      { Name: 'custom:language', Value: language || 'english' },
+      { Name: 'custom:is_admin', Value: isAdmin ? 'true' : 'false' }
+    ];
+
+    // Only add phone number if provided and valid
+    if (phone && phone.trim() && phone.startsWith('+')) {
+      userAttributes.push({ Name: 'phone_number', Value: phone });
+    }
+
     // Register user in Cognito
     const signUpResponse = await cognitoClient.send(new SignUpCommand({
       ClientId: process.env.COGNITO_CLIENT_ID,
       Username: email,
       Password: password,
-      UserAttributes: [
-        { Name: 'email', Value: email },
-        { Name: 'name', Value: name },
-        { Name: 'phone_number', Value: phone || '' },
-        { Name: 'custom:user_type', Value: userType || 'individual' },
-        { Name: 'custom:language', Value: language || 'english' },
-        { Name: 'custom:is_admin', Value: isAdmin ? 'true' : 'false' }
-      ]
+      UserAttributes: userAttributes
     }));
 
     // Auto-confirm user (for testing - remove in production)

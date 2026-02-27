@@ -25,6 +25,15 @@ export default function Register() {
       return
     }
 
+    // Validate phone number if provided
+    if (formData.phone && formData.phone.trim()) {
+      const phoneRegex = /^\+[1-9]\d{1,14}$/
+      if (!phoneRegex.test(formData.phone.replace(/\s/g, ''))) {
+        alert('Please enter a valid phone number in international format (e.g., +919876543210)')
+        return
+      }
+    }
+
     setLoading(true)
     
     try {
@@ -38,7 +47,7 @@ export default function Register() {
           email: formData.email,
           password: formData.password,
           name: formData.name,
-          phone: formData.phone,
+          phone: formData.phone ? formData.phone.replace(/\s/g, '') : '', // Remove spaces
           userType: formData.userType,
           language: formData.language
         })
@@ -89,12 +98,11 @@ export default function Register() {
 
           <div className="grid md:grid-cols-2 gap-4">
             <Input
-              label="Phone Number"
+              label="Phone Number (Optional)"
               type="tel"
               value={formData.phone}
               onChange={(e) => setFormData({...formData, phone: e.target.value})}
               placeholder="+91 98765 43210"
-              required
             />
 
             <Select
