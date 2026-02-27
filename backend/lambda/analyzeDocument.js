@@ -1,6 +1,7 @@
 const { BedrockRuntimeClient, InvokeModelCommand } = require('@aws-sdk/client-bedrock-runtime');
 const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
 const { DynamoDBDocumentClient, GetCommand, UpdateCommand } = require('@aws-sdk/lib-dynamodb');
+const { detectFormType } = require('./detectFormType');
 
 const bedrockClient = new BedrockRuntimeClient({ region: process.env.AWS_REGION });
 const dynamoClient = new DynamoDBClient({ region: process.env.AWS_REGION });
@@ -35,20 +36,46 @@ exports.handler = async (event) => {
       };
     }
 
-    // Create prompt for Bedrock
-    const prompt = `You are an AI assistant helping Indian citizens understand government documents. 
+    // First, detect form type using our database
+    const formDetection = detectFormType(document.extractedText);
+    
+    let detectedFormInfo = '';
+    if (formDetection.detectedForm) {
+      detectedFormInfo = `\n\nPre-detected Form Information:
+- Form Name: ${formDetection.detectedForm.name}
+- Category: ${formDetection.detectedForm.category}
+- Authority: ${formDetection.detectedForm.authority}
+- Expected Fields: ${formDetection.detectedForm.fields.join(', ')}
+- Detection Confidence: ${formDetection.confidence}%
+
+Please verify this detection is correct based on the document text.`;
+    }
+
+    // Create improved prompt for Bedrock with better form detection
+    const prompt = `You are an expert AI assistant specializing in Indian government and bank documents. Analyze this document carefully.${detectedFormInfo}
 
 Document Text:
 ${document.extractedText}
 
-Please analyze this government document and provide:
-1. Document Type (e.g., GST Form, PAN Application, License, etc.)
-2. Summary in simple ${language} language
-3. Key Information extracted
-4. Required Actions or deadlines (if any)
-5. Important fields that need to be filled (if it's a form)
+IMPORTANT: Carefully identify the EXACT document type by looking for specific keywords, form numbers, and headers:
+- Aadhaar forms: Look for "UIDAI", "Aadhaar", "UID", "Unique Identification"
+- PAN forms: Look for "PAN", "Permanent Account Number", "Form 49A", "Income Tax"
+- GST forms: Look for "GST", "GSTIN", "Goods and Services Tax", "GSTR"
+- Bank forms: Look for bank names, "Account Opening", "KYC", "IFSC"
+- Passport forms: Look for "Passport", "MEA", "Ministry of External Affairs"
+- Driving License: Look for "DL", "Driving License", "RTO", "Transport"
+- Voter ID: Look for "EPIC", "Election Commission", "Voter"
 
-Respond in JSON format with keys: documentType, summary, keyInformation, requiredActions, importantFields`;
+Analyze and provide:
+1. Document Type: Be VERY specific (e.g., "Aadhaar Update Form", "PAN Card Application Form 49A", "GST Registration Form GST REG-01")
+2. Form Number/Code: If present (e.g., "Form 49A", "GST REG-01", "Aadhaar Update Form")
+3. Summary: Explain in simple ${language} language what this document is for
+4. Key Information: Extract important details like names, numbers, dates
+5. Required Actions: What the user needs to do
+6. Important Fields: List fields that must be filled
+7. Deadlines: Any time-sensitive information
+
+Respond in JSON format with keys: documentType, formNumber, summary, keyInformation, requiredActions, importantFields, deadlines`;
 
     // Call Bedrock Claude 3.5 Sonnet
     const bedrockResponse = await bedrockClient.send(new InvokeModelCommand({
@@ -81,10 +108,11 @@ Respond in JSON format with keys: documentType, summary, keyInformation, require
     await docClient.send(new UpdateCommand({
       TableName: process.env.DOCUMENTS_TABLE,
       Key: { documentId },
-      UpdateExpression: 'SET aiAnalysis = :analysis, analyzedDate = :date',
+      UpdateExpression: 'SET aiAnalysis = :analysis, analyzedDate = :date, detectedForm = :form',
       ExpressionAttributeValues: {
         ':analysis': analysis,
-        ':date': new Date().toISOString()
+        ':date': new Date().toISOString(),
+        ':form': formDetection.detectedForm
       }
     }));
 
@@ -95,6 +123,8 @@ Respond in JSON format with keys: documentType, summary, keyInformation, require
         documentId,
         fileName: document.fileName,
         analysis,
+        detectedForm: formDetection.detectedForm,
+        detectionConfidence: formDetection.confidence,
         ocrConfidence: document.ocrConfidence
       })
     };

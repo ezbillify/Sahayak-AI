@@ -44,6 +44,12 @@ provider:
           Action:
             - bedrock:InvokeModel
           Resource: "*"
+        - Effect: Allow
+          Action:
+            - sns:Publish
+            - ses:SendEmail
+            - ses:SendRawEmail
+          Resource: "*"
 
 custom:
   documentsBucket: sahayak-ai-documents-${self:provider.stage}
@@ -86,6 +92,37 @@ functions:
           path: /documents/{documentId}
           method: get
           cors: true
+
+  createUser:
+    handler: lambda/createUser.handler
+    events:
+      - http:
+          path: /users
+          method: post
+          cors: true
+
+  addCompliance:
+    handler: lambda/addCompliance.handler
+    events:
+      - http:
+          path: /compliance
+          method: post
+          cors: true
+
+  getUpcomingDeadlines:
+    handler: lambda/getUpcomingDeadlines.handler
+    events:
+      - http:
+          path: /compliance/upcoming
+          method: get
+          cors: true
+
+  sendReminders:
+    handler: lambda/sendReminders.handler
+    events:
+      - schedule:
+          rate: cron(0 9 * * ? *)  # Run daily at 9 AM IST
+          enabled: true
 
 resources:
   Resources:

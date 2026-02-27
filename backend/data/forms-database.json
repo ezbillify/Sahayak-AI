@@ -1,0 +1,246 @@
+{
+  "governmentForms": [
+    {
+      "id": "aadhaar-enrollment",
+      "name": "Aadhaar Enrollment Form",
+      "category": "Identity",
+      "authority": "UIDAI",
+      "keywords": ["aadhaar", "uid", "uidai", "enrollment", "unique identification"],
+      "fields": ["Name", "Date of Birth", "Gender", "Address", "Mobile Number", "Email"]
+    },
+    {
+      "id": "aadhaar-update",
+      "name": "Aadhaar Update Form",
+      "category": "Identity",
+      "authority": "UIDAI",
+      "keywords": ["aadhaar update", "correction", "uidai", "demographic update"],
+      "fields": ["Aadhaar Number", "Update Type", "New Information", "Supporting Documents"]
+    },
+    {
+      "id": "pan-49a",
+      "name": "PAN Card Application Form 49A",
+      "category": "Tax",
+      "authority": "Income Tax Department",
+      "keywords": ["pan", "form 49a", "permanent account number", "income tax"],
+      "fields": ["Name", "Father's Name", "Date of Birth", "Address", "Identity Proof"]
+    },
+    {
+      "id": "pan-correction",
+      "name": "PAN Correction/Update Form",
+      "category": "Tax",
+      "authority": "Income Tax Department",
+      "keywords": ["pan correction", "pan update", "change request"],
+      "fields": ["PAN Number", "Correction Type", "New Details", "Documents"]
+    },
+    {
+      "id": "gst-reg-01",
+      "name": "GST Registration Form GST REG-01",
+      "category": "Tax",
+      "authority": "GST Council",
+      "keywords": ["gst", "gstin", "registration", "goods and services tax", "reg-01"],
+      "fields": ["Business Name", "PAN", "Address", "Business Type", "Turnover"]
+    },
+    {
+      "id": "gstr-1",
+      "name": "GSTR-1 Outward Supplies Return",
+      "category": "Tax",
+      "authority": "GST Council",
+      "keywords": ["gstr-1", "gst return", "outward supplies", "sales"],
+      "fields": ["GSTIN", "Period", "Invoice Details", "Tax Amount"]
+    },
+    {
+      "id": "gstr-3b",
+      "name": "GSTR-3B Monthly Return",
+      "category": "Tax",
+      "authority": "GST Council",
+      "keywords": ["gstr-3b", "monthly return", "gst payment"],
+      "fields": ["GSTIN", "Period", "Tax Liability", "ITC Claimed", "Payment"]
+    },
+    {
+      "id": "passport-application",
+      "name": "Passport Application Form",
+      "category": "Identity",
+      "authority": "Ministry of External Affairs",
+      "keywords": ["passport", "mea", "external affairs", "travel document"],
+      "fields": ["Name", "DOB", "Address", "Parents Details", "Emergency Contact"]
+    },
+    {
+      "id": "passport-renewal",
+      "name": "Passport Renewal Form",
+      "category": "Identity",
+      "authority": "Ministry of External Affairs",
+      "keywords": ["passport renewal", "reissue", "expired passport"],
+      "fields": ["Passport Number", "Issue Date", "Expiry Date", "Reason for Renewal"]
+    },
+    {
+      "id": "dl-application",
+      "name": "Driving License Application Form",
+      "category": "Transport",
+      "authority": "RTO",
+      "keywords": ["driving license", "dl", "rto", "learner license", "transport"],
+      "fields": ["Name", "DOB", "Address", "Vehicle Type", "Medical Certificate"]
+    },
+    {
+      "id": "dl-renewal",
+      "name": "Driving License Renewal Form",
+      "category": "Transport",
+      "authority": "RTO",
+      "keywords": ["dl renewal", "license renewal", "rto renewal"],
+      "fields": ["DL Number", "Expiry Date", "Medical Certificate", "Address Proof"]
+    },
+    {
+      "id": "voter-id",
+      "name": "Voter ID Card Application Form 6",
+      "category": "Identity",
+      "authority": "Election Commission",
+      "keywords": ["voter id", "epic", "election card", "form 6", "election commission"],
+      "fields": ["Name", "DOB", "Address", "Constituency", "Identity Proof"]
+    },
+    {
+      "id": "itr-1",
+      "name": "Income Tax Return Form ITR-1 (Sahaj)",
+      "category": "Tax",
+      "authority": "Income Tax Department",
+      "keywords": ["itr-1", "income tax return", "sahaj", "tax filing"],
+      "fields": ["PAN", "Income Details", "Deductions", "Tax Paid", "Refund"]
+    },
+    {
+      "id": "itr-2",
+      "name": "Income Tax Return Form ITR-2",
+      "category": "Tax",
+      "authority": "Income Tax Department",
+      "keywords": ["itr-2", "capital gains", "multiple properties"],
+      "fields": ["PAN", "Salary", "Capital Gains", "Other Income", "Deductions"]
+    },
+    {
+      "id": "itr-3",
+      "name": "Income Tax Return Form ITR-3",
+      "category": "Tax",
+      "authority": "Income Tax Department",
+      "keywords": ["itr-3", "business income", "professional income"],
+      "fields": ["PAN", "Business Income", "Professional Income", "Balance Sheet"]
+    },
+    {
+      "id": "itr-4",
+      "name": "Income Tax Return Form ITR-4 (Sugam)",
+      "category": "Tax",
+      "authority": "Income Tax Department",
+      "keywords": ["itr-4", "sugam", "presumptive taxation"],
+      "fields": ["PAN", "Presumptive Income", "Turnover", "Deductions"]
+    },
+    {
+      "id": "shop-establishment",
+      "name": "Shop and Establishment License",
+      "category": "Business",
+      "authority": "Municipal Corporation",
+      "keywords": ["shop license", "establishment", "trade license", "municipal"],
+      "fields": ["Business Name", "Owner Name", "Address", "Business Type", "Employees"]
+    },
+    {
+      "id": "fssai-registration",
+      "name": "FSSAI Food License Registration",
+      "category": "Business",
+      "authority": "FSSAI",
+      "keywords": ["fssai", "food license", "food safety", "fbo"],
+      "fields": ["Business Name", "Food Category", "Premises Details", "Turnover"]
+    },
+    {
+      "id": "msme-udyam",
+      "name": "MSME Udyam Registration",
+      "category": "Business",
+      "authority": "Ministry of MSME",
+      "keywords": ["msme", "udyam", "sme registration", "micro enterprise"],
+      "fields": ["Business Name", "PAN", "Aadhaar", "Investment", "Turnover"]
+    },
+    {
+      "id": "import-export-code",
+      "name": "Import Export Code (IEC) Application",
+      "category": "Business",
+      "authority": "DGFT",
+      "keywords": ["iec", "import export", "dgft", "foreign trade"],
+      "fields": ["Business Name", "PAN", "Bank Details", "Business Address"]
+    }
+  ],
+  "bankForms": [
+    {
+      "id": "savings-account",
+      "name": "Savings Account Opening Form",
+      "category": "Banking",
+      "authority": "Banks",
+      "keywords": ["savings account", "account opening", "bank account", "kyc"],
+      "fields": ["Name", "DOB", "PAN", "Aadhaar", "Address", "Nominee", "Initial Deposit"]
+    },
+    {
+      "id": "current-account",
+      "name": "Current Account Opening Form",
+      "category": "Banking",
+      "authority": "Banks",
+      "keywords": ["current account", "business account", "company account"],
+      "fields": ["Business Name", "PAN", "GST", "Address", "Authorized Signatories"]
+    },
+    {
+      "id": "kyc-update",
+      "name": "KYC Update Form",
+      "category": "Banking",
+      "authority": "Banks",
+      "keywords": ["kyc", "know your customer", "kyc update", "customer verification"],
+      "fields": ["Account Number", "Updated Information", "Identity Proof", "Address Proof"]
+    },
+    {
+      "id": "cheque-book",
+      "name": "Cheque Book Request Form",
+      "category": "Banking",
+      "authority": "Banks",
+      "keywords": ["cheque book", "checkbook", "cheque request"],
+      "fields": ["Account Number", "Number of Leaves", "Delivery Address"]
+    },
+    {
+      "id": "atm-debit-card",
+      "name": "ATM/Debit Card Application",
+      "category": "Banking",
+      "authority": "Banks",
+      "keywords": ["atm card", "debit card", "card application"],
+      "fields": ["Account Number", "Card Type", "Delivery Address", "PIN"]
+    },
+    {
+      "id": "credit-card",
+      "name": "Credit Card Application Form",
+      "category": "Banking",
+      "authority": "Banks",
+      "keywords": ["credit card", "card application", "credit limit"],
+      "fields": ["Name", "Income", "Employment", "PAN", "Address", "Card Type"]
+    },
+    {
+      "id": "home-loan",
+      "name": "Home Loan Application Form",
+      "category": "Banking",
+      "authority": "Banks",
+      "keywords": ["home loan", "housing loan", "mortgage", "property loan"],
+      "fields": ["Applicant Details", "Property Details", "Income", "Loan Amount", "Co-applicant"]
+    },
+    {
+      "id": "personal-loan",
+      "name": "Personal Loan Application Form",
+      "category": "Banking",
+      "authority": "Banks",
+      "keywords": ["personal loan", "unsecured loan", "consumer loan"],
+      "fields": ["Name", "Income", "Employment", "Loan Amount", "Purpose", "Tenure"]
+    },
+    {
+      "id": "fixed-deposit",
+      "name": "Fixed Deposit Account Opening Form",
+      "category": "Banking",
+      "authority": "Banks",
+      "keywords": ["fixed deposit", "fd", "term deposit", "time deposit"],
+      "fields": ["Account Number", "Deposit Amount", "Tenure", "Interest Rate", "Nominee"]
+    },
+    {
+      "id": "recurring-deposit",
+      "name": "Recurring Deposit Account Form",
+      "category": "Banking",
+      "authority": "Banks",
+      "keywords": ["recurring deposit", "rd", "monthly deposit"],
+      "fields": ["Account Number", "Monthly Amount", "Tenure", "Nominee"]
+    }
+  ]
+}
