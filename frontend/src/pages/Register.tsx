@@ -89,8 +89,12 @@ export default function Register() {
               { value: 'hindi', label: 'हिंदी (Hindi)' },
               { value: 'tamil', label: 'தமிழ் (Tamil)' },
               { value: 'telugu', label: 'తెలుగు (Telugu)' },
+              { value: 'kannada', label: 'ಕನ್ನಡ (Kannada)' },
               { value: 'bengali', label: 'বাংলা (Bengali)' },
-              { value: 'marathi', label: 'मराठी (Marathi)' }
+              { value: 'marathi', label: 'मराठी (Marathi)' },
+              { value: 'gujarati', label: 'ગુજરાતી (Gujarati)' },
+              { value: 'malayalam', label: 'മലയാളം (Malayalam)' },
+              { value: 'punjabi', label: 'ਪੰਜਾਬੀ (Punjabi)' }
             ]}
             required
           />

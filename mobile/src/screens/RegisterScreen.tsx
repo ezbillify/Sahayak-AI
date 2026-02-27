@@ -91,8 +91,12 @@ export default function RegisterScreen({ navigation }: any) {
                 <Picker.Item label="हिंदी (Hindi)" value="hindi" />
                 <Picker.Item label="தமிழ் (Tamil)" value="tamil" />
                 <Picker.Item label="తెలుగు (Telugu)" value="telugu" />
+                <Picker.Item label="ಕನ್ನಡ (Kannada)" value="kannada" />
                 <Picker.Item label="বাংলা (Bengali)" value="bengali" />
                 <Picker.Item label="मराठी (Marathi)" value="marathi" />
+                <Picker.Item label="ગુજરાતી (Gujarati)" value="gujarati" />
+                <Picker.Item label="മലയാളം (Malayalam)" value="malayalam" />
+                <Picker.Item label="ਪੰਜਾਬੀ (Punjabi)" value="punjabi" />
               </Picker>
             </View>
           </View>
