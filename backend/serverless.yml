@@ -1,0 +1,189 @@
+service: sahayak-ai-backend
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  region: ap-south-1  # Mumbai region for India data residency
+  stage: ${opt:stage, 'dev'}
+  memorySize: 512
+  timeout: 30
+  environment:
+    DOCUMENTS_BUCKET: ${self:custom.documentsBucket}
+    USERS_TABLE: ${self:custom.usersTable}
+    DOCUMENTS_TABLE: ${self:custom.documentsTable}
+    COMPLIANCE_TABLE: ${self:custom.complianceTable}
+    FORMS_TABLE: ${self:custom.formsTable}
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - s3:GetObject
+            - s3:PutObject
+            - s3:DeleteObject
+          Resource: "arn:aws:s3:::${self:custom.documentsBucket}/*"
+        - Effect: Allow
+          Action:
+            - dynamodb:Query
+            - dynamodb:Scan
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
+          Resource:
+            - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.usersTable}"
+            - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.documentsTable}"
+            - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.complianceTable}"
+            - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.formsTable}"
+        - Effect: Allow
+          Action:
+            - textract:DetectDocumentText
+            - textract:AnalyzeDocument
+          Resource: "*"
+        - Effect: Allow
+          Action:
+            - bedrock:InvokeModel
+          Resource: "*"
+
+custom:
+  documentsBucket: sahayak-ai-documents-${self:provider.stage}
+  usersTable: sahayak-ai-users-${self:provider.stage}
+  documentsTable: sahayak-ai-documents-${self:provider.stage}
+  complianceTable: sahayak-ai-compliance-${self:provider.stage}
+  formsTable: sahayak-ai-forms-${self:provider.stage}
+
+functions:
+  uploadDocument:
+    handler: lambda/uploadDocument.handler
+    events:
+      - http:
+          path: /documents/upload
+          method: post
+          cors: true
+
+  processDocument:
+    handler: lambda/processDocument.handler
+    timeout: 60
+    events:
+      - s3:
+          bucket: ${self:custom.documentsBucket}
+          event: s3:ObjectCreated:*
+          existing: true
+
+  analyzeDocument:
+    handler: lambda/analyzeDocument.handler
+    timeout: 60
+    events:
+      - http:
+          path: /documents/{documentId}/analyze
+          method: get
+          cors: true
+
+  getDocument:
+    handler: lambda/getDocument.handler
+    events:
+      - http:
+          path: /documents/{documentId}
+          method: get
+          cors: true
+
+resources:
+  Resources:
+    DocumentsBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${self:custom.documentsBucket}
+        BucketEncryption:
+          ServerSideEncryptionConfiguration:
+            - ServerSideEncryptionByDefault:
+                SSEAlgorithm: AES256
+        LifecycleConfiguration:
+          Rules:
+            - Id: MoveToGlacierAfter1Year
+              Status: Enabled
+              Transitions:
+                - TransitionInDays: 365
+                  StorageClass: GLACIER
+            - Id: DeleteTempFilesAfter30Days
+              Status: Enabled
+              ExpirationInDays: 30
+              Prefix: temp/
+
+    UsersTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.usersTable}
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: userId
+            AttributeType: S
+          - AttributeName: email
+            AttributeType: S
+        KeySchema:
+          - AttributeName: userId
+            KeyType: HASH
+        GlobalSecondaryIndexes:
+          - IndexName: EmailIndex
+            KeySchema:
+              - AttributeName: email
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+
+    DocumentsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.documentsTable}
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: documentId
+            AttributeType: S
+          - AttributeName: userId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: documentId
+            KeyType: HASH
+        GlobalSecondaryIndexes:
+          - IndexName: UserIdIndex
+            KeySchema:
+              - AttributeName: userId
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+
+    ComplianceTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.complianceTable}
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: complianceId
+            AttributeType: S
+          - AttributeName: userId
+            AttributeType: S
+          - AttributeName: dueDate
+            AttributeType: S
+        KeySchema:
+          - AttributeName: complianceId
+            KeyType: HASH
+        GlobalSecondaryIndexes:
+          - IndexName: UserIdIndex
+            KeySchema:
+              - AttributeName: userId
+                KeyType: HASH
+              - AttributeName: dueDate
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
+
+    FormsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.formsTable}
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: formId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: formId
+            KeyType: HASH
