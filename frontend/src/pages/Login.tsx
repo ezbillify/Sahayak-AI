@@ -15,6 +15,7 @@ export default function Login() {
     
     try {
       const apiUrl = import.meta.env.VITE_API_URL || 'https://yy6whjwjt1.execute-api.ap-south-1.amazonaws.com/prod'
+      console.log('Login API URL:', apiUrl)
       
       const response = await fetch(`${apiUrl}/auth/login`, {
         method: 'POST',
@@ -22,7 +23,9 @@ export default function Login() {
         body: JSON.stringify({ email, password })
       })
 
+      console.log('Login response status:', response.status)
       const data = await response.json()
+      console.log('Login response data:', data)
 
       if (data.success) {
         // Store tokens and user data

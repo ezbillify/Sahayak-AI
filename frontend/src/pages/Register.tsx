@@ -29,6 +29,7 @@ export default function Register() {
     
     try {
       const apiUrl = import.meta.env.VITE_API_URL || 'https://yy6whjwjt1.execute-api.ap-south-1.amazonaws.com/prod'
+      console.log('Register API URL:', apiUrl)
       
       const response = await fetch(`${apiUrl}/auth/register`, {
         method: 'POST',
@@ -43,7 +44,9 @@ export default function Register() {
         })
       })
 
+      console.log('Register response status:', response.status)
       const data = await response.json()
+      console.log('Register response data:', data)
 
       if (data.success) {
         alert(data.message || 'Registration successful! Please check your email to verify your account.')
