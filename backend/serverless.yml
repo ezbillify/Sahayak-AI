@@ -5,8 +5,8 @@ provider:
   runtime: nodejs20.x
   region: ap-south-1  # Mumbai region for India data residency
   stage: ${opt:stage, 'dev'}
-  memorySize: 512
-  timeout: 30
+  memorySize: 256  # Reduced default memory (cost optimization)
+  timeout: 10  # Reduced default timeout (cost optimization)
   environment:
     DOCUMENTS_BUCKET: ${self:custom.documentsBucket}
     USERS_TABLE: ${self:custom.usersTable}
@@ -129,6 +129,7 @@ functions:
 
   processDocument:
     handler: lambda/processDocument.handler
+    memorySize: 512  # Needs more memory for OCR
     timeout: 60
     events:
       - s3:
@@ -138,6 +139,7 @@ functions:
 
   analyzeDocument:
     handler: lambda/analyzeDocument.handler
+    memorySize: 512  # Needs more memory for AI
     timeout: 60
     events:
       - http:

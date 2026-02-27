@@ -1,0 +1,108 @@
+# Cost Optimization Configuration for Sahayak AI
+
+## Lambda Optimizations
+lambda:
+  # Reduce memory for simple functions (lower memory = lower cost)
+  memory:
+    simple: 256  # Auth, simple CRUD
+    medium: 512  # Document processing
+    heavy: 1024  # AI analysis, OCR
+  
+  # Timeout optimization (shorter timeout = lower cost)
+  timeout:
+    simple: 10
+    medium: 30
+    heavy: 60
+
+## Caching Strategy
+caching:
+  # Cache AI analysis results to avoid re-processing
+  aiAnalysis:
+    enabled: true
+    ttl: 2592000  # 30 days
+  
+  # Cache form detection results
+  formDetection:
+    enabled: true
+    ttl: 2592000  # 30 days
+  
+  # Cache OCR results
+  ocrResults:
+    enabled: true
+    ttl: 2592000  # 30 days
+
+## S3 Optimizations
+s3:
+  # Lifecycle policies
+  lifecycle:
+    # Move old documents to cheaper storage
+    transitionToIA: 90  # days (Infrequent Access)
+    transitionToGlacier: 365  # days
+    expireAfter: 1825  # 5 years
+  
+  # Intelligent tiering for automatic cost optimization
+  intelligentTiering: true
+
+## DynamoDB Optimizations
+dynamodb:
+  # Use on-demand pricing for low traffic
+  billingMode: PAY_PER_REQUEST
+  
+  # Enable point-in-time recovery only for critical tables
+  pitr:
+    users: true
+    documents: true
+    compliance: false
+    forms: false
+
+## Textract Optimizations
+textract:
+  # Compress images before processing
+  compression:
+    enabled: true
+    quality: 85
+    maxWidth: 2048
+    maxHeight: 2048
+  
+  # Batch processing
+  batchSize: 10
+
+## Bedrock (AI) Optimizations
+bedrock:
+  # Cache responses
+  cacheEnabled: true
+  
+  # Use cheaper model for simple tasks
+  models:
+    simple: "anthropic.claude-instant-v1"  # Cheaper
+    complex: "anthropic.claude-3-5-sonnet-20241022-v2:0"  # More expensive
+  
+  # Limit token usage
+  maxTokens:
+    simple: 500
+    complex: 2000
+
+## Monitoring & Alerts
+monitoring:
+  # Cost alerts
+  budgetAlerts:
+    - threshold: 10  # USD
+      email: "admin@ezbillify.com"
+    - threshold: 50  # USD
+      email: "admin@ezbillify.com"
+    - threshold: 100  # USD
+      email: "admin@ezbillify.com"
+  
+  # Usage tracking
+  trackMetrics:
+    - lambda_invocations
+    - textract_pages
+    - bedrock_tokens
+    - s3_storage
+    - dynamodb_reads_writes
+
+## Estimated Monthly Costs (with optimizations)
+estimatedCosts:
+  lowTraffic: 0.65  # USD (< 100 users)
+  mediumTraffic: 5.00  # USD (< 1000 users)
+  highTraffic: 50.00  # USD (< 10000 users)

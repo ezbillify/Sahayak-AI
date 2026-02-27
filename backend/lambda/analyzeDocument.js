@@ -28,6 +28,28 @@ exports.handler = async (event) => {
 
     const document = result.Item;
 
+    // Check if document already has AI analysis (CACHE CHECK)
+    if (document.aiAnalysis && document.analyzedDate) {
+      console.log('Returning cached AI analysis');
+      return {
+        statusCode: 200,
+        headers: { 
+          'Access-Control-Allow-Origin': '*',
+          'X-Cache': 'HIT'
+        },
+        body: JSON.stringify({
+          documentId,
+          fileName: document.fileName,
+          analysis: document.aiAnalysis,
+          detectedForm: document.detectedForm,
+          detectionConfidence: document.detectedForm ? 95 : 0,
+          ocrConfidence: document.ocrConfidence,
+          cached: true,
+          analyzedDate: document.analyzedDate
+        })
+      };
+    }
+
     if (!document.extractedText) {
       return {
         statusCode: 400,
