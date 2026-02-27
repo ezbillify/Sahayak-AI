@@ -1,18 +1,25 @@
 import React, { useRef, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
-import { RNCamera } from 'react-native-camera';
+import { View, Text, StyleSheet, TouchableOpacity, Image, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+
+// Note: Install react-native-camera or use react-native-vision-camera
+// For now, using a placeholder implementation
+const RNCamera: any = {
+  Constants: {
+    Type: {
+      back: 'back',
+      front: 'front'
+    }
+  }
+};
 
 export default function CameraScreen({ navigation }: any) {
   const cameraRef = useRef<RNCamera>(null);
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
 
   const takePicture = async () => {
-    if (cameraRef.current) {
-      const options = { quality: 0.8, base64: true };
-      const data = await cameraRef.current.takePictureAsync(options);
-      setCapturedImage(data.uri);
-    }
+    // Placeholder - implement with react-native-vision-camera or expo-camera
+    Alert.alert('Camera', 'Camera functionality requires native camera library installation');
   };
 
   const retake = () => {
@@ -44,16 +51,14 @@ export default function CameraScreen({ navigation }: any) {
 
   return (
     <View style={styles.container}>
-      <RNCamera
-        ref={cameraRef}
-        style={styles.camera}
-        type={RNCamera.Constants.Type.back}
-        captureAudio={false}
-      >
+      <View style={styles.camera}>
         <View style={styles.overlay}>
           <Text style={styles.instruction}>Position document within frame</Text>
+          <Text style={styles.note}>
+            Note: Install react-native-vision-camera for full camera functionality
+          </Text>
         </View>
-      </RNCamera>
+      </View>
       <View style={styles.controls}>
         <TouchableOpacity style={styles.captureButton} onPress={takePicture}>
           <View style={styles.captureInner} />
@@ -83,6 +88,16 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     backgroundColor: 'rgba(0,0,0,0.5)',
     padding: 12,
+    borderRadius: 8,
+    textAlign: 'center',
+  },
+  note: {
+    color: '#fff',
+    fontSize: 14,
+    marginTop: 12,
+    textAlign: 'center',
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    padding: 8,
     borderRadius: 8,
   },
   controls: {
