@@ -7,8 +7,17 @@ The admin dashboard is available at: `/admin`
 ### Admin Login Credentials
 
 To access the admin dashboard, login with:
-- **Email**: `admin@sahayak.ai`
-- **Password**: Any password (for demo purposes)
+- **Email**: `admin@ezbillify.com`
+- **Password**: Set during first registration
+
+**Important**: When you login with the admin email, you will be automatically redirected to the Admin Dashboard instead of the regular user dashboard.
+
+### First Time Setup
+
+1. Go to `/register` and create an account with email: `admin@ezbillify.com`
+2. The system will automatically mark this user as admin
+3. Login with these credentials - you'll be redirected to `/admin`
+4. The "Admin" link will appear in the header for admin users
 
 ### Admin Features
 

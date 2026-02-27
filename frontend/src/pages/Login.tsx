@@ -10,10 +10,25 @@ export default function Login() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
+    
+    // Check if admin user
+    const isAdmin = email === 'admin@ezbillify.com'
+    
     // Store dummy token for authentication
     localStorage.setItem('userToken', 'dummy-token-' + Date.now())
-    localStorage.setItem('userData', JSON.stringify({ email, name: 'User' }))
-    navigate('/dashboard')
+    localStorage.setItem('userData', JSON.stringify({ 
+      email, 
+      name: isAdmin ? 'Admin' : 'User',
+      isAdmin 
+    }))
+    
+    // Redirect based on user type
+    if (isAdmin) {
+      navigate('/admin')
+    } else {
+      navigate('/dashboard')
+    }
+    
     window.location.reload() // Reload to update header
   }
 
@@ -44,6 +59,12 @@ export default function Login() {
           <Button type="submit" fullWidth>
             Login
           </Button>
+
+          <div className="text-center">
+            <Link to="/forgot-password" className="text-sm text-blue-600 hover:underline">
+              Forgot Password?
+            </Link>
+          </div>
         </form>
 
         <p className="text-center mt-6 text-gray-600">

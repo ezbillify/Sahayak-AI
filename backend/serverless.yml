@@ -13,6 +13,8 @@ provider:
     DOCUMENTS_TABLE: ${self:custom.documentsTable}
     COMPLIANCE_TABLE: ${self:custom.complianceTable}
     FORMS_TABLE: ${self:custom.formsTable}
+    COGNITO_USER_POOL_ID: !Ref CognitoUserPool
+    COGNITO_CLIENT_ID: !Ref CognitoUserPoolClient
   iam:
     role:
       statements:
@@ -50,6 +52,12 @@ provider:
             - ses:SendEmail
             - ses:SendRawEmail
           Resource: "*"
+        - Effect: Allow
+          Action:
+            - cognito-idp:AdminAddUserToGroup
+            - cognito-idp:AdminGetUser
+            - cognito-idp:AdminListGroupsForUser
+          Resource: !GetAtt CognitoUserPool.Arn
 
 custom:
   documentsBucket: sahayak-ai-documents-${self:provider.stage}
@@ -59,6 +67,40 @@ custom:
   formsTable: sahayak-ai-forms-${self:provider.stage}
 
 functions:
+  # Authentication Functions
+  login:
+    handler: lambda/auth/login.handler
+    events:
+      - http:
+          path: /auth/login
+          method: post
+          cors: true
+
+  register:
+    handler: lambda/auth/register.handler
+    events:
+      - http:
+          path: /auth/register
+          method: post
+          cors: true
+
+  forgotPassword:
+    handler: lambda/auth/forgotPassword.handler
+    events:
+      - http:
+          path: /auth/forgot-password
+          method: post
+          cors: true
+
+  resetPassword:
+    handler: lambda/auth/resetPassword.handler
+    events:
+      - http:
+          path: /auth/reset-password
+          method: post
+          cors: true
+
+  # Document Functions
   uploadDocument:
     handler: lambda/uploadDocument.handler
     events:
@@ -126,6 +168,68 @@ functions:
 
 resources:
   Resources:
+    # Cognito User Pool
+    CognitoUserPool:
+      Type: AWS::Cognito::UserPool
+      Properties:
+        UserPoolName: sahayak-ai-users-${self:provider.stage}
+        UsernameAttributes:
+          - email
+        AutoVerifiedAttributes:
+          - email
+        EmailConfiguration:
+          EmailSendingAccount: COGNITO_DEFAULT
+        Policies:
+          PasswordPolicy:
+            MinimumLength: 8
+            RequireUppercase: true
+            RequireLowercase: true
+            RequireNumbers: true
+            RequireSymbols: false
+        Schema:
+          - Name: email
+            Required: true
+            Mutable: false
+          - Name: name
+            Required: true
+            Mutable: true
+          - Name: phone_number
+            Required: false
+            Mutable: true
+          - Name: user_type
+            AttributeDataType: String
+            Mutable: true
+          - Name: language
+            AttributeDataType: String
+            Mutable: true
+          - Name: is_admin
+            AttributeDataType: String
+            Mutable: true
+
+    # Cognito User Pool Client
+    CognitoUserPoolClient:
+      Type: AWS::Cognito::UserPoolClient
+      Properties:
+        ClientName: sahayak-ai-client-${self:provider.stage}
+        UserPoolId:
+          Ref: CognitoUserPool
+        GenerateSecret: false
+        ExplicitAuthFlows:
+          - ALLOW_USER_PASSWORD_AUTH
+          - ALLOW_REFRESH_TOKEN_AUTH
+          - ALLOW_USER_SRP_AUTH
+        PreventUserExistenceErrors: ENABLED
+
+    # Cognito Admin User Group
+    CognitoAdminGroup:
+      Type: AWS::Cognito::UserPoolGroup
+      Properties:
+        GroupName: Admins
+        Description: Administrator users with full access
+        UserPoolId:
+          Ref: CognitoUserPool
+        Precedence: 0
+
     DocumentsBucket:
       Type: AWS::S3::Bucket
       Properties:

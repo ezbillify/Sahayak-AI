@@ -15,7 +15,7 @@ export default function Layout() {
     const userData = localStorage.getItem('userData')
     if (userData) {
       const user = JSON.parse(userData)
-      setIsAdmin(user.email === 'admin@sahayak.ai' || user.isAdmin)
+      setIsAdmin(user.email === 'admin@ezbillify.com' || user.isAdmin)
     }
   }, [])
 
