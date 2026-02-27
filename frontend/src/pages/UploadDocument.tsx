@@ -18,43 +18,47 @@ export default function UploadDocument() {
     setResult(null)
     
     try {
-      const token = localStorage.getItem('userToken')
+      const userData = localStorage.getItem('userData')
+      const user = userData ? JSON.parse(userData) : null
+      const userId = user?.email || 'anonymous'
+      
       const apiUrl = import.meta.env.VITE_API_URL || 'https://yy6whjwjt1.execute-api.ap-south-1.amazonaws.com/prod'
       
-      // Step 1: Get presigned URL for upload
-      const uploadResponse = await fetch(`${apiUrl}/documents/upload`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          fileName: file.name,
-          fileType: file.type
-        })
-      })
-
-      if (!uploadResponse.ok) {
-        throw new Error('Failed to get upload URL')
-      }
-
-      const { uploadUrl, documentId } = await uploadResponse.json()
-
-      // Step 2: Upload file to S3
-      await fetch(uploadUrl, {
-        method: 'PUT',
-        body: file,
-        headers: {
-          'Content-Type': file.type
-        }
-      })
-
-      // Step 3: Wait a bit for processing, then get analysis
-      setTimeout(async () => {
+      // Convert file to base64
+      const reader = new FileReader()
+      reader.readAsDataURL(file)
+      
+      reader.onload = async () => {
         try {
+          const base64 = reader.result?.toString().split(',')[1]
+          
+          // Upload document
+          const uploadResponse = await fetch(`${apiUrl}/documents/upload`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              fileName: file.name,
+              fileType: file.type,
+              fileContent: base64,
+              userId
+            })
+          })
+
+          if (!uploadResponse.ok) {
+            throw new Error('Failed to upload document')
+          }
+
+          const { documentId } = await uploadResponse.json()
+
+          // Wait for OCR processing (5 seconds)
+          await new Promise(resolve => setTimeout(resolve, 5000))
+
+          // Get analysis
           const analysisResponse = await fetch(`${apiUrl}/documents/${documentId}/analyze`, {
             headers: {
-              'Authorization': `Bearer ${token}`
+              'Content-Type': 'application/json'
             }
           })
 
@@ -70,19 +74,26 @@ export default function UploadDocument() {
               detectedForm: analysisData.detectedForm,
               detectionConfidence: analysisData.detectionConfidence
             })
+          } else {
+            setResult({
+              documentType: 'Processing',
+              summary: 'Document uploaded successfully. Analysis in progress...',
+              keyInformation: [],
+              requiredActions: []
+            })
           }
         } catch (error) {
-          console.error('Error analyzing document:', error)
-          setResult({
-            documentType: 'Processing',
-            summary: 'Document uploaded successfully. Analysis in progress...',
-            keyInformation: [],
-            requiredActions: []
-          })
+          console.error('Error processing document:', error)
+          alert('Failed to process document. Please try again.')
         } finally {
           setUploading(false)
         }
-      }, 3000) // Wait 3 seconds for OCR processing
+      }
+
+      reader.onerror = () => {
+        alert('Failed to read file')
+        setUploading(false)
+      }
 
     } catch (error) {
       console.error('Upload error:', error)
