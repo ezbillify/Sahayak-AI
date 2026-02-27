@@ -38,30 +38,33 @@ export default function Layout() {
             <div className="flex gap-6 items-center">
               {isLoggedIn ? (
                 <>
-                  <Link to="/dashboard" className="text-gray-700 hover:text-blue-600 transition-colors">
+                  <Link to="/dashboard" className="text-gray-700 hover:text-blue-600 font-medium transition-colors">
                     Dashboard
                   </Link>
-                  <Link to="/upload" className="text-gray-700 hover:text-blue-600 transition-colors">
+                  <Link to="/upload" className="text-gray-700 hover:text-blue-600 font-medium transition-colors">
                     Upload
                   </Link>
-                  <Link to="/compliance" className="text-gray-700 hover:text-blue-600 transition-colors">
+                  <Link to="/compliance" className="text-gray-700 hover:text-blue-600 font-medium transition-colors">
                     Compliance
                   </Link>
                   {isAdmin && (
-                    <Link to="/admin" className="text-purple-600 hover:text-purple-700 font-semibold transition-colors">
+                    <Link 
+                      to="/admin" 
+                      className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 font-semibold transition-colors"
+                    >
                       Admin
                     </Link>
                   )}
                   <button 
                     onClick={handleLogout}
-                    className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors"
+                    className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors ml-2"
                   >
                     Logout
                   </button>
                 </>
               ) : (
                 <>
-                  <Link to="/login" className="text-gray-700 hover:text-blue-600 transition-colors">
+                  <Link to="/login" className="text-gray-700 hover:text-blue-600 font-medium transition-colors">
                     Login
                   </Link>
                   <Link to="/register" className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">

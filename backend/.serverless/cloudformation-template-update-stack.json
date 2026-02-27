@@ -71,6 +71,30 @@
         }
       }
     },
+    "LoginLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/sahayak-ai-backend-prod-login"
+      }
+    },
+    "RegisterLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/sahayak-ai-backend-prod-register"
+      }
+    },
+    "ForgotPasswordLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/sahayak-ai-backend-prod-forgotPassword"
+      }
+    },
+    "ResetPasswordLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/sahayak-ai-backend-prod-resetPassword"
+      }
+    },
     "UploadDocumentLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
@@ -226,6 +250,20 @@
                     "ses:SendRawEmail"
                   ],
                   "Resource": "*"
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "cognito-idp:AdminAddUserToGroup",
+                    "cognito-idp:AdminGetUser",
+                    "cognito-idp:AdminListGroupsForUser"
+                  ],
+                  "Resource": {
+                    "Fn::GetAtt": [
+                      "CognitoUserPool",
+                      "Arn"
+                    ]
+                  }
                 }
               ]
             }
@@ -247,6 +285,166 @@
         }
       }
     },
+    "LoginLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/sahayak-ai-backend/prod/1772172734659-2026-02-27T06:12:14.659Z/sahayak-ai-backend.zip"
+        },
+        "Handler": "lambda/auth/login.handler",
+        "Runtime": "nodejs20.x",
+        "FunctionName": "sahayak-ai-backend-prod-login",
+        "MemorySize": 512,
+        "Timeout": 30,
+        "Environment": {
+          "Variables": {
+            "DOCUMENTS_BUCKET": "sahayak-ai-documents-prod",
+            "USERS_TABLE": "sahayak-ai-users-prod",
+            "DOCUMENTS_TABLE": "sahayak-ai-documents-prod",
+            "COMPLIANCE_TABLE": "sahayak-ai-compliance-prod",
+            "FORMS_TABLE": "sahayak-ai-forms-prod",
+            "COGNITO_USER_POOL_ID": {
+              "Ref": "CognitoUserPool"
+            },
+            "COGNITO_CLIENT_ID": {
+              "Ref": "CognitoUserPoolClient"
+            }
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "LoginLogGroup"
+      ]
+    },
+    "RegisterLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/sahayak-ai-backend/prod/1772172734659-2026-02-27T06:12:14.659Z/sahayak-ai-backend.zip"
+        },
+        "Handler": "lambda/auth/register.handler",
+        "Runtime": "nodejs20.x",
+        "FunctionName": "sahayak-ai-backend-prod-register",
+        "MemorySize": 512,
+        "Timeout": 30,
+        "Environment": {
+          "Variables": {
+            "DOCUMENTS_BUCKET": "sahayak-ai-documents-prod",
+            "USERS_TABLE": "sahayak-ai-users-prod",
+            "DOCUMENTS_TABLE": "sahayak-ai-documents-prod",
+            "COMPLIANCE_TABLE": "sahayak-ai-compliance-prod",
+            "FORMS_TABLE": "sahayak-ai-forms-prod",
+            "COGNITO_USER_POOL_ID": {
+              "Ref": "CognitoUserPool"
+            },
+            "COGNITO_CLIENT_ID": {
+              "Ref": "CognitoUserPoolClient"
+            }
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "RegisterLogGroup"
+      ]
+    },
+    "ForgotPasswordLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/sahayak-ai-backend/prod/1772172734659-2026-02-27T06:12:14.659Z/sahayak-ai-backend.zip"
+        },
+        "Handler": "lambda/auth/forgotPassword.handler",
+        "Runtime": "nodejs20.x",
+        "FunctionName": "sahayak-ai-backend-prod-forgotPassword",
+        "MemorySize": 512,
+        "Timeout": 30,
+        "Environment": {
+          "Variables": {
+            "DOCUMENTS_BUCKET": "sahayak-ai-documents-prod",
+            "USERS_TABLE": "sahayak-ai-users-prod",
+            "DOCUMENTS_TABLE": "sahayak-ai-documents-prod",
+            "COMPLIANCE_TABLE": "sahayak-ai-compliance-prod",
+            "FORMS_TABLE": "sahayak-ai-forms-prod",
+            "COGNITO_USER_POOL_ID": {
+              "Ref": "CognitoUserPool"
+            },
+            "COGNITO_CLIENT_ID": {
+              "Ref": "CognitoUserPoolClient"
+            }
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "ForgotPasswordLogGroup"
+      ]
+    },
+    "ResetPasswordLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/sahayak-ai-backend/prod/1772172734659-2026-02-27T06:12:14.659Z/sahayak-ai-backend.zip"
+        },
+        "Handler": "lambda/auth/resetPassword.handler",
+        "Runtime": "nodejs20.x",
+        "FunctionName": "sahayak-ai-backend-prod-resetPassword",
+        "MemorySize": 512,
+        "Timeout": 30,
+        "Environment": {
+          "Variables": {
+            "DOCUMENTS_BUCKET": "sahayak-ai-documents-prod",
+            "USERS_TABLE": "sahayak-ai-users-prod",
+            "DOCUMENTS_TABLE": "sahayak-ai-documents-prod",
+            "COMPLIANCE_TABLE": "sahayak-ai-compliance-prod",
+            "FORMS_TABLE": "sahayak-ai-forms-prod",
+            "COGNITO_USER_POOL_ID": {
+              "Ref": "CognitoUserPool"
+            },
+            "COGNITO_CLIENT_ID": {
+              "Ref": "CognitoUserPoolClient"
+            }
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "ResetPasswordLogGroup"
+      ]
+    },
     "UploadDocumentLambdaFunction": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
@@ -254,7 +452,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/sahayak-ai-backend/prod/1772171840226-2026-02-27T05:57:20.226Z/sahayak-ai-backend.zip"
+          "S3Key": "serverless/sahayak-ai-backend/prod/1772172734659-2026-02-27T06:12:14.659Z/sahayak-ai-backend.zip"
         },
         "Handler": "lambda/uploadDocument.handler",
         "Runtime": "nodejs20.x",
@@ -267,7 +465,13 @@
             "USERS_TABLE": "sahayak-ai-users-prod",
             "DOCUMENTS_TABLE": "sahayak-ai-documents-prod",
             "COMPLIANCE_TABLE": "sahayak-ai-compliance-prod",
-            "FORMS_TABLE": "sahayak-ai-forms-prod"
+            "FORMS_TABLE": "sahayak-ai-forms-prod",
+            "COGNITO_USER_POOL_ID": {
+              "Ref": "CognitoUserPool"
+            },
+            "COGNITO_CLIENT_ID": {
+              "Ref": "CognitoUserPoolClient"
+            }
           }
         },
         "Role": {
@@ -288,7 +492,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/sahayak-ai-backend/prod/1772171840226-2026-02-27T05:57:20.226Z/sahayak-ai-backend.zip"
+          "S3Key": "serverless/sahayak-ai-backend/prod/1772172734659-2026-02-27T06:12:14.659Z/sahayak-ai-backend.zip"
         },
         "Handler": "lambda/processDocument.handler",
         "Runtime": "nodejs20.x",
@@ -301,7 +505,13 @@
             "USERS_TABLE": "sahayak-ai-users-prod",
             "DOCUMENTS_TABLE": "sahayak-ai-documents-prod",
             "COMPLIANCE_TABLE": "sahayak-ai-compliance-prod",
-            "FORMS_TABLE": "sahayak-ai-forms-prod"
+            "FORMS_TABLE": "sahayak-ai-forms-prod",
+            "COGNITO_USER_POOL_ID": {
+              "Ref": "CognitoUserPool"
+            },
+            "COGNITO_CLIENT_ID": {
+              "Ref": "CognitoUserPoolClient"
+            }
           }
         },
         "Role": {
@@ -322,7 +532,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/sahayak-ai-backend/prod/1772171840226-2026-02-27T05:57:20.226Z/sahayak-ai-backend.zip"
+          "S3Key": "serverless/sahayak-ai-backend/prod/1772172734659-2026-02-27T06:12:14.659Z/sahayak-ai-backend.zip"
         },
         "Handler": "lambda/analyzeDocument.handler",
         "Runtime": "nodejs20.x",
@@ -335,7 +545,13 @@
             "USERS_TABLE": "sahayak-ai-users-prod",
             "DOCUMENTS_TABLE": "sahayak-ai-documents-prod",
             "COMPLIANCE_TABLE": "sahayak-ai-compliance-prod",
-            "FORMS_TABLE": "sahayak-ai-forms-prod"
+            "FORMS_TABLE": "sahayak-ai-forms-prod",
+            "COGNITO_USER_POOL_ID": {
+              "Ref": "CognitoUserPool"
+            },
+            "COGNITO_CLIENT_ID": {
+              "Ref": "CognitoUserPoolClient"
+            }
           }
         },
         "Role": {
@@ -356,7 +572,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/sahayak-ai-backend/prod/1772171840226-2026-02-27T05:57:20.226Z/sahayak-ai-backend.zip"
+          "S3Key": "serverless/sahayak-ai-backend/prod/1772172734659-2026-02-27T06:12:14.659Z/sahayak-ai-backend.zip"
         },
         "Handler": "lambda/getDocument.handler",
         "Runtime": "nodejs20.x",
@@ -369,7 +585,13 @@
             "USERS_TABLE": "sahayak-ai-users-prod",
             "DOCUMENTS_TABLE": "sahayak-ai-documents-prod",
             "COMPLIANCE_TABLE": "sahayak-ai-compliance-prod",
-            "FORMS_TABLE": "sahayak-ai-forms-prod"
+            "FORMS_TABLE": "sahayak-ai-forms-prod",
+            "COGNITO_USER_POOL_ID": {
+              "Ref": "CognitoUserPool"
+            },
+            "COGNITO_CLIENT_ID": {
+              "Ref": "CognitoUserPoolClient"
+            }
           }
         },
         "Role": {
@@ -390,7 +612,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/sahayak-ai-backend/prod/1772171840226-2026-02-27T05:57:20.226Z/sahayak-ai-backend.zip"
+          "S3Key": "serverless/sahayak-ai-backend/prod/1772172734659-2026-02-27T06:12:14.659Z/sahayak-ai-backend.zip"
         },
         "Handler": "lambda/createUser.handler",
         "Runtime": "nodejs20.x",
@@ -403,7 +625,13 @@
             "USERS_TABLE": "sahayak-ai-users-prod",
             "DOCUMENTS_TABLE": "sahayak-ai-documents-prod",
             "COMPLIANCE_TABLE": "sahayak-ai-compliance-prod",
-            "FORMS_TABLE": "sahayak-ai-forms-prod"
+            "FORMS_TABLE": "sahayak-ai-forms-prod",
+            "COGNITO_USER_POOL_ID": {
+              "Ref": "CognitoUserPool"
+            },
+            "COGNITO_CLIENT_ID": {
+              "Ref": "CognitoUserPoolClient"
+            }
           }
         },
         "Role": {
@@ -424,7 +652,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/sahayak-ai-backend/prod/1772171840226-2026-02-27T05:57:20.226Z/sahayak-ai-backend.zip"
+          "S3Key": "serverless/sahayak-ai-backend/prod/1772172734659-2026-02-27T06:12:14.659Z/sahayak-ai-backend.zip"
         },
         "Handler": "lambda/addCompliance.handler",
         "Runtime": "nodejs20.x",
@@ -437,7 +665,13 @@
             "USERS_TABLE": "sahayak-ai-users-prod",
             "DOCUMENTS_TABLE": "sahayak-ai-documents-prod",
             "COMPLIANCE_TABLE": "sahayak-ai-compliance-prod",
-            "FORMS_TABLE": "sahayak-ai-forms-prod"
+            "FORMS_TABLE": "sahayak-ai-forms-prod",
+            "COGNITO_USER_POOL_ID": {
+              "Ref": "CognitoUserPool"
+            },
+            "COGNITO_CLIENT_ID": {
+              "Ref": "CognitoUserPoolClient"
+            }
           }
         },
         "Role": {
@@ -458,7 +692,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/sahayak-ai-backend/prod/1772171840226-2026-02-27T05:57:20.226Z/sahayak-ai-backend.zip"
+          "S3Key": "serverless/sahayak-ai-backend/prod/1772172734659-2026-02-27T06:12:14.659Z/sahayak-ai-backend.zip"
         },
         "Handler": "lambda/getUpcomingDeadlines.handler",
         "Runtime": "nodejs20.x",
@@ -471,7 +705,13 @@
             "USERS_TABLE": "sahayak-ai-users-prod",
             "DOCUMENTS_TABLE": "sahayak-ai-documents-prod",
             "COMPLIANCE_TABLE": "sahayak-ai-compliance-prod",
-            "FORMS_TABLE": "sahayak-ai-forms-prod"
+            "FORMS_TABLE": "sahayak-ai-forms-prod",
+            "COGNITO_USER_POOL_ID": {
+              "Ref": "CognitoUserPool"
+            },
+            "COGNITO_CLIENT_ID": {
+              "Ref": "CognitoUserPoolClient"
+            }
           }
         },
         "Role": {
@@ -492,7 +732,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/sahayak-ai-backend/prod/1772171840226-2026-02-27T05:57:20.226Z/sahayak-ai-backend.zip"
+          "S3Key": "serverless/sahayak-ai-backend/prod/1772172734659-2026-02-27T06:12:14.659Z/sahayak-ai-backend.zip"
         },
         "Handler": "lambda/sendReminders.handler",
         "Runtime": "nodejs20.x",
@@ -505,7 +745,13 @@
             "USERS_TABLE": "sahayak-ai-users-prod",
             "DOCUMENTS_TABLE": "sahayak-ai-documents-prod",
             "COMPLIANCE_TABLE": "sahayak-ai-compliance-prod",
-            "FORMS_TABLE": "sahayak-ai-forms-prod"
+            "FORMS_TABLE": "sahayak-ai-forms-prod",
+            "COGNITO_USER_POOL_ID": {
+              "Ref": "CognitoUserPool"
+            },
+            "COGNITO_CLIENT_ID": {
+              "Ref": "CognitoUserPoolClient"
+            }
           }
         },
         "Role": {
@@ -519,84 +765,124 @@
         "SendRemindersLogGroup"
       ]
     },
-    "UploadDocumentLambdaVersionxwgZyNTDt9pr2Dlt6mNRx54ieBuEt0pwhSyBT5dSY": {
+    "LoginLambdaVersionk6vl7PsbpZuvxsCn1wlXjKRskukbDxby6BdDgjEJkKY": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "LoginLambdaFunction"
+        },
+        "CodeSha256": "fZ3ohWljkqbcTKeN2ocWDVqo/owU3IQZbckG/isfOKU="
+      }
+    },
+    "RegisterLambdaVersionGfsWhtjXCpdTfHEzWYYtuHiyhLbIA0vrjQb2W05Eg": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "RegisterLambdaFunction"
+        },
+        "CodeSha256": "fZ3ohWljkqbcTKeN2ocWDVqo/owU3IQZbckG/isfOKU="
+      }
+    },
+    "ForgotPasswordLambdaVersionDeJWyfis91iZitQQQWHIIcTxDDJCmnRHwtpzjmTUtmc": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "ForgotPasswordLambdaFunction"
+        },
+        "CodeSha256": "fZ3ohWljkqbcTKeN2ocWDVqo/owU3IQZbckG/isfOKU="
+      }
+    },
+    "ResetPasswordLambdaVersionwhJ7mXU26BPOKCcCNP6nV5aA0xTkgr5RgF9XSIRveo": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "ResetPasswordLambdaFunction"
+        },
+        "CodeSha256": "fZ3ohWljkqbcTKeN2ocWDVqo/owU3IQZbckG/isfOKU="
+      }
+    },
+    "UploadDocumentLambdaVersionuSJBU6j8L1cMMw6ztPIa2SdzUftjKZUEbJOauOjx9Vc": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "UploadDocumentLambdaFunction"
         },
-        "CodeSha256": "e7dOGCMrGzr1A0Dl5fzGJXZJ5rvw7EC9T0AvC6ZYcGM="
+        "CodeSha256": "fZ3ohWljkqbcTKeN2ocWDVqo/owU3IQZbckG/isfOKU="
       }
     },
-    "ProcessDocumentLambdaVersiond285MjUeSvja9eCCBEbaWCKSfxDkBUGZpHEJ0vyXJo": {
+    "ProcessDocumentLambdaVersiondWgySnRO2OtNyYNzlyo4Ic8f9DGeE8iCW3lA6DrGfg": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "ProcessDocumentLambdaFunction"
         },
-        "CodeSha256": "e7dOGCMrGzr1A0Dl5fzGJXZJ5rvw7EC9T0AvC6ZYcGM="
+        "CodeSha256": "fZ3ohWljkqbcTKeN2ocWDVqo/owU3IQZbckG/isfOKU="
       }
     },
-    "AnalyzeDocumentLambdaVersionrJIv4Exa5nmPmySEUdawVthyGjRPAfCJif9fVeMypI": {
+    "AnalyzeDocumentLambdaVersionLLs3Ztrq9qPCu91AU8tRMg0FBksI237qpfAIRloUP4": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "AnalyzeDocumentLambdaFunction"
         },
-        "CodeSha256": "e7dOGCMrGzr1A0Dl5fzGJXZJ5rvw7EC9T0AvC6ZYcGM="
+        "CodeSha256": "fZ3ohWljkqbcTKeN2ocWDVqo/owU3IQZbckG/isfOKU="
       }
     },
-    "GetDocumentLambdaVersionXY9r1uo6KcN5b3XcTpVhB3jXG4cZmYJ1WkNpNWmf2dk": {
+    "GetDocumentLambdaVersion0In9jE7ShzkJTfhNWQKUm088PiuEKQjGLc2ISkC78": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "GetDocumentLambdaFunction"
         },
-        "CodeSha256": "e7dOGCMrGzr1A0Dl5fzGJXZJ5rvw7EC9T0AvC6ZYcGM="
+        "CodeSha256": "fZ3ohWljkqbcTKeN2ocWDVqo/owU3IQZbckG/isfOKU="
       }
     },
-    "CreateUserLambdaVersioniTwsXuWC3uZv07kTfgkVdcIrCMXniSVVvrFwMTpzaU": {
+    "CreateUserLambdaVersion0FnaNu56vwUKz8f7wsiLhqsZQwGGnkXxprywqycGI0": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "CreateUserLambdaFunction"
         },
-        "CodeSha256": "e7dOGCMrGzr1A0Dl5fzGJXZJ5rvw7EC9T0AvC6ZYcGM="
+        "CodeSha256": "fZ3ohWljkqbcTKeN2ocWDVqo/owU3IQZbckG/isfOKU="
       }
     },
-    "AddComplianceLambdaVersionFyiyRnnpd82n8eO46RqDhoDBHJIrUISKkcCwaVqPD8": {
+    "AddComplianceLambdaVersionOm1BIp9czio3NbKxmUsfnNu7Kt8UX32Dr4FCqdvLru0": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "AddComplianceLambdaFunction"
         },
-        "CodeSha256": "e7dOGCMrGzr1A0Dl5fzGJXZJ5rvw7EC9T0AvC6ZYcGM="
+        "CodeSha256": "fZ3ohWljkqbcTKeN2ocWDVqo/owU3IQZbckG/isfOKU="
       }
     },
-    "GetUpcomingDeadlinesLambdaVersionGe7aWlr0LBzgADXO9x7euKwtqVoDku805HB0VZHWM": {
+    "GetUpcomingDeadlinesLambdaVersion12i14GC6kDXeJcs02OH1jCcCJudJZYvg5wxDChyg": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "GetUpcomingDeadlinesLambdaFunction"
         },
-        "CodeSha256": "e7dOGCMrGzr1A0Dl5fzGJXZJ5rvw7EC9T0AvC6ZYcGM="
+        "CodeSha256": "fZ3ohWljkqbcTKeN2ocWDVqo/owU3IQZbckG/isfOKU="
       }
     },
-    "SendRemindersLambdaVersion9OxfhFaZEezFiElD72494hkg4IAy7BoF2TWiGkH6ac": {
+    "SendRemindersLambdaVersionicyAxkHSDxj7JvbQk8EVwm4mUgpE8aMwMhXuu1Wi89Y": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "SendRemindersLambdaFunction"
         },
-        "CodeSha256": "e7dOGCMrGzr1A0Dl5fzGJXZJ5rvw7EC9T0AvC6ZYcGM="
+        "CodeSha256": "fZ3ohWljkqbcTKeN2ocWDVqo/owU3IQZbckG/isfOKU="
       }
     },
     "SendRemindersEventsRuleSchedule1": {
@@ -756,7 +1042,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/sahayak-ai-backend/prod/1772171840226-2026-02-27T05:57:20.226Z/custom-resources.zip"
+          "S3Key": "serverless/sahayak-ai-backend/prod/1772172734659-2026-02-27T06:12:14.659Z/custom-resources.zip"
         },
         "FunctionName": "sahayak-ai-backend-prod-custom-resource-existing-s3",
         "Handler": "s3/handler.handler",
@@ -784,6 +1070,69 @@
           ]
         },
         "Policy": ""
+      }
+    },
+    "ApiGatewayResourceAuth": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "ApiGatewayRestApi",
+            "RootResourceId"
+          ]
+        },
+        "PathPart": "auth",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayResourceAuthLogin": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Ref": "ApiGatewayResourceAuth"
+        },
+        "PathPart": "login",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayResourceAuthRegister": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Ref": "ApiGatewayResourceAuth"
+        },
+        "PathPart": "register",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayResourceAuthForgotDashpassword": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Ref": "ApiGatewayResourceAuth"
+        },
+        "PathPart": "forgot-password",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayResourceAuthResetDashpassword": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Ref": "ApiGatewayResourceAuth"
+        },
+        "PathPart": "reset-password",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
       }
     },
     "ApiGatewayResourceDocuments": {
@@ -874,6 +1223,186 @@
           "Ref": "ApiGatewayResourceCompliance"
         },
         "PathPart": "upcoming",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayMethodAuthLoginOptions": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "OPTIONS",
+        "MethodResponses": [
+          {
+            "StatusCode": "200",
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Origin": true,
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true
+            },
+            "ResponseModels": {}
+          }
+        ],
+        "RequestParameters": {},
+        "Integration": {
+          "Type": "MOCK",
+          "RequestTemplates": {
+            "application/json": "{statusCode:200}"
+          },
+          "ContentHandling": "CONVERT_TO_TEXT",
+          "IntegrationResponses": [
+            {
+              "StatusCode": "200",
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'",
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'",
+                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'"
+              },
+              "ResponseTemplates": {
+                "application/json": ""
+              }
+            }
+          ]
+        },
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceAuthLogin"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayMethodAuthRegisterOptions": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "OPTIONS",
+        "MethodResponses": [
+          {
+            "StatusCode": "200",
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Origin": true,
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true
+            },
+            "ResponseModels": {}
+          }
+        ],
+        "RequestParameters": {},
+        "Integration": {
+          "Type": "MOCK",
+          "RequestTemplates": {
+            "application/json": "{statusCode:200}"
+          },
+          "ContentHandling": "CONVERT_TO_TEXT",
+          "IntegrationResponses": [
+            {
+              "StatusCode": "200",
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'",
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'",
+                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'"
+              },
+              "ResponseTemplates": {
+                "application/json": ""
+              }
+            }
+          ]
+        },
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceAuthRegister"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayMethodAuthForgotDashpasswordOptions": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "OPTIONS",
+        "MethodResponses": [
+          {
+            "StatusCode": "200",
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Origin": true,
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true
+            },
+            "ResponseModels": {}
+          }
+        ],
+        "RequestParameters": {},
+        "Integration": {
+          "Type": "MOCK",
+          "RequestTemplates": {
+            "application/json": "{statusCode:200}"
+          },
+          "ContentHandling": "CONVERT_TO_TEXT",
+          "IntegrationResponses": [
+            {
+              "StatusCode": "200",
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'",
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'",
+                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'"
+              },
+              "ResponseTemplates": {
+                "application/json": ""
+              }
+            }
+          ]
+        },
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceAuthForgotDashpassword"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayMethodAuthResetDashpasswordOptions": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "OPTIONS",
+        "MethodResponses": [
+          {
+            "StatusCode": "200",
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Origin": true,
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true
+            },
+            "ResponseModels": {}
+          }
+        ],
+        "RequestParameters": {},
+        "Integration": {
+          "Type": "MOCK",
+          "RequestTemplates": {
+            "application/json": "{statusCode:200}"
+          },
+          "ContentHandling": "CONVERT_TO_TEXT",
+          "IntegrationResponses": [
+            {
+              "StatusCode": "200",
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'",
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'",
+                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'"
+              },
+              "ResponseTemplates": {
+                "application/json": ""
+              }
+            }
+          ]
+        },
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceAuthResetDashpassword"
+        },
         "RestApiId": {
           "Ref": "ApiGatewayRestApi"
         }
@@ -1148,6 +1677,190 @@
           "Ref": "ApiGatewayRestApi"
         }
       }
+    },
+    "ApiGatewayMethodAuthLoginPost": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "POST",
+        "RequestParameters": {},
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceAuthLogin"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "ApiKeyRequired": false,
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "LoginLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": []
+      },
+      "DependsOn": [
+        "LoginLambdaPermissionApiGateway"
+      ]
+    },
+    "ApiGatewayMethodAuthRegisterPost": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "POST",
+        "RequestParameters": {},
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceAuthRegister"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "ApiKeyRequired": false,
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "RegisterLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": []
+      },
+      "DependsOn": [
+        "RegisterLambdaPermissionApiGateway"
+      ]
+    },
+    "ApiGatewayMethodAuthForgotDashpasswordPost": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "POST",
+        "RequestParameters": {},
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceAuthForgotDashpassword"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "ApiKeyRequired": false,
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "ForgotPasswordLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": []
+      },
+      "DependsOn": [
+        "ForgotPasswordLambdaPermissionApiGateway"
+      ]
+    },
+    "ApiGatewayMethodAuthResetDashpasswordPost": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "POST",
+        "RequestParameters": {},
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceAuthResetDashpassword"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "ApiKeyRequired": false,
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "ResetPasswordLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": []
+      },
+      "DependsOn": [
+        "ResetPasswordLambdaPermissionApiGateway"
+      ]
     },
     "ApiGatewayMethodDocumentsUploadPost": {
       "Type": "AWS::ApiGateway::Method",
@@ -1425,7 +2138,7 @@
         "GetUpcomingDeadlinesLambdaPermissionApiGateway"
       ]
     },
-    "ApiGatewayDeployment1772171835653": {
+    "ApiGatewayDeployment1772172729200": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -1434,12 +2147,20 @@
         "StageName": "prod"
       },
       "DependsOn": [
+        "ApiGatewayMethodAuthLoginOptions",
+        "ApiGatewayMethodAuthRegisterOptions",
+        "ApiGatewayMethodAuthForgotDashpasswordOptions",
+        "ApiGatewayMethodAuthResetDashpasswordOptions",
         "ApiGatewayMethodDocumentsUploadOptions",
         "ApiGatewayMethodDocumentsDocumentidVarAnalyzeOptions",
         "ApiGatewayMethodDocumentsDocumentidVarOptions",
         "ApiGatewayMethodUsersOptions",
         "ApiGatewayMethodComplianceOptions",
         "ApiGatewayMethodComplianceUpcomingOptions",
+        "ApiGatewayMethodAuthLoginPost",
+        "ApiGatewayMethodAuthRegisterPost",
+        "ApiGatewayMethodAuthForgotDashpasswordPost",
+        "ApiGatewayMethodAuthResetDashpasswordPost",
         "ApiGatewayMethodDocumentsUploadPost",
         "ApiGatewayMethodDocumentsDocumentidVarAnalyzeGet",
         "ApiGatewayMethodDocumentsDocumentidVarGet",
@@ -1447,6 +2168,154 @@
         "ApiGatewayMethodCompliancePost",
         "ApiGatewayMethodComplianceUpcomingGet"
       ]
+    },
+    "LoginLambdaPermissionApiGateway": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "LoginLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "/*/*"
+            ]
+          ]
+        }
+      }
+    },
+    "RegisterLambdaPermissionApiGateway": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "RegisterLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "/*/*"
+            ]
+          ]
+        }
+      }
+    },
+    "ForgotPasswordLambdaPermissionApiGateway": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "ForgotPasswordLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "/*/*"
+            ]
+          ]
+        }
+      }
+    },
+    "ResetPasswordLambdaPermissionApiGateway": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "ResetPasswordLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "/*/*"
+            ]
+          ]
+        }
+      }
     },
     "UploadDocumentLambdaPermissionApiGateway": {
       "Type": "AWS::Lambda::Permission",
@@ -1670,6 +2539,89 @@
         }
       }
     },
+    "CognitoUserPool": {
+      "Type": "AWS::Cognito::UserPool",
+      "Properties": {
+        "UserPoolName": "sahayak-ai-users-prod",
+        "UsernameAttributes": [
+          "email"
+        ],
+        "AutoVerifiedAttributes": [
+          "email"
+        ],
+        "EmailConfiguration": {
+          "EmailSendingAccount": "COGNITO_DEFAULT"
+        },
+        "Policies": {
+          "PasswordPolicy": {
+            "MinimumLength": 8,
+            "RequireUppercase": true,
+            "RequireLowercase": true,
+            "RequireNumbers": true,
+            "RequireSymbols": false
+          }
+        },
+        "Schema": [
+          {
+            "Name": "email",
+            "Required": true,
+            "Mutable": false
+          },
+          {
+            "Name": "name",
+            "Required": true,
+            "Mutable": true
+          },
+          {
+            "Name": "phone_number",
+            "Required": false,
+            "Mutable": true
+          },
+          {
+            "Name": "user_type",
+            "AttributeDataType": "String",
+            "Mutable": true
+          },
+          {
+            "Name": "language",
+            "AttributeDataType": "String",
+            "Mutable": true
+          },
+          {
+            "Name": "is_admin",
+            "AttributeDataType": "String",
+            "Mutable": true
+          }
+        ]
+      }
+    },
+    "CognitoUserPoolClient": {
+      "Type": "AWS::Cognito::UserPoolClient",
+      "Properties": {
+        "ClientName": "sahayak-ai-client-prod",
+        "UserPoolId": {
+          "Ref": "CognitoUserPool"
+        },
+        "GenerateSecret": false,
+        "ExplicitAuthFlows": [
+          "ALLOW_USER_PASSWORD_AUTH",
+          "ALLOW_REFRESH_TOKEN_AUTH",
+          "ALLOW_USER_SRP_AUTH"
+        ],
+        "PreventUserExistenceErrors": "ENABLED"
+      }
+    },
+    "CognitoAdminGroup": {
+      "Type": "AWS::Cognito::UserPoolGroup",
+      "Properties": {
+        "GroupName": "Admins",
+        "Description": "Administrator users with full access",
+        "UserPoolId": {
+          "Ref": "CognitoUserPool"
+        },
+        "Precedence": 0
+      }
+    },
     "DocumentsBucket": {
       "Type": "AWS::S3::Bucket",
       "Properties": {
@@ -1853,10 +2805,46 @@
         "Name": "sls-sahayak-ai-backend-prod-ServerlessDeploymentBucketName"
       }
     },
+    "LoginLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "LoginLambdaVersionk6vl7PsbpZuvxsCn1wlXjKRskukbDxby6BdDgjEJkKY"
+      },
+      "Export": {
+        "Name": "sls-sahayak-ai-backend-prod-LoginLambdaFunctionQualifiedArn"
+      }
+    },
+    "RegisterLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "RegisterLambdaVersionGfsWhtjXCpdTfHEzWYYtuHiyhLbIA0vrjQb2W05Eg"
+      },
+      "Export": {
+        "Name": "sls-sahayak-ai-backend-prod-RegisterLambdaFunctionQualifiedArn"
+      }
+    },
+    "ForgotPasswordLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "ForgotPasswordLambdaVersionDeJWyfis91iZitQQQWHIIcTxDDJCmnRHwtpzjmTUtmc"
+      },
+      "Export": {
+        "Name": "sls-sahayak-ai-backend-prod-ForgotPasswordLambdaFunctionQualifiedArn"
+      }
+    },
+    "ResetPasswordLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "ResetPasswordLambdaVersionwhJ7mXU26BPOKCcCNP6nV5aA0xTkgr5RgF9XSIRveo"
+      },
+      "Export": {
+        "Name": "sls-sahayak-ai-backend-prod-ResetPasswordLambdaFunctionQualifiedArn"
+      }
+    },
     "UploadDocumentLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "UploadDocumentLambdaVersionxwgZyNTDt9pr2Dlt6mNRx54ieBuEt0pwhSyBT5dSY"
+        "Ref": "UploadDocumentLambdaVersionuSJBU6j8L1cMMw6ztPIa2SdzUftjKZUEbJOauOjx9Vc"
       },
       "Export": {
         "Name": "sls-sahayak-ai-backend-prod-UploadDocumentLambdaFunctionQualifiedArn"
@@ -1865,7 +2853,7 @@
     "ProcessDocumentLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "ProcessDocumentLambdaVersiond285MjUeSvja9eCCBEbaWCKSfxDkBUGZpHEJ0vyXJo"
+        "Ref": "ProcessDocumentLambdaVersiondWgySnRO2OtNyYNzlyo4Ic8f9DGeE8iCW3lA6DrGfg"
       },
       "Export": {
         "Name": "sls-sahayak-ai-backend-prod-ProcessDocumentLambdaFunctionQualifiedArn"
@@ -1874,7 +2862,7 @@
     "AnalyzeDocumentLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "AnalyzeDocumentLambdaVersionrJIv4Exa5nmPmySEUdawVthyGjRPAfCJif9fVeMypI"
+        "Ref": "AnalyzeDocumentLambdaVersionLLs3Ztrq9qPCu91AU8tRMg0FBksI237qpfAIRloUP4"
       },
       "Export": {
         "Name": "sls-sahayak-ai-backend-prod-AnalyzeDocumentLambdaFunctionQualifiedArn"
@@ -1883,7 +2871,7 @@
     "GetDocumentLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "GetDocumentLambdaVersionXY9r1uo6KcN5b3XcTpVhB3jXG4cZmYJ1WkNpNWmf2dk"
+        "Ref": "GetDocumentLambdaVersion0In9jE7ShzkJTfhNWQKUm088PiuEKQjGLc2ISkC78"
       },
       "Export": {
         "Name": "sls-sahayak-ai-backend-prod-GetDocumentLambdaFunctionQualifiedArn"
@@ -1892,7 +2880,7 @@
     "CreateUserLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "CreateUserLambdaVersioniTwsXuWC3uZv07kTfgkVdcIrCMXniSVVvrFwMTpzaU"
+        "Ref": "CreateUserLambdaVersion0FnaNu56vwUKz8f7wsiLhqsZQwGGnkXxprywqycGI0"
       },
       "Export": {
         "Name": "sls-sahayak-ai-backend-prod-CreateUserLambdaFunctionQualifiedArn"
@@ -1901,7 +2889,7 @@
     "AddComplianceLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "AddComplianceLambdaVersionFyiyRnnpd82n8eO46RqDhoDBHJIrUISKkcCwaVqPD8"
+        "Ref": "AddComplianceLambdaVersionOm1BIp9czio3NbKxmUsfnNu7Kt8UX32Dr4FCqdvLru0"
       },
       "Export": {
         "Name": "sls-sahayak-ai-backend-prod-AddComplianceLambdaFunctionQualifiedArn"
@@ -1910,7 +2898,7 @@
     "GetUpcomingDeadlinesLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "GetUpcomingDeadlinesLambdaVersionGe7aWlr0LBzgADXO9x7euKwtqVoDku805HB0VZHWM"
+        "Ref": "GetUpcomingDeadlinesLambdaVersion12i14GC6kDXeJcs02OH1jCcCJudJZYvg5wxDChyg"
       },
       "Export": {
         "Name": "sls-sahayak-ai-backend-prod-GetUpcomingDeadlinesLambdaFunctionQualifiedArn"
@@ -1919,7 +2907,7 @@
     "SendRemindersLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "SendRemindersLambdaVersion9OxfhFaZEezFiElD72494hkg4IAy7BoF2TWiGkH6ac"
+        "Ref": "SendRemindersLambdaVersionicyAxkHSDxj7JvbQk8EVwm4mUgpE8aMwMhXuu1Wi89Y"
       },
       "Export": {
         "Name": "sls-sahayak-ai-backend-prod-SendRemindersLambdaFunctionQualifiedArn"
