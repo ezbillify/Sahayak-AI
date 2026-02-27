@@ -4,16 +4,22 @@ interface Tab {
   id: string
   label: string
   icon?: React.ReactNode
-  content: React.ReactNode
+  content?: React.ReactNode
 }
 
 interface TabsProps {
   tabs: Tab[]
   defaultTab?: string
+  activeTab?: string
+  onChange?: (tabId: string) => void
 }
 
-export default function Tabs({ tabs, defaultTab }: TabsProps) {
-  const [activeTab, setActiveTab] = useState(defaultTab || tabs[0]?.id)
+export default function Tabs({ tabs, defaultTab, activeTab: controlledActiveTab, onChange }: TabsProps) {
+  const [internalActiveTab, setInternalActiveTab] = useState(defaultTab || tabs[0]?.id)
+  
+  // Use controlled state if provided, otherwise use internal state
+  const activeTab = controlledActiveTab !== undefined ? controlledActiveTab : internalActiveTab
+  const setActiveTab = onChange || setInternalActiveTab
 
   const activeContent = tabs.find(tab => tab.id === activeTab)?.content
 
@@ -42,10 +48,12 @@ export default function Tabs({ tabs, defaultTab }: TabsProps) {
         </div>
       </div>
 
-      {/* Tab Content */}
-      <div className="py-4">
-        {activeContent}
-      </div>
+      {/* Tab Content - only render if content is provided */}
+      {activeContent && (
+        <div className="py-4">
+          {activeContent}
+        </div>
+      )}
     </div>
   )
 }
