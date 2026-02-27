@@ -29,7 +29,22 @@ export default function Compliance() {
 
   const fetchCompliance = async () => {
     try {
-      const userId = localStorage.getItem('userId')
+      // Try to get userId from localStorage
+      let userId = localStorage.getItem('userId')
+      
+      // Fallback: if userId not found, try to get it from userData
+      if (!userId) {
+        const userData = localStorage.getItem('userData')
+        if (userData) {
+          const user = JSON.parse(userData)
+          userId = user.userId || user.sub
+          // Store it for future use
+          if (userId) {
+            localStorage.setItem('userId', userId)
+          }
+        }
+      }
+      
       if (!userId) {
         console.error('No userId found')
         setLoading(false)
@@ -51,7 +66,22 @@ export default function Compliance() {
 
   const handleAddCompliance = async () => {
     try {
-      const userId = localStorage.getItem('userId')
+      // Try to get userId from localStorage
+      let userId = localStorage.getItem('userId')
+      
+      // Fallback: if userId not found, try to get it from userData
+      if (!userId) {
+        const userData = localStorage.getItem('userData')
+        if (userData) {
+          const user = JSON.parse(userData)
+          userId = user.userId || user.sub
+          // Store it for future use
+          if (userId) {
+            localStorage.setItem('userId', userId)
+          }
+        }
+      }
+      
       if (!userId) {
         alert('Please login first')
         return

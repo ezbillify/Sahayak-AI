@@ -35,14 +35,12 @@ export default function Login() {
         localStorage.setItem('userData', JSON.stringify(data.user))
         localStorage.setItem('userId', data.user.userId) // Store userId separately for easy access
         
-        // Redirect based on user type
+        // Redirect based on user type (no reload needed, React Router will handle it)
         if (data.user.isAdmin) {
           navigate('/admin')
         } else {
           navigate('/dashboard')
         }
-        
-        window.location.reload() // Reload to update header
       } else {
         alert(data.error || 'Login failed')
       }
