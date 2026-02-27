@@ -166,6 +166,47 @@ functions:
           rate: cron(0 9 * * ? *)  # Run daily at 9 AM IST
           enabled: true
 
+  # Admin Functions
+  getAdminStats:
+    handler: lambda/admin/getStats.handler
+    events:
+      - http:
+          path: /admin/stats
+          method: get
+          cors: true
+
+  getAdminUsers:
+    handler: lambda/admin/getUsers.handler
+    events:
+      - http:
+          path: /admin/users
+          method: get
+          cors: true
+
+  getAdminDocuments:
+    handler: lambda/admin/getDocuments.handler
+    events:
+      - http:
+          path: /admin/documents
+          method: get
+          cors: true
+
+  addAdminForm:
+    handler: lambda/admin/addForm.handler
+    events:
+      - http:
+          path: /admin/forms
+          method: post
+          cors: true
+
+  startAdminTraining:
+    handler: lambda/admin/startTraining.handler
+    events:
+      - http:
+          path: /admin/train
+          method: post
+          cors: true
+
 resources:
   Resources:
     # Cognito User Pool
