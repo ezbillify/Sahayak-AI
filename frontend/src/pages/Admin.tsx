@@ -9,7 +9,7 @@ import Select from '../components/Select'
 import Modal from '../components/Modal'
 
 export default function Admin() {
-  const [isAdmin, setIsAdmin] = useState(false)
+  const [isAdmin, setIsAdmin] = useState<boolean | null>(null) // null = loading
   const [activeTab, setActiveTab] = useState('dashboard')
   const [showAddFormModal, setShowAddFormModal] = useState(false)
   const [showTrainingModal, setShowTrainingModal] = useState(false)
@@ -50,8 +50,22 @@ export default function Admin() {
     if (userData) {
       const user = JSON.parse(userData)
       setIsAdmin(user.email === 'admin@ezbillify.com' || user.isAdmin)
+    } else {
+      setIsAdmin(false)
     }
   }, [])
+
+  // Show loading while checking admin status
+  if (isAdmin === null) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    )
+  }
 
   if (!isAdmin) {
     return <Navigate to="/" replace />
