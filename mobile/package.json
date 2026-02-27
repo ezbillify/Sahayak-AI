@@ -29,7 +29,8 @@
     "@react-native-firebase/app": "^19.0.1",
     "@react-native-firebase/messaging": "^19.0.1",
     "react-native-vector-icons": "^10.0.3",
-    "react-native-calendars": "^1.1302.0"
+    "react-native-calendars": "^1.1302.0",
+    "@react-native-picker/picker": "^2.6.1"
   },
   "devDependencies": {
     "@babel/core": "^7.23.7",
