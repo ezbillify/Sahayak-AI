@@ -36,19 +36,53 @@ exports.handler = async (event) => {
     }
 
     // Send custom verification email via our email service
-    const emailTemplates = require('./sendEmail');
-    const verificationCode = signUpResponse.CodeDeliveryDetails?.Destination || 'Check your email';
-    const emailTemplate = emailTemplates.getVerificationEmailTemplate(verificationCode, name);
+    const verificationCode = signUpResponse.CodeDeliveryDetails?.Destination || 'your email';
+    
+    const emailHtml = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <style>
+          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+          .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+          .content { background: #f9f9f9; padding: 30px; border-radius: 0 0 10px 10px; }
+          .code { background: #667eea; color: white; padding: 15px; font-size: 24px; font-weight: bold; text-align: center; border-radius: 5px; margin: 20px 0; letter-spacing: 2px; }
+          .footer { text-align: center; margin-top: 20px; color: #666; font-size: 12px; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="header">
+            <h1>Welcome to Sahayak AI!</h1>
+          </div>
+          <div class="content">
+            <p>Hi ${name},</p>
+            <p>Thank you for registering with Sahayak AI. To complete your registration, please verify your email address.</p>
+            <p>Your verification code is:</p>
+            <div class="code">${verificationCode}</div>
+            <p>If you didn't create this account, please ignore this email.</p>
+            <p>Best regards,<br>The Sahayak AI Team</p>
+          </div>
+          <div class="footer">
+            <p>© 2024 Sahayak AI. All rights reserved.</p>
+          </div>
+        </div>
+      </body>
+      </html>
+    `;
     
     try {
       await lambdaClient.send(new InvokeCommand({
-        FunctionName: process.env.EMAIL_FUNCTION_NAME,
+        FunctionName: 'sahayak-ai-backend-prod-sendEmail',
         InvocationType: 'Event', // Async
         Payload: JSON.stringify({
-          to: email,
-          subject: emailTemplate.subject,
-          html: emailTemplate.html,
-          text: emailTemplate.text
+          body: JSON.stringify({
+            to: email,
+            subject: 'Verify Your Sahayak AI Account',
+            html: emailHtml,
+            text: `Welcome to Sahayak AI! Your verification code is: ${verificationCode}`
+          })
         })
       }));
     } catch (emailError) {
