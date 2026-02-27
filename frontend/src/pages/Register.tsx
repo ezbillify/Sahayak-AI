@@ -5,6 +5,7 @@ import Select from '../components/Select'
 import Button from '../components/Button'
 
 export default function Register() {
+  const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -16,18 +17,46 @@ export default function Register() {
   })
   const navigate = useNavigate()
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // Store dummy token for authentication
-    localStorage.setItem('userToken', 'dummy-token-' + Date.now())
-    localStorage.setItem('userData', JSON.stringify({ 
-      email: formData.email, 
-      name: formData.name,
-      userType: formData.userType,
-      language: formData.language
-    }))
-    navigate('/dashboard')
-    window.location.reload() // Reload to update header
+    
+    if (formData.password !== formData.confirmPassword) {
+      alert('Passwords do not match')
+      return
+    }
+
+    setLoading(true)
+    
+    try {
+      const apiUrl = import.meta.env.VITE_API_URL || 'https://yy6whjwjt1.execute-api.ap-south-1.amazonaws.com/prod'
+      
+      const response = await fetch(`${apiUrl}/auth/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+          name: formData.name,
+          phone: formData.phone,
+          userType: formData.userType,
+          language: formData.language
+        })
+      })
+
+      const data = await response.json()
+
+      if (data.success) {
+        alert(data.message || 'Registration successful! Please check your email to verify your account.')
+        navigate('/login')
+      } else {
+        alert(data.error || 'Registration failed')
+      }
+    } catch (error) {
+      console.error('Registration error:', error)
+      alert('Network error. Please try again.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -119,7 +148,7 @@ export default function Register() {
             />
           </div>
 
-          <Button type="submit" fullWidth>
+          <Button type="submit" fullWidth loading={loading}>
             Create Account
           </Button>
         </form>

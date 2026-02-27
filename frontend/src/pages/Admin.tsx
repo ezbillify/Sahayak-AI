@@ -13,28 +13,76 @@ export default function Admin() {
   const [activeTab, setActiveTab] = useState('dashboard')
   const [showAddFormModal, setShowAddFormModal] = useState(false)
   const [showTrainingModal, setShowTrainingModal] = useState(false)
+  const [loading, setLoading] = useState(true)
 
-  // Mock data - replace with real API calls
+  // Real data from API
   const [stats, setStats] = useState({
-    totalUsers: 1247,
-    activeUsers: 892,
-    totalDocuments: 5634,
-    documentsToday: 127,
-    avgAccuracy: 94.5,
-    systemUptime: 99.8
+    totalUsers: 0,
+    activeUsers: 0,
+    totalDocuments: 0,
+    documentsToday: 0,
+    avgAccuracy: 0,
+    systemUptime: 0
   })
 
-  const [users, setUsers] = useState([
-    { id: 1, name: 'John Doe', email: 'john@example.com', userType: 'business', lastLogin: '2024-02-27 10:30', documentsUploaded: 45, status: 'active' },
-    { id: 2, name: 'Jane Smith', email: 'jane@example.com', userType: 'freelancer', lastLogin: '2024-02-27 09:15', documentsUploaded: 23, status: 'active' },
-    { id: 3, name: 'Raj Kumar', email: 'raj@example.com', userType: 'student', lastLogin: '2024-02-26 18:45', documentsUploaded: 12, status: 'inactive' },
-  ])
+  const [users, setUsers] = useState<any[]>([])
+  const [documents, setDocuments] = useState<any[]>([])
 
-  const [documents, setDocuments] = useState([
-    { id: 1, fileName: 'aadhaar-update.pdf', userName: 'John Doe', formType: 'Aadhaar Update', uploadDate: '2024-02-27 10:30', status: 'processed', accuracy: 96 },
-    { id: 2, fileName: 'gst-return.pdf', userName: 'Jane Smith', formType: 'GST Return', uploadDate: '2024-02-27 09:15', status: 'processing', accuracy: null },
-    { id: 3, fileName: 'pan-application.pdf', userName: 'Raj Kumar', formType: 'PAN Application', uploadDate: '2024-02-26 18:45', status: 'processed', accuracy: 98 },
-  ])
+  useEffect(() => {
+    // Check if user is admin
+    const userData = localStorage.getItem('userData')
+    if (userData) {
+      const user = JSON.parse(userData)
+      setIsAdmin(user.email === 'admin@ezbillify.com' || user.isAdmin)
+      
+      // Fetch admin data if user is admin
+      if (user.email === 'admin@ezbillify.com' || user.isAdmin) {
+        fetchAdminData()
+      }
+    } else {
+      setIsAdmin(false)
+    }
+  }, [])
+
+  const fetchAdminData = async () => {
+    setLoading(true)
+    try {
+      const token = localStorage.getItem('userToken')
+      const apiUrl = import.meta.env.VITE_API_URL || 'https://yy6whjwjt1.execute-api.ap-south-1.amazonaws.com/prod'
+      
+      // Fetch stats, users, and documents in parallel
+      const [statsRes, usersRes, docsRes] = await Promise.all([
+        fetch(`${apiUrl}/admin/stats`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        }),
+        fetch(`${apiUrl}/admin/users`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        }),
+        fetch(`${apiUrl}/admin/documents`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        })
+      ])
+
+      if (statsRes.ok) {
+        const statsData = await statsRes.json()
+        setStats(statsData)
+      }
+
+      if (usersRes.ok) {
+        const usersData = await usersRes.json()
+        setUsers(usersData.users || [])
+      }
+
+      if (docsRes.ok) {
+        const docsData = await docsRes.json()
+        setDocuments(docsData.documents || [])
+      }
+    } catch (error) {
+      console.error('Error fetching admin data:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const [newForm, setNewForm] = useState({
     name: '',
@@ -43,17 +91,6 @@ export default function Admin() {
     keywords: '',
     fields: ''
   })
-
-  useEffect(() => {
-    // Check if user is admin
-    const userData = localStorage.getItem('userData')
-    if (userData) {
-      const user = JSON.parse(userData)
-      setIsAdmin(user.email === 'admin@ezbillify.com' || user.isAdmin)
-    } else {
-      setIsAdmin(false)
-    }
-  }, [])
 
   // Show loading while checking admin status
   if (isAdmin === null) {
@@ -71,16 +108,49 @@ export default function Admin() {
     return <Navigate to="/" replace />
   }
 
-  const handleAddForm = () => {
-    console.log('Adding new form:', newForm)
-    setShowAddFormModal(false)
-    // Add API call here
+  const handleAddForm = async () => {
+    try {
+      const token = localStorage.getItem('userToken')
+      const apiUrl = import.meta.env.VITE_API_URL || 'https://yy6whjwjt1.execute-api.ap-south-1.amazonaws.com/prod'
+      
+      const response = await fetch(`${apiUrl}/admin/forms`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(newForm)
+      })
+
+      if (response.ok) {
+        setShowAddFormModal(false)
+        // Refresh data
+        fetchAdminData()
+      }
+    } catch (error) {
+      console.error('Error adding form:', error)
+    }
   }
 
-  const handleTrainSystem = () => {
-    console.log('Training system...')
-    setShowTrainingModal(false)
-    // Add API call here
+  const handleTrainSystem = async () => {
+    try {
+      const token = localStorage.getItem('userToken')
+      const apiUrl = import.meta.env.VITE_API_URL || 'https://yy6whjwjt1.execute-api.ap-south-1.amazonaws.com/prod'
+      
+      const response = await fetch(`${apiUrl}/admin/train`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
+
+      if (response.ok) {
+        setShowTrainingModal(false)
+        alert('Training started successfully!')
+      }
+    } catch (error) {
+      console.error('Error starting training:', error)
+    }
   }
 
   return (

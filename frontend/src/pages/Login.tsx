@@ -6,30 +6,48 @@ import Button from '../components/Button'
 export default function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setLoading(true)
     
-    // Check if admin user
-    const isAdmin = email === 'admin@ezbillify.com'
-    
-    // Store dummy token for authentication
-    localStorage.setItem('userToken', 'dummy-token-' + Date.now())
-    localStorage.setItem('userData', JSON.stringify({ 
-      email, 
-      name: isAdmin ? 'Admin' : 'User',
-      isAdmin 
-    }))
-    
-    // Redirect based on user type
-    if (isAdmin) {
-      navigate('/admin')
-    } else {
-      navigate('/dashboard')
+    try {
+      const apiUrl = import.meta.env.VITE_API_URL || 'https://yy6whjwjt1.execute-api.ap-south-1.amazonaws.com/prod'
+      
+      const response = await fetch(`${apiUrl}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      })
+
+      const data = await response.json()
+
+      if (data.success) {
+        // Store tokens and user data
+        localStorage.setItem('userToken', data.tokens.accessToken)
+        localStorage.setItem('idToken', data.tokens.idToken)
+        localStorage.setItem('refreshToken', data.tokens.refreshToken)
+        localStorage.setItem('userData', JSON.stringify(data.user))
+        
+        // Redirect based on user type
+        if (data.user.isAdmin) {
+          navigate('/admin')
+        } else {
+          navigate('/dashboard')
+        }
+        
+        window.location.reload() // Reload to update header
+      } else {
+        alert(data.error || 'Login failed')
+      }
+    } catch (error) {
+      console.error('Login error:', error)
+      alert('Network error. Please try again.')
+    } finally {
+      setLoading(false)
     }
-    
-    window.location.reload() // Reload to update header
   }
 
   return (
@@ -56,7 +74,7 @@ export default function Login() {
             required
           />
 
-          <Button type="submit" fullWidth>
+          <Button type="submit" fullWidth loading={loading}>
             Login
           </Button>
 

@@ -15,27 +15,80 @@ export default function UploadDocument() {
     if (!file) return
 
     setUploading(true)
+    setResult(null)
     
-    // Simulate upload and processing
-    setTimeout(() => {
-      setResult({
-        documentType: 'GST Registration Form',
-        summary: 'This is a GST registration application form for new businesses. It requires basic business information, owner details, and bank account information.',
-        keyInformation: [
-          'Business Name and Address',
-          'PAN Number',
-          'Bank Account Details',
-          'Business Activity Type'
-        ],
-        requiredActions: [
-          'Fill all mandatory fields marked with *',
-          'Attach PAN card copy',
-          'Attach address proof',
-          'Submit within 30 days of business commencement'
-        ]
+    try {
+      const token = localStorage.getItem('userToken')
+      const apiUrl = import.meta.env.VITE_API_URL || 'https://yy6whjwjt1.execute-api.ap-south-1.amazonaws.com/prod'
+      
+      // Step 1: Get presigned URL for upload
+      const uploadResponse = await fetch(`${apiUrl}/documents/upload`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          fileName: file.name,
+          fileType: file.type
+        })
       })
+
+      if (!uploadResponse.ok) {
+        throw new Error('Failed to get upload URL')
+      }
+
+      const { uploadUrl, documentId } = await uploadResponse.json()
+
+      // Step 2: Upload file to S3
+      await fetch(uploadUrl, {
+        method: 'PUT',
+        body: file,
+        headers: {
+          'Content-Type': file.type
+        }
+      })
+
+      // Step 3: Wait a bit for processing, then get analysis
+      setTimeout(async () => {
+        try {
+          const analysisResponse = await fetch(`${apiUrl}/documents/${documentId}/analyze`, {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          })
+
+          if (analysisResponse.ok) {
+            const analysisData = await analysisResponse.json()
+            setResult({
+              documentType: analysisData.analysis?.documentType || 'Unknown Document',
+              formNumber: analysisData.analysis?.formNumber,
+              summary: analysisData.analysis?.summary || 'Document processed successfully',
+              keyInformation: analysisData.analysis?.keyInformation || [],
+              requiredActions: analysisData.analysis?.requiredActions || [],
+              importantFields: analysisData.analysis?.importantFields || [],
+              detectedForm: analysisData.detectedForm,
+              detectionConfidence: analysisData.detectionConfidence
+            })
+          }
+        } catch (error) {
+          console.error('Error analyzing document:', error)
+          setResult({
+            documentType: 'Processing',
+            summary: 'Document uploaded successfully. Analysis in progress...',
+            keyInformation: [],
+            requiredActions: []
+          })
+        } finally {
+          setUploading(false)
+        }
+      }, 3000) // Wait 3 seconds for OCR processing
+
+    } catch (error) {
+      console.error('Upload error:', error)
+      alert('Failed to upload document. Please try again.')
       setUploading(false)
-    }, 2000)
+    }
   }
 
   return (
@@ -84,6 +137,22 @@ export default function UploadDocument() {
           <div className="mb-6">
             <h3 className="font-semibold text-lg mb-2">Document Type</h3>
             <p className="text-gray-700">{result.documentType}</p>
+            {result.formNumber && (
+              <p className="text-sm text-gray-600 mt-1">Form: {result.formNumber}</p>
+            )}
+            {result.detectedForm && (
+              <div className="mt-2 p-3 bg-blue-50 rounded">
+                <p className="text-sm font-medium text-blue-900">{result.detectedForm.name}</p>
+                <p className="text-xs text-blue-700">
+                  {result.detectedForm.category} • {result.detectedForm.authority}
+                </p>
+                {result.detectionConfidence && (
+                  <p className="text-xs text-blue-600 mt-1">
+                    Confidence: {result.detectionConfidence}%
+                  </p>
+                )}
+              </div>
+            )}
           </div>
 
           <div className="mb-6">
@@ -91,23 +160,38 @@ export default function UploadDocument() {
             <p className="text-gray-700">{result.summary}</p>
           </div>
 
-          <div className="mb-6">
-            <h3 className="font-semibold text-lg mb-2">Key Information Required</h3>
-            <ul className="list-disc list-inside space-y-1">
-              {result.keyInformation.map((info: string, i: number) => (
-                <li key={i} className="text-gray-700">{info}</li>
-              ))}
-            </ul>
-          </div>
+          {result.keyInformation && result.keyInformation.length > 0 && (
+            <div className="mb-6">
+              <h3 className="font-semibold text-lg mb-2">Key Information Required</h3>
+              <ul className="list-disc list-inside space-y-1">
+                {result.keyInformation.map((info: string, i: number) => (
+                  <li key={i} className="text-gray-700">{info}</li>
+                ))}
+              </ul>
+            </div>
+          )}
 
-          <div>
-            <h3 className="font-semibold text-lg mb-2">Required Actions</h3>
-            <ul className="list-disc list-inside space-y-1">
-              {result.requiredActions.map((action: string, i: number) => (
-                <li key={i} className="text-gray-700">{action}</li>
-              ))}
-            </ul>
-          </div>
+          {result.requiredActions && result.requiredActions.length > 0 && (
+            <div className="mb-6">
+              <h3 className="font-semibold text-lg mb-2">Required Actions</h3>
+              <ul className="list-disc list-inside space-y-1">
+                {result.requiredActions.map((action: string, i: number) => (
+                  <li key={i} className="text-gray-700">{action}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {result.importantFields && result.importantFields.length > 0 && (
+            <div className="mb-6">
+              <h3 className="font-semibold text-lg mb-2">Important Fields to Fill</h3>
+              <ul className="list-disc list-inside space-y-1">
+                {result.importantFields.map((field: string, i: number) => (
+                  <li key={i} className="text-gray-700">{field}</li>
+                ))}
+              </ul>
+            </div>
+          )}
 
           <button
             onClick={() => {
