@@ -2,9 +2,17 @@ import React, { useRef, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-// Note: Install react-native-camera or use react-native-vision-camera
-// For now, using a placeholder implementation
-const RNCamera: any = {
+// Camera placeholder - install react-native-vision-camera for full functionality
+interface CameraType {
+  Constants: {
+    Type: {
+      back: string;
+      front: string;
+    };
+  };
+}
+
+const RNCamera: CameraType = {
   Constants: {
     Type: {
       back: 'back',
