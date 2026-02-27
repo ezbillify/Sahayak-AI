@@ -1,4 +1,4 @@
-const { CognitoIdentityProviderClient, SignUpCommand, AdminAddUserToGroupCommand } = require('@aws-sdk/client-cognito-identity-provider');
+const { CognitoIdentityProviderClient, SignUpCommand, AdminAddUserToGroupCommand, AdminConfirmSignUpCommand } = require('@aws-sdk/client-cognito-identity-provider');
 const { LambdaClient, InvokeCommand } = require('@aws-sdk/client-lambda');
 
 const cognitoClient = new CognitoIdentityProviderClient({ region: process.env.AWS_REGION });
@@ -11,7 +11,7 @@ exports.handler = async (event) => {
     // Check if this is admin email
     const isAdmin = email === 'admin@ezbillify.com';
 
-    // Register user in Cognito (without auto-verification)
+    // Register user in Cognito
     const signUpResponse = await cognitoClient.send(new SignUpCommand({
       ClientId: process.env.COGNITO_CLIENT_ID,
       Username: email,
@@ -24,6 +24,12 @@ exports.handler = async (event) => {
         { Name: 'custom:language', Value: language || 'english' },
         { Name: 'custom:is_admin', Value: isAdmin ? 'true' : 'false' }
       ]
+    }));
+
+    // Auto-confirm user (for testing - remove in production)
+    await cognitoClient.send(new AdminConfirmSignUpCommand({
+      UserPoolId: process.env.COGNITO_USER_POOL_ID,
+      Username: email
     }));
 
     // If admin, add to admin group
@@ -58,10 +64,8 @@ exports.handler = async (event) => {
           </div>
           <div class="content">
             <p>Hi ${name},</p>
-            <p>Thank you for registering with Sahayak AI. To complete your registration, please verify your email address.</p>
-            <p>Your verification code is:</p>
-            <div class="code">${verificationCode}</div>
-            <p>If you didn't create this account, please ignore this email.</p>
+            <p>Thank you for registering with Sahayak AI. Your account has been created successfully!</p>
+            <p>You can now login and start managing your documents.</p>
             <p>Best regards,<br>The Sahayak AI Team</p>
           </div>
           <div class="footer">
@@ -79,15 +83,14 @@ exports.handler = async (event) => {
         Payload: JSON.stringify({
           body: JSON.stringify({
             to: email,
-            subject: 'Verify Your Sahayak AI Account',
+            subject: 'Welcome to Sahayak AI!',
             html: emailHtml,
-            text: `Welcome to Sahayak AI! Your verification code is: ${verificationCode}`
+            text: `Welcome to Sahayak AI! Your account has been created successfully. You can now login and start managing your documents.`
           })
         })
       }));
     } catch (emailError) {
       console.error('Error sending custom email:', emailError);
-      // Continue anyway, Cognito will send default email
     }
 
     return {
@@ -95,7 +98,7 @@ exports.handler = async (event) => {
       headers: { 'Access-Control-Allow-Origin': '*' },
       body: JSON.stringify({
         success: true,
-        message: 'Registration successful. Please check your email to verify your account.',
+        message: 'Registration successful. You can now login!',
         userSub: signUpResponse.UserSub
       })
     };

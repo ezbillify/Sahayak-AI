@@ -49,7 +49,7 @@ export default function Register() {
       console.log('Register response data:', data)
 
       if (data.success) {
-        alert(data.message || 'Registration successful! Please check your email to verify your account.')
+        alert(data.message || 'Registration successful! You can now login.')
         navigate('/login')
       } else {
         alert(data.error || 'Registration failed')

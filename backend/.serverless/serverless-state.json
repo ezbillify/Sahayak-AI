@@ -84,15 +84,12 @@
               "Effect": "Allow",
               "Action": [
                 "cognito-idp:AdminAddUserToGroup",
+                "cognito-idp:AdminConfirmSignUp",
                 "cognito-idp:AdminGetUser",
+                "cognito-idp:AdminUpdateUserAttributes",
                 "cognito-idp:AdminListGroupsForUser"
               ],
-              "Resource": {
-                "Fn::GetAtt": [
-                  "CognitoUserPool",
-                  "Arn"
-                ]
-              }
+              "Resource": "*"
             }
           ]
         }
@@ -382,7 +379,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/sahayak-ai-backend/prod/1772176383206-2026-02-27T07:13:03.206Z/sahayak-ai-backend.zip"
+                "S3Key": "serverless/sahayak-ai-backend/prod/1772177162244-2026-02-27T07:26:02.244Z/sahayak-ai-backend.zip"
               },
               "Handler": "lambda/email/sendEmail.handler",
               "Runtime": "nodejs20.x",
@@ -425,7 +422,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/sahayak-ai-backend/prod/1772176383206-2026-02-27T07:13:03.206Z/sahayak-ai-backend.zip"
+                "S3Key": "serverless/sahayak-ai-backend/prod/1772177162244-2026-02-27T07:26:02.244Z/sahayak-ai-backend.zip"
               },
               "Handler": "lambda/auth/login.handler",
               "Runtime": "nodejs20.x",
@@ -468,7 +465,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/sahayak-ai-backend/prod/1772176383206-2026-02-27T07:13:03.206Z/sahayak-ai-backend.zip"
+                "S3Key": "serverless/sahayak-ai-backend/prod/1772177162244-2026-02-27T07:26:02.244Z/sahayak-ai-backend.zip"
               },
               "Handler": "lambda/auth/register.handler",
               "Runtime": "nodejs20.x",
@@ -511,7 +508,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/sahayak-ai-backend/prod/1772176383206-2026-02-27T07:13:03.206Z/sahayak-ai-backend.zip"
+                "S3Key": "serverless/sahayak-ai-backend/prod/1772177162244-2026-02-27T07:26:02.244Z/sahayak-ai-backend.zip"
               },
               "Handler": "lambda/auth/forgotPassword.handler",
               "Runtime": "nodejs20.x",
@@ -554,7 +551,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/sahayak-ai-backend/prod/1772176383206-2026-02-27T07:13:03.206Z/sahayak-ai-backend.zip"
+                "S3Key": "serverless/sahayak-ai-backend/prod/1772177162244-2026-02-27T07:26:02.244Z/sahayak-ai-backend.zip"
               },
               "Handler": "lambda/auth/resetPassword.handler",
               "Runtime": "nodejs20.x",
@@ -597,7 +594,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/sahayak-ai-backend/prod/1772176383206-2026-02-27T07:13:03.206Z/sahayak-ai-backend.zip"
+                "S3Key": "serverless/sahayak-ai-backend/prod/1772177162244-2026-02-27T07:26:02.244Z/sahayak-ai-backend.zip"
               },
               "Handler": "lambda/uploadDocument.handler",
               "Runtime": "nodejs20.x",
@@ -640,7 +637,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/sahayak-ai-backend/prod/1772176383206-2026-02-27T07:13:03.206Z/sahayak-ai-backend.zip"
+                "S3Key": "serverless/sahayak-ai-backend/prod/1772177162244-2026-02-27T07:26:02.244Z/sahayak-ai-backend.zip"
               },
               "Handler": "lambda/processDocument.handler",
               "Runtime": "nodejs20.x",
@@ -683,7 +680,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/sahayak-ai-backend/prod/1772176383206-2026-02-27T07:13:03.206Z/sahayak-ai-backend.zip"
+                "S3Key": "serverless/sahayak-ai-backend/prod/1772177162244-2026-02-27T07:26:02.244Z/sahayak-ai-backend.zip"
               },
               "Handler": "lambda/analyzeDocument.handler",
               "Runtime": "nodejs20.x",
@@ -726,7 +723,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/sahayak-ai-backend/prod/1772176383206-2026-02-27T07:13:03.206Z/sahayak-ai-backend.zip"
+                "S3Key": "serverless/sahayak-ai-backend/prod/1772177162244-2026-02-27T07:26:02.244Z/sahayak-ai-backend.zip"
               },
               "Handler": "lambda/getDocument.handler",
               "Runtime": "nodejs20.x",
@@ -769,7 +766,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/sahayak-ai-backend/prod/1772176383206-2026-02-27T07:13:03.206Z/sahayak-ai-backend.zip"
+                "S3Key": "serverless/sahayak-ai-backend/prod/1772177162244-2026-02-27T07:26:02.244Z/sahayak-ai-backend.zip"
               },
               "Handler": "lambda/createUser.handler",
               "Runtime": "nodejs20.x",
@@ -812,7 +809,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/sahayak-ai-backend/prod/1772176383206-2026-02-27T07:13:03.206Z/sahayak-ai-backend.zip"
+                "S3Key": "serverless/sahayak-ai-backend/prod/1772177162244-2026-02-27T07:26:02.244Z/sahayak-ai-backend.zip"
               },
               "Handler": "lambda/addCompliance.handler",
               "Runtime": "nodejs20.x",
@@ -855,7 +852,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/sahayak-ai-backend/prod/1772176383206-2026-02-27T07:13:03.206Z/sahayak-ai-backend.zip"
+                "S3Key": "serverless/sahayak-ai-backend/prod/1772177162244-2026-02-27T07:26:02.244Z/sahayak-ai-backend.zip"
               },
               "Handler": "lambda/getUpcomingDeadlines.handler",
               "Runtime": "nodejs20.x",
@@ -898,7 +895,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/sahayak-ai-backend/prod/1772176383206-2026-02-27T07:13:03.206Z/sahayak-ai-backend.zip"
+                "S3Key": "serverless/sahayak-ai-backend/prod/1772177162244-2026-02-27T07:26:02.244Z/sahayak-ai-backend.zip"
               },
               "Handler": "lambda/sendReminders.handler",
               "Runtime": "nodejs20.x",
@@ -941,7 +938,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/sahayak-ai-backend/prod/1772176383206-2026-02-27T07:13:03.206Z/sahayak-ai-backend.zip"
+                "S3Key": "serverless/sahayak-ai-backend/prod/1772177162244-2026-02-27T07:26:02.244Z/sahayak-ai-backend.zip"
               },
               "Handler": "lambda/admin/getStats.handler",
               "Runtime": "nodejs20.x",
@@ -984,7 +981,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/sahayak-ai-backend/prod/1772176383206-2026-02-27T07:13:03.206Z/sahayak-ai-backend.zip"
+                "S3Key": "serverless/sahayak-ai-backend/prod/1772177162244-2026-02-27T07:26:02.244Z/sahayak-ai-backend.zip"
               },
               "Handler": "lambda/admin/getUsers.handler",
               "Runtime": "nodejs20.x",
@@ -1027,7 +1024,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/sahayak-ai-backend/prod/1772176383206-2026-02-27T07:13:03.206Z/sahayak-ai-backend.zip"
+                "S3Key": "serverless/sahayak-ai-backend/prod/1772177162244-2026-02-27T07:26:02.244Z/sahayak-ai-backend.zip"
               },
               "Handler": "lambda/admin/getDocuments.handler",
               "Runtime": "nodejs20.x",
@@ -1070,7 +1067,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/sahayak-ai-backend/prod/1772176383206-2026-02-27T07:13:03.206Z/sahayak-ai-backend.zip"
+                "S3Key": "serverless/sahayak-ai-backend/prod/1772177162244-2026-02-27T07:26:02.244Z/sahayak-ai-backend.zip"
               },
               "Handler": "lambda/admin/addForm.handler",
               "Runtime": "nodejs20.x",
@@ -1113,7 +1110,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/sahayak-ai-backend/prod/1772176383206-2026-02-27T07:13:03.206Z/sahayak-ai-backend.zip"
+                "S3Key": "serverless/sahayak-ai-backend/prod/1772177162244-2026-02-27T07:26:02.244Z/sahayak-ai-backend.zip"
               },
               "Handler": "lambda/admin/startTraining.handler",
               "Runtime": "nodejs20.x",
@@ -1149,184 +1146,184 @@
               "StartAdminTrainingLogGroup"
             ]
           },
-          "SendEmailLambdaVersion8vxaaRYrrAXzrPT9moyuez21glmMjGDOAqv7iMiwk": {
+          "SendEmailLambdaVersionQEf43kiQCiTTyepOx9GlpMqV5Y34IyTH3He06MOSXg": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "SendEmailLambdaFunction"
               },
-              "CodeSha256": "+6z3HKzKi3E3iDJ5OoM43G1CIoZnkjCYfBEALuTd7g0="
+              "CodeSha256": "ZeIY49TGOGnFROxr+yDP/bsOpfj+M4W3jyDCTx+CgkA="
             }
           },
-          "LoginLambdaVersion163gFNhsZZIa4yHwpLBkSJ5WnUnBYRx8rvEptGvWh4": {
+          "LoginLambdaVersionZGRCmk8oobwOG7qSe6Yi0siPbi46cm9CEBL68CZC0": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "LoginLambdaFunction"
               },
-              "CodeSha256": "+6z3HKzKi3E3iDJ5OoM43G1CIoZnkjCYfBEALuTd7g0="
+              "CodeSha256": "ZeIY49TGOGnFROxr+yDP/bsOpfj+M4W3jyDCTx+CgkA="
             }
           },
-          "RegisterLambdaVersionF0VIuZOHdhipflFmZQ35ik1slOtiKXwU7G5XGrN3fPk": {
+          "RegisterLambdaVersionBYrF8TYpa5OTnjkEuUSLgz8oNTb3KS9KuhXgmyvA": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "RegisterLambdaFunction"
               },
-              "CodeSha256": "+6z3HKzKi3E3iDJ5OoM43G1CIoZnkjCYfBEALuTd7g0="
+              "CodeSha256": "ZeIY49TGOGnFROxr+yDP/bsOpfj+M4W3jyDCTx+CgkA="
             }
           },
-          "ForgotPasswordLambdaVersion4Vb3fToF1JSwbssUeeUFEvK64ygpdB11me9siZ2coSg": {
+          "ForgotPasswordLambdaVersion1dceIc8D7p4NU969hLLuhP0vwjzDe2Un1Q6CjyfIjeo": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "ForgotPasswordLambdaFunction"
               },
-              "CodeSha256": "+6z3HKzKi3E3iDJ5OoM43G1CIoZnkjCYfBEALuTd7g0="
+              "CodeSha256": "ZeIY49TGOGnFROxr+yDP/bsOpfj+M4W3jyDCTx+CgkA="
             }
           },
-          "ResetPasswordLambdaVersionBDMi2wygyTGvWhaiALJYMv5AlMY4JOiYujWDNbYWRao": {
+          "ResetPasswordLambdaVersion9MGEuEo0su2acKBH1PTVai4Hq3VhdyNbcE80Zwk": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "ResetPasswordLambdaFunction"
               },
-              "CodeSha256": "+6z3HKzKi3E3iDJ5OoM43G1CIoZnkjCYfBEALuTd7g0="
+              "CodeSha256": "ZeIY49TGOGnFROxr+yDP/bsOpfj+M4W3jyDCTx+CgkA="
             }
           },
-          "UploadDocumentLambdaVersion65bVcjbu9WjujA1KE3ObnRgq77omv9QHyH6HAdEY9E": {
+          "UploadDocumentLambdaVersionRfu8wngtptNUxRNN0Fy8t16m3qIKEgUyKVTbCtUrIA": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "UploadDocumentLambdaFunction"
               },
-              "CodeSha256": "+6z3HKzKi3E3iDJ5OoM43G1CIoZnkjCYfBEALuTd7g0="
+              "CodeSha256": "ZeIY49TGOGnFROxr+yDP/bsOpfj+M4W3jyDCTx+CgkA="
             }
           },
-          "ProcessDocumentLambdaVersionMjJE73WgssX5osyElNtx45pW2EOuE9EHpfu6mqcck": {
+          "ProcessDocumentLambdaVersionKCXKoDWKQ69xoTitqyz8q27kQeS3xIWjjMr03hbeySw": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "ProcessDocumentLambdaFunction"
               },
-              "CodeSha256": "+6z3HKzKi3E3iDJ5OoM43G1CIoZnkjCYfBEALuTd7g0="
+              "CodeSha256": "ZeIY49TGOGnFROxr+yDP/bsOpfj+M4W3jyDCTx+CgkA="
             }
           },
-          "AnalyzeDocumentLambdaVersionGBOyXXVlitf1VBEHE2KElr7CqBLD25lKXWPMkhh0": {
+          "AnalyzeDocumentLambdaVersion3ThJx6SLmNzO7UmRBPXQurpzJG9XpiwtWcinsNNo": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "AnalyzeDocumentLambdaFunction"
               },
-              "CodeSha256": "+6z3HKzKi3E3iDJ5OoM43G1CIoZnkjCYfBEALuTd7g0="
+              "CodeSha256": "ZeIY49TGOGnFROxr+yDP/bsOpfj+M4W3jyDCTx+CgkA="
             }
           },
-          "GetDocumentLambdaVersion11vEbUvAvwLYyufTJatIk0AKZpeG6rGFo3bpzZKkF0": {
+          "GetDocumentLambdaVersionNPrff4Ny4y3tMYec79PDXieXYgqvUhOJdJ409gOQ": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetDocumentLambdaFunction"
               },
-              "CodeSha256": "+6z3HKzKi3E3iDJ5OoM43G1CIoZnkjCYfBEALuTd7g0="
+              "CodeSha256": "ZeIY49TGOGnFROxr+yDP/bsOpfj+M4W3jyDCTx+CgkA="
             }
           },
-          "CreateUserLambdaVersionbA7CDv38vnWHLmij4sz4SIIakGuAGTZ35cqz1T6I": {
+          "CreateUserLambdaVersionjEUMwNpJFWVOANPZz2N2QH4ZMtmyGI1AzLwocDeE5E": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "CreateUserLambdaFunction"
               },
-              "CodeSha256": "+6z3HKzKi3E3iDJ5OoM43G1CIoZnkjCYfBEALuTd7g0="
+              "CodeSha256": "ZeIY49TGOGnFROxr+yDP/bsOpfj+M4W3jyDCTx+CgkA="
             }
           },
-          "AddComplianceLambdaVersionrFvBJLjfxpcJU6aBKl7OnSkaZYaGjMstj1wMP3eekI": {
+          "AddComplianceLambdaVersion1iuPr0OfeKWM3rn2f5JVJLtUOi4LCvAu3vEKli42o4M": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "AddComplianceLambdaFunction"
               },
-              "CodeSha256": "+6z3HKzKi3E3iDJ5OoM43G1CIoZnkjCYfBEALuTd7g0="
+              "CodeSha256": "ZeIY49TGOGnFROxr+yDP/bsOpfj+M4W3jyDCTx+CgkA="
             }
           },
-          "GetUpcomingDeadlinesLambdaVersionDqwE3c1fmKsPbhHb0I2LRJIb30Ciyd0y9QGkEnPZKCs": {
+          "GetUpcomingDeadlinesLambdaVersionkf8h4kl03ORJ8T8kIdXFFU90cWOLNFx2vTTthOI8": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetUpcomingDeadlinesLambdaFunction"
               },
-              "CodeSha256": "+6z3HKzKi3E3iDJ5OoM43G1CIoZnkjCYfBEALuTd7g0="
+              "CodeSha256": "ZeIY49TGOGnFROxr+yDP/bsOpfj+M4W3jyDCTx+CgkA="
             }
           },
-          "SendRemindersLambdaVersionXycZzelMoyrskqfK7OxP8WmURqs7CqDbXvK9neeUW14": {
+          "SendRemindersLambdaVersion2DjemjEUQypq9JyV7aolHBSsrNpkYHbsYVriqW2n4Nw": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "SendRemindersLambdaFunction"
               },
-              "CodeSha256": "+6z3HKzKi3E3iDJ5OoM43G1CIoZnkjCYfBEALuTd7g0="
+              "CodeSha256": "ZeIY49TGOGnFROxr+yDP/bsOpfj+M4W3jyDCTx+CgkA="
             }
           },
-          "GetAdminStatsLambdaVersionXwsVNn2F9cO0FskWztZAb1gfK1yylvDd2sDrCdr6t0": {
+          "GetAdminStatsLambdaVersionwbTPxeIHgWGm3i1yT4GD08TzLL9VpuHS7kg8epY1ts": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetAdminStatsLambdaFunction"
               },
-              "CodeSha256": "+6z3HKzKi3E3iDJ5OoM43G1CIoZnkjCYfBEALuTd7g0="
+              "CodeSha256": "ZeIY49TGOGnFROxr+yDP/bsOpfj+M4W3jyDCTx+CgkA="
             }
           },
-          "GetAdminUsersLambdaVersionsLI6QzbFOZapYiAgYLwUN0zXDbtJ1NYfK8IRwLE": {
+          "GetAdminUsersLambdaVersionznZc9wBF3Gg3nitwJzHJXpdsHmkTK4cnf1Zzer0Jg6Q": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetAdminUsersLambdaFunction"
               },
-              "CodeSha256": "+6z3HKzKi3E3iDJ5OoM43G1CIoZnkjCYfBEALuTd7g0="
+              "CodeSha256": "ZeIY49TGOGnFROxr+yDP/bsOpfj+M4W3jyDCTx+CgkA="
             }
           },
-          "GetAdminDocumentsLambdaVersionQszwyUWZyRbmnXUsovOQ74DQC1ofcOmxLyYz7zCEkU": {
+          "GetAdminDocumentsLambdaVersionA6IsJolsg8PXNLyC27tke9j86B0103PLRUBGOpSu1cI": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetAdminDocumentsLambdaFunction"
               },
-              "CodeSha256": "+6z3HKzKi3E3iDJ5OoM43G1CIoZnkjCYfBEALuTd7g0="
+              "CodeSha256": "ZeIY49TGOGnFROxr+yDP/bsOpfj+M4W3jyDCTx+CgkA="
             }
           },
-          "AddAdminFormLambdaVersioncmg3XJaiqZsX2l293hezVxAZY8KK5wyUoJ5Naspnqo": {
+          "AddAdminFormLambdaVersionPC3p5izdUT7cfOgXAQ7JcLpzrHD6rFhPgnuNAqUM": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "AddAdminFormLambdaFunction"
               },
-              "CodeSha256": "+6z3HKzKi3E3iDJ5OoM43G1CIoZnkjCYfBEALuTd7g0="
+              "CodeSha256": "ZeIY49TGOGnFROxr+yDP/bsOpfj+M4W3jyDCTx+CgkA="
             }
           },
-          "StartAdminTrainingLambdaVersiondpsp6rIGDMNPMONFCg8fs2RzCfGxMyuKTSpWMr24rg": {
+          "StartAdminTrainingLambdaVersionwiUCyDgCPQKkCWTZojrBA6kBE7S6NfFIGDaZATgN8hQ": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "StartAdminTrainingLambdaFunction"
               },
-              "CodeSha256": "+6z3HKzKi3E3iDJ5OoM43G1CIoZnkjCYfBEALuTd7g0="
+              "CodeSha256": "ZeIY49TGOGnFROxr+yDP/bsOpfj+M4W3jyDCTx+CgkA="
             }
           },
           "SendRemindersEventsRuleSchedule1": {
@@ -1486,7 +1483,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/sahayak-ai-backend/prod/1772176383206-2026-02-27T07:13:03.206Z/custom-resources.zip"
+                "S3Key": "serverless/sahayak-ai-backend/prod/1772177162244-2026-02-27T07:26:02.244Z/custom-resources.zip"
               },
               "FunctionName": "sahayak-ai-backend-prod-custom-resource-existing-s3",
               "Handler": "s3/handler.handler",
@@ -3230,7 +3227,7 @@
               "StartAdminTrainingLambdaPermissionApiGateway"
             ]
           },
-          "ApiGatewayDeployment1772176377937": {
+          "ApiGatewayDeployment1772177157165": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -4134,7 +4131,7 @@
           "SendEmailLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "SendEmailLambdaVersion8vxaaRYrrAXzrPT9moyuez21glmMjGDOAqv7iMiwk"
+              "Ref": "SendEmailLambdaVersionQEf43kiQCiTTyepOx9GlpMqV5Y34IyTH3He06MOSXg"
             },
             "Export": {
               "Name": "sls-sahayak-ai-backend-prod-SendEmailLambdaFunctionQualifiedArn"
@@ -4143,7 +4140,7 @@
           "LoginLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "LoginLambdaVersion163gFNhsZZIa4yHwpLBkSJ5WnUnBYRx8rvEptGvWh4"
+              "Ref": "LoginLambdaVersionZGRCmk8oobwOG7qSe6Yi0siPbi46cm9CEBL68CZC0"
             },
             "Export": {
               "Name": "sls-sahayak-ai-backend-prod-LoginLambdaFunctionQualifiedArn"
@@ -4152,7 +4149,7 @@
           "RegisterLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "RegisterLambdaVersionF0VIuZOHdhipflFmZQ35ik1slOtiKXwU7G5XGrN3fPk"
+              "Ref": "RegisterLambdaVersionBYrF8TYpa5OTnjkEuUSLgz8oNTb3KS9KuhXgmyvA"
             },
             "Export": {
               "Name": "sls-sahayak-ai-backend-prod-RegisterLambdaFunctionQualifiedArn"
@@ -4161,7 +4158,7 @@
           "ForgotPasswordLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "ForgotPasswordLambdaVersion4Vb3fToF1JSwbssUeeUFEvK64ygpdB11me9siZ2coSg"
+              "Ref": "ForgotPasswordLambdaVersion1dceIc8D7p4NU969hLLuhP0vwjzDe2Un1Q6CjyfIjeo"
             },
             "Export": {
               "Name": "sls-sahayak-ai-backend-prod-ForgotPasswordLambdaFunctionQualifiedArn"
@@ -4170,7 +4167,7 @@
           "ResetPasswordLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "ResetPasswordLambdaVersionBDMi2wygyTGvWhaiALJYMv5AlMY4JOiYujWDNbYWRao"
+              "Ref": "ResetPasswordLambdaVersion9MGEuEo0su2acKBH1PTVai4Hq3VhdyNbcE80Zwk"
             },
             "Export": {
               "Name": "sls-sahayak-ai-backend-prod-ResetPasswordLambdaFunctionQualifiedArn"
@@ -4179,7 +4176,7 @@
           "UploadDocumentLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "UploadDocumentLambdaVersion65bVcjbu9WjujA1KE3ObnRgq77omv9QHyH6HAdEY9E"
+              "Ref": "UploadDocumentLambdaVersionRfu8wngtptNUxRNN0Fy8t16m3qIKEgUyKVTbCtUrIA"
             },
             "Export": {
               "Name": "sls-sahayak-ai-backend-prod-UploadDocumentLambdaFunctionQualifiedArn"
@@ -4188,7 +4185,7 @@
           "ProcessDocumentLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "ProcessDocumentLambdaVersionMjJE73WgssX5osyElNtx45pW2EOuE9EHpfu6mqcck"
+              "Ref": "ProcessDocumentLambdaVersionKCXKoDWKQ69xoTitqyz8q27kQeS3xIWjjMr03hbeySw"
             },
             "Export": {
               "Name": "sls-sahayak-ai-backend-prod-ProcessDocumentLambdaFunctionQualifiedArn"
@@ -4197,7 +4194,7 @@
           "AnalyzeDocumentLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "AnalyzeDocumentLambdaVersionGBOyXXVlitf1VBEHE2KElr7CqBLD25lKXWPMkhh0"
+              "Ref": "AnalyzeDocumentLambdaVersion3ThJx6SLmNzO7UmRBPXQurpzJG9XpiwtWcinsNNo"
             },
             "Export": {
               "Name": "sls-sahayak-ai-backend-prod-AnalyzeDocumentLambdaFunctionQualifiedArn"
@@ -4206,7 +4203,7 @@
           "GetDocumentLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetDocumentLambdaVersion11vEbUvAvwLYyufTJatIk0AKZpeG6rGFo3bpzZKkF0"
+              "Ref": "GetDocumentLambdaVersionNPrff4Ny4y3tMYec79PDXieXYgqvUhOJdJ409gOQ"
             },
             "Export": {
               "Name": "sls-sahayak-ai-backend-prod-GetDocumentLambdaFunctionQualifiedArn"
@@ -4215,7 +4212,7 @@
           "CreateUserLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "CreateUserLambdaVersionbA7CDv38vnWHLmij4sz4SIIakGuAGTZ35cqz1T6I"
+              "Ref": "CreateUserLambdaVersionjEUMwNpJFWVOANPZz2N2QH4ZMtmyGI1AzLwocDeE5E"
             },
             "Export": {
               "Name": "sls-sahayak-ai-backend-prod-CreateUserLambdaFunctionQualifiedArn"
@@ -4224,7 +4221,7 @@
           "AddComplianceLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "AddComplianceLambdaVersionrFvBJLjfxpcJU6aBKl7OnSkaZYaGjMstj1wMP3eekI"
+              "Ref": "AddComplianceLambdaVersion1iuPr0OfeKWM3rn2f5JVJLtUOi4LCvAu3vEKli42o4M"
             },
             "Export": {
               "Name": "sls-sahayak-ai-backend-prod-AddComplianceLambdaFunctionQualifiedArn"
@@ -4233,7 +4230,7 @@
           "GetUpcomingDeadlinesLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetUpcomingDeadlinesLambdaVersionDqwE3c1fmKsPbhHb0I2LRJIb30Ciyd0y9QGkEnPZKCs"
+              "Ref": "GetUpcomingDeadlinesLambdaVersionkf8h4kl03ORJ8T8kIdXFFU90cWOLNFx2vTTthOI8"
             },
             "Export": {
               "Name": "sls-sahayak-ai-backend-prod-GetUpcomingDeadlinesLambdaFunctionQualifiedArn"
@@ -4242,7 +4239,7 @@
           "SendRemindersLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "SendRemindersLambdaVersionXycZzelMoyrskqfK7OxP8WmURqs7CqDbXvK9neeUW14"
+              "Ref": "SendRemindersLambdaVersion2DjemjEUQypq9JyV7aolHBSsrNpkYHbsYVriqW2n4Nw"
             },
             "Export": {
               "Name": "sls-sahayak-ai-backend-prod-SendRemindersLambdaFunctionQualifiedArn"
@@ -4251,7 +4248,7 @@
           "GetAdminStatsLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetAdminStatsLambdaVersionXwsVNn2F9cO0FskWztZAb1gfK1yylvDd2sDrCdr6t0"
+              "Ref": "GetAdminStatsLambdaVersionwbTPxeIHgWGm3i1yT4GD08TzLL9VpuHS7kg8epY1ts"
             },
             "Export": {
               "Name": "sls-sahayak-ai-backend-prod-GetAdminStatsLambdaFunctionQualifiedArn"
@@ -4260,7 +4257,7 @@
           "GetAdminUsersLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetAdminUsersLambdaVersionsLI6QzbFOZapYiAgYLwUN0zXDbtJ1NYfK8IRwLE"
+              "Ref": "GetAdminUsersLambdaVersionznZc9wBF3Gg3nitwJzHJXpdsHmkTK4cnf1Zzer0Jg6Q"
             },
             "Export": {
               "Name": "sls-sahayak-ai-backend-prod-GetAdminUsersLambdaFunctionQualifiedArn"
@@ -4269,7 +4266,7 @@
           "GetAdminDocumentsLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetAdminDocumentsLambdaVersionQszwyUWZyRbmnXUsovOQ74DQC1ofcOmxLyYz7zCEkU"
+              "Ref": "GetAdminDocumentsLambdaVersionA6IsJolsg8PXNLyC27tke9j86B0103PLRUBGOpSu1cI"
             },
             "Export": {
               "Name": "sls-sahayak-ai-backend-prod-GetAdminDocumentsLambdaFunctionQualifiedArn"
@@ -4278,7 +4275,7 @@
           "AddAdminFormLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "AddAdminFormLambdaVersioncmg3XJaiqZsX2l293hezVxAZY8KK5wyUoJ5Naspnqo"
+              "Ref": "AddAdminFormLambdaVersionPC3p5izdUT7cfOgXAQ7JcLpzrHD6rFhPgnuNAqUM"
             },
             "Export": {
               "Name": "sls-sahayak-ai-backend-prod-AddAdminFormLambdaFunctionQualifiedArn"
@@ -4287,7 +4284,7 @@
           "StartAdminTrainingLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "StartAdminTrainingLambdaVersiondpsp6rIGDMNPMONFCg8fs2RzCfGxMyuKTSpWMr24rg"
+              "Ref": "StartAdminTrainingLambdaVersionwiUCyDgCPQKkCWTZojrBA6kBE7S6NfFIGDaZATgN8hQ"
             },
             "Export": {
               "Name": "sls-sahayak-ai-backend-prod-StartAdminTrainingLambdaFunctionQualifiedArn"
@@ -4452,7 +4449,7 @@
         "timeout": 30,
         "runtime": "nodejs20.x",
         "vpc": {},
-        "versionLogicalId": "SendEmailLambdaVersion8vxaaRYrrAXzrPT9moyuez21glmMjGDOAqv7iMiwk"
+        "versionLogicalId": "SendEmailLambdaVersionQEf43kiQCiTTyepOx9GlpMqV5Y34IyTH3He06MOSXg"
       },
       "login": {
         "handler": "lambda/auth/login.handler",
@@ -4488,7 +4485,7 @@
         "timeout": 30,
         "runtime": "nodejs20.x",
         "vpc": {},
-        "versionLogicalId": "LoginLambdaVersion163gFNhsZZIa4yHwpLBkSJ5WnUnBYRx8rvEptGvWh4"
+        "versionLogicalId": "LoginLambdaVersionZGRCmk8oobwOG7qSe6Yi0siPbi46cm9CEBL68CZC0"
       },
       "register": {
         "handler": "lambda/auth/register.handler",
@@ -4524,7 +4521,7 @@
         "timeout": 30,
         "runtime": "nodejs20.x",
         "vpc": {},
-        "versionLogicalId": "RegisterLambdaVersionF0VIuZOHdhipflFmZQ35ik1slOtiKXwU7G5XGrN3fPk"
+        "versionLogicalId": "RegisterLambdaVersionBYrF8TYpa5OTnjkEuUSLgz8oNTb3KS9KuhXgmyvA"
       },
       "forgotPassword": {
         "handler": "lambda/auth/forgotPassword.handler",
@@ -4560,7 +4557,7 @@
         "timeout": 30,
         "runtime": "nodejs20.x",
         "vpc": {},
-        "versionLogicalId": "ForgotPasswordLambdaVersion4Vb3fToF1JSwbssUeeUFEvK64ygpdB11me9siZ2coSg"
+        "versionLogicalId": "ForgotPasswordLambdaVersion1dceIc8D7p4NU969hLLuhP0vwjzDe2Un1Q6CjyfIjeo"
       },
       "resetPassword": {
         "handler": "lambda/auth/resetPassword.handler",
@@ -4596,7 +4593,7 @@
         "timeout": 30,
         "runtime": "nodejs20.x",
         "vpc": {},
-        "versionLogicalId": "ResetPasswordLambdaVersionBDMi2wygyTGvWhaiALJYMv5AlMY4JOiYujWDNbYWRao"
+        "versionLogicalId": "ResetPasswordLambdaVersion9MGEuEo0su2acKBH1PTVai4Hq3VhdyNbcE80Zwk"
       },
       "uploadDocument": {
         "handler": "lambda/uploadDocument.handler",
@@ -4632,7 +4629,7 @@
         "timeout": 30,
         "runtime": "nodejs20.x",
         "vpc": {},
-        "versionLogicalId": "UploadDocumentLambdaVersion65bVcjbu9WjujA1KE3ObnRgq77omv9QHyH6HAdEY9E"
+        "versionLogicalId": "UploadDocumentLambdaVersionRfu8wngtptNUxRNN0Fy8t16m3qIKEgUyKVTbCtUrIA"
       },
       "processDocument": {
         "handler": "lambda/processDocument.handler",
@@ -4651,7 +4648,7 @@
         "memory": 512,
         "runtime": "nodejs20.x",
         "vpc": {},
-        "versionLogicalId": "ProcessDocumentLambdaVersionMjJE73WgssX5osyElNtx45pW2EOuE9EHpfu6mqcck"
+        "versionLogicalId": "ProcessDocumentLambdaVersionKCXKoDWKQ69xoTitqyz8q27kQeS3xIWjjMr03hbeySw"
       },
       "analyzeDocument": {
         "handler": "lambda/analyzeDocument.handler",
@@ -4687,7 +4684,7 @@
         "memory": 512,
         "runtime": "nodejs20.x",
         "vpc": {},
-        "versionLogicalId": "AnalyzeDocumentLambdaVersionGBOyXXVlitf1VBEHE2KElr7CqBLD25lKXWPMkhh0"
+        "versionLogicalId": "AnalyzeDocumentLambdaVersion3ThJx6SLmNzO7UmRBPXQurpzJG9XpiwtWcinsNNo"
       },
       "getDocument": {
         "handler": "lambda/getDocument.handler",
@@ -4723,7 +4720,7 @@
         "timeout": 30,
         "runtime": "nodejs20.x",
         "vpc": {},
-        "versionLogicalId": "GetDocumentLambdaVersion11vEbUvAvwLYyufTJatIk0AKZpeG6rGFo3bpzZKkF0"
+        "versionLogicalId": "GetDocumentLambdaVersionNPrff4Ny4y3tMYec79PDXieXYgqvUhOJdJ409gOQ"
       },
       "createUser": {
         "handler": "lambda/createUser.handler",
@@ -4759,7 +4756,7 @@
         "timeout": 30,
         "runtime": "nodejs20.x",
         "vpc": {},
-        "versionLogicalId": "CreateUserLambdaVersionbA7CDv38vnWHLmij4sz4SIIakGuAGTZ35cqz1T6I"
+        "versionLogicalId": "CreateUserLambdaVersionjEUMwNpJFWVOANPZz2N2QH4ZMtmyGI1AzLwocDeE5E"
       },
       "addCompliance": {
         "handler": "lambda/addCompliance.handler",
@@ -4795,7 +4792,7 @@
         "timeout": 30,
         "runtime": "nodejs20.x",
         "vpc": {},
-        "versionLogicalId": "AddComplianceLambdaVersionrFvBJLjfxpcJU6aBKl7OnSkaZYaGjMstj1wMP3eekI"
+        "versionLogicalId": "AddComplianceLambdaVersion1iuPr0OfeKWM3rn2f5JVJLtUOi4LCvAu3vEKli42o4M"
       },
       "getUpcomingDeadlines": {
         "handler": "lambda/getUpcomingDeadlines.handler",
@@ -4831,7 +4828,7 @@
         "timeout": 30,
         "runtime": "nodejs20.x",
         "vpc": {},
-        "versionLogicalId": "GetUpcomingDeadlinesLambdaVersionDqwE3c1fmKsPbhHb0I2LRJIb30Ciyd0y9QGkEnPZKCs"
+        "versionLogicalId": "GetUpcomingDeadlinesLambdaVersionkf8h4kl03ORJ8T8kIdXFFU90cWOLNFx2vTTthOI8"
       },
       "sendReminders": {
         "handler": "lambda/sendReminders.handler",
@@ -4851,7 +4848,7 @@
         "timeout": 30,
         "runtime": "nodejs20.x",
         "vpc": {},
-        "versionLogicalId": "SendRemindersLambdaVersionXycZzelMoyrskqfK7OxP8WmURqs7CqDbXvK9neeUW14"
+        "versionLogicalId": "SendRemindersLambdaVersion2DjemjEUQypq9JyV7aolHBSsrNpkYHbsYVriqW2n4Nw"
       },
       "getAdminStats": {
         "handler": "lambda/admin/getStats.handler",
@@ -4887,7 +4884,7 @@
         "timeout": 30,
         "runtime": "nodejs20.x",
         "vpc": {},
-        "versionLogicalId": "GetAdminStatsLambdaVersionXwsVNn2F9cO0FskWztZAb1gfK1yylvDd2sDrCdr6t0"
+        "versionLogicalId": "GetAdminStatsLambdaVersionwbTPxeIHgWGm3i1yT4GD08TzLL9VpuHS7kg8epY1ts"
       },
       "getAdminUsers": {
         "handler": "lambda/admin/getUsers.handler",
@@ -4923,7 +4920,7 @@
         "timeout": 30,
         "runtime": "nodejs20.x",
         "vpc": {},
-        "versionLogicalId": "GetAdminUsersLambdaVersionsLI6QzbFOZapYiAgYLwUN0zXDbtJ1NYfK8IRwLE"
+        "versionLogicalId": "GetAdminUsersLambdaVersionznZc9wBF3Gg3nitwJzHJXpdsHmkTK4cnf1Zzer0Jg6Q"
       },
       "getAdminDocuments": {
         "handler": "lambda/admin/getDocuments.handler",
@@ -4959,7 +4956,7 @@
         "timeout": 30,
         "runtime": "nodejs20.x",
         "vpc": {},
-        "versionLogicalId": "GetAdminDocumentsLambdaVersionQszwyUWZyRbmnXUsovOQ74DQC1ofcOmxLyYz7zCEkU"
+        "versionLogicalId": "GetAdminDocumentsLambdaVersionA6IsJolsg8PXNLyC27tke9j86B0103PLRUBGOpSu1cI"
       },
       "addAdminForm": {
         "handler": "lambda/admin/addForm.handler",
@@ -4995,7 +4992,7 @@
         "timeout": 30,
         "runtime": "nodejs20.x",
         "vpc": {},
-        "versionLogicalId": "AddAdminFormLambdaVersioncmg3XJaiqZsX2l293hezVxAZY8KK5wyUoJ5Naspnqo"
+        "versionLogicalId": "AddAdminFormLambdaVersionPC3p5izdUT7cfOgXAQ7JcLpzrHD6rFhPgnuNAqUM"
       },
       "startAdminTraining": {
         "handler": "lambda/admin/startTraining.handler",
@@ -5031,7 +5028,7 @@
         "timeout": 30,
         "runtime": "nodejs20.x",
         "vpc": {},
-        "versionLogicalId": "StartAdminTrainingLambdaVersiondpsp6rIGDMNPMONFCg8fs2RzCfGxMyuKTSpWMr24rg"
+        "versionLogicalId": "StartAdminTrainingLambdaVersionwiUCyDgCPQKkCWTZojrBA6kBE7S6NfFIGDaZATgN8hQ"
       }
     },
     "resources": {
@@ -5317,7 +5314,7 @@
     "artifact": "/Users/devacc/Sahayak AI/backend/.serverless/sahayak-ai-backend.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/sahayak-ai-backend/prod/1772176383206-2026-02-27T07:13:03.206Z",
+    "artifactDirectoryName": "serverless/sahayak-ai-backend/prod/1772177162244-2026-02-27T07:26:02.244Z",
     "artifact": "sahayak-ai-backend.zip"
   }
 }
