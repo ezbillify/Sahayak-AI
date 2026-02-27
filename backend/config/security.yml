@@ -1,0 +1,139 @@
+# AWS WAF Configuration for API Gateway
+waf:
+  rules:
+    - name: RateLimitRule
+      priority: 1
+      action: BLOCK
+      statement:
+        rateBasedStatement:
+          limit: 2000
+          aggregateKeyType: IP
+    
+    - name: SQLInjectionRule
+      priority: 2
+      action: BLOCK
+      statement:
+        sqliMatchStatement:
+          fieldToMatch:
+            body: {}
+          textTransformations:
+            - priority: 0
+              type: URL_DECODE
+    
+    - name: XSSRule
+      priority: 3
+      action: BLOCK
+      statement:
+        xssMatchStatement:
+          fieldToMatch:
+            body: {}
+          textTransformations:
+            - priority: 0
+              type: URL_DECODE
+    
+    - name: GeoBlockingRule
+      priority: 4
+      action: BLOCK
+      statement:
+        notStatement:
+          statement:
+            geoMatchStatement:
+              countryCodes:
+                - IN  # Only allow India
+
+# KMS Encryption Keys
+kms:
+  documentEncryption:
+    description: "Encryption key for user documents"
+    keyPolicy:
+      - Effect: Allow
+        Principal:
+          Service: s3.amazonaws.com
+        Action:
+          - kms:Decrypt
+          - kms:GenerateDataKey
+  
+  databaseEncryption:
+    description: "Encryption key for DynamoDB"
+    keyPolicy:
+      - Effect: Allow
+        Principal:
+          Service: dynamodb.amazonaws.com
+        Action:
+          - kms:Decrypt
+          - kms:DescribeKey
+
+# IAM Policies
+iam:
+  lambdaExecutionRole:
+    policies:
+      - PolicyName: S3Access
+        Statement:
+          - Effect: Allow
+            Action:
+              - s3:GetObject
+              - s3:PutObject
+            Resource: "arn:aws:s3:::sahayak-ai-documents-*/*"
+      
+      - PolicyName: DynamoDBAccess
+        Statement:
+          - Effect: Allow
+            Action:
+              - dynamodb:GetItem
+              - dynamodb:PutItem
+              - dynamodb:UpdateItem
+              - dynamodb:Query
+            Resource: "arn:aws:dynamodb:*:*:table/sahayak-ai-*"
+      
+      - PolicyName: TextractAccess
+        Statement:
+          - Effect: Allow
+            Action:
+              - textract:DetectDocumentText
+              - textract:AnalyzeDocument
+            Resource: "*"
+      
+      - PolicyName: BedrockAccess
+        Statement:
+          - Effect: Allow
+            Action:
+              - bedrock:InvokeModel
+            Resource: "*"
+
+# CloudWatch Alarms
+monitoring:
+  alarms:
+    - name: HighErrorRate
+      metric: Errors
+      threshold: 10
+      period: 300
+      evaluationPeriods: 2
+      action: SNS_ALERT
+    
+    - name: HighLatency
+      metric: Duration
+      threshold: 5000
+      period: 300
+      evaluationPeriods: 2
+      action: SNS_ALERT
+    
+    - name: ThrottledRequests
+      metric: Throttles
+      threshold: 5
+      period: 60
+      evaluationPeriods: 1
+      action: SNS_ALERT
+
+# Data Retention Policies
+dataRetention:
+  documents:
+    activeStorage: 365  # days in S3 Standard
+    archiveStorage: 2555  # days in Glacier (7 years total)
+    deletion: 2920  # days (8 years - after 7 year retention + 1 year grace)
+  
+  logs:
+    cloudwatch: 90  # days
+    s3AccessLogs: 365  # days
+  
+  userData:
+    deletionGracePeriod: 30  # days after account deletion request
