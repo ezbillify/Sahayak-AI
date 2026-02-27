@@ -7,6 +7,7 @@ import Register from './pages/Register'
 import Dashboard from './pages/Dashboard'
 import UploadDocument from './pages/UploadDocument'
 import Compliance from './pages/Compliance'
+import Admin from './pages/Admin'
 
 function App() {
   return (
@@ -29,6 +30,11 @@ function App() {
           <Route path="compliance" element={
             <ProtectedRoute>
               <Compliance />
+            </ProtectedRoute>
+          } />
+          <Route path="admin" element={
+            <ProtectedRoute>
+              <Admin />
             </ProtectedRoute>
           } />
         </Route>
