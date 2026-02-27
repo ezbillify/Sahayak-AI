@@ -18,8 +18,16 @@ export default function Register() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    // Simulate registration
+    // Store dummy token for authentication
+    localStorage.setItem('userToken', 'dummy-token-' + Date.now())
+    localStorage.setItem('userData', JSON.stringify({ 
+      email: formData.email, 
+      name: formData.name,
+      userType: formData.userType,
+      language: formData.language
+    }))
     navigate('/dashboard')
+    window.location.reload() // Reload to update header
   }
 
   return (

@@ -95,3 +95,38 @@ npm run android  # or npm run ios
 ## Still Having Issues?
 
 Check the main README.md for detailed setup instructions or see CAMERA_SETUP.md for camera-specific setup.
+
+
+## Font Setup (Outfit)
+
+### Install Outfit Font
+
+**For Android:**
+1. Create folder: `mobile/android/app/src/main/assets/fonts/`
+2. Download Outfit font files (.ttf) from [Google Fonts](https://fonts.google.com/specimen/Outfit)
+3. Copy font files to the fonts folder:
+   - Outfit-Regular.ttf
+   - Outfit-Medium.ttf
+   - Outfit-SemiBold.ttf
+   - Outfit-Bold.ttf
+
+**For iOS:**
+1. Create folder: `mobile/ios/Fonts/`
+2. Copy the same font files to this folder
+3. Add fonts to `Info.plist`:
+```xml
+<key>UIAppFonts</key>
+<array>
+  <string>Outfit-Regular.ttf</string>
+  <string>Outfit-Medium.ttf</string>
+  <string>Outfit-SemiBold.ttf</string>
+  <string>Outfit-Bold.ttf</string>
+</array>
+```
+
+**Or use automated linking:**
+```bash
+npx react-native-asset
+```
+
+After adding fonts, rebuild the app completely.

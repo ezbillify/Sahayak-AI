@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import Input from '../components/Input'
+import Button from '../components/Button'
 
 export default function Login() {
   const [email, setEmail] = useState('')
@@ -8,8 +10,11 @@ export default function Login() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    // Simulate login
+    // Store dummy token for authentication
+    localStorage.setItem('userToken', 'dummy-token-' + Date.now())
+    localStorage.setItem('userData', JSON.stringify({ email, name: 'User' }))
     navigate('/dashboard')
+    window.location.reload() // Reload to update header
   }
 
   return (
@@ -17,43 +22,33 @@ export default function Login() {
       <div className="card max-w-md w-full">
         <h2 className="text-3xl font-bold text-center mb-8">Login to Sahayak AI</h2>
         
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Email
-            </label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="input"
-              placeholder="your@email.com"
-              required
-            />
-          </div>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <Input
+            label="Email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="your@email.com"
+            required
+          />
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Password
-            </label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="input"
-              placeholder="••••••••"
-              required
-            />
-          </div>
+          <Input
+            label="Password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="••••••••"
+            required
+          />
 
-          <button type="submit" className="btn btn-primary w-full">
+          <Button type="submit" fullWidth>
             Login
-          </button>
+          </Button>
         </form>
 
         <p className="text-center mt-6 text-gray-600">
           Don't have an account?{' '}
-          <Link to="/register" className="text-primary font-semibold hover:underline">
+          <Link to="/register" className="text-blue-600 font-semibold hover:underline">
             Register
           </Link>
         </p>

@@ -2,7 +2,15 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Text, TextInput } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+
+// Set default font family for all Text components
+if (Text.defaultProps == null) Text.defaultProps = {};
+Text.defaultProps.style = { fontFamily: 'Outfit' };
+
+if (TextInput.defaultProps == null) TextInput.defaultProps = {};
+TextInput.defaultProps.style = { fontFamily: 'Outfit' };
 
 // Screens
 import HomeScreen from './src/screens/HomeScreen';
@@ -31,6 +39,8 @@ function MainTabs() {
         },
         tabBarActiveTintColor: '#2563eb',
         tabBarInactiveTintColor: 'gray',
+        tabBarLabelStyle: { fontFamily: 'Outfit' },
+        headerTitleStyle: { fontFamily: 'Outfit' },
       })}
     >
       <Tab.Screen name="Dashboard" component={DashboardScreen} />
@@ -43,7 +53,12 @@ function MainTabs() {
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
+      <Stack.Navigator 
+        initialRouteName="Home"
+        screenOptions={{
+          headerTitleStyle: { fontFamily: 'Outfit' },
+        }}
+      >
         <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Register" component={RegisterScreen} />
