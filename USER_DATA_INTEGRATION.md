@@ -5,7 +5,7 @@ Removed all hardcoded dummy data from user-facing pages (Dashboard and Complianc
 
 ## Changes Made
 
-### Backend (3 New Lambda Functions)
+### Backend (3 New Lambda Functions + 1 Updated)
 
 1. **getUserDocuments.js** - `/documents/user?userId={userId}` (GET)
    - Fetches all documents uploaded by a specific user
@@ -22,14 +22,23 @@ Removed all hardcoded dummy data from user-facing pages (Dashboard and Complianc
    - Records completion timestamp
    - Used for "Mark Complete" functionality
 
+4. **login.js** (UPDATED)
+   - Now returns `userId` (Cognito sub) in user object
+   - This is the actual Cognito user ID used for all database queries
+   - Frontend stores this separately in localStorage for easy access
+
 ### Frontend Updates
+
+#### Login Page (`frontend/src/pages/Login.tsx`)
+- Now stores `userId` separately in localStorage (from Cognito sub)
+- This userId is used by all other pages for API calls
 
 #### Dashboard Page (`frontend/src/pages/Dashboard.tsx`)
 **Before:** Hardcoded 3 deadlines and 2 documents
 
 **After:**
-- Fetches real user documents from `/documents/user` API
-- Fetches real compliance items from `/compliance/user` API
+- Fetches real user documents from `/documents/user` API using userId
+- Fetches real compliance items from `/compliance/user` API using userId
 - Shows only pending compliance items as deadlines
 - Displays top 5 most recent documents
 - Shows loading state while fetching data
@@ -40,7 +49,7 @@ Removed all hardcoded dummy data from user-facing pages (Dashboard and Complianc
 **Before:** Hardcoded 3 compliance items, non-functional add/complete buttons
 
 **After:**
-- Fetches real compliance items from `/compliance/user` API
+- Fetches real compliance items from `/compliance/user` API using userId
 - Fully functional "Add Compliance" modal with form validation
 - Working "Mark Complete" button that updates status in database
 - Shows loading state while fetching data
@@ -48,6 +57,11 @@ Removed all hardcoded dummy data from user-facing pages (Dashboard and Complianc
 - Calendar view shows only pending items
 - Shows empty state when no compliance items exist
 - Form data properly bound to state with controlled inputs
+
+#### Upload Document Page (`frontend/src/pages/UploadDocument.tsx`)
+- Updated to use userId from localStorage (instead of email)
+- Validates user is logged in before allowing upload
+- Properly associates uploaded documents with user's Cognito ID
 
 ### API Endpoints Added to serverless.yml
 
@@ -91,10 +105,21 @@ getUserDocuments:
 
 ## User Flow
 
+### Login
+1. User logs in with email/password
+2. Backend returns Cognito tokens + user data including userId (Cognito sub)
+3. Frontend stores:
+   - `userToken` (access token)
+   - `idToken` (ID token)
+   - `refreshToken` (refresh token)
+   - `userData` (full user object)
+   - `userId` (Cognito sub - stored separately for easy access)
+
 ### Dashboard
-1. User logs in → userId stored in localStorage
-2. Dashboard fetches user's documents and compliance items
-3. Shows real-time data:
+1. User navigates to dashboard
+2. Dashboard reads userId from localStorage
+3. Fetches user's documents and compliance items using userId
+4. Shows real-time data:
    - Upcoming deadlines count
    - Documents processed count
    - Pending actions (deadlines within 7 days)
@@ -187,11 +212,14 @@ getUserDocuments:
 - `backend/lambda/getUserDocuments.js` (new)
 - `backend/lambda/getUserCompliance.js` (new)
 - `backend/lambda/updateCompliance.js` (new)
+- `backend/lambda/auth/login.js` (updated - now returns userId)
 - `backend/serverless.yml` (updated)
 
 ### Frontend
 - `frontend/src/pages/Dashboard.tsx` (updated)
 - `frontend/src/pages/Compliance.tsx` (updated)
+- `frontend/src/pages/Login.tsx` (updated - stores userId)
+- `frontend/src/pages/UploadDocument.tsx` (updated - uses userId)
 
 ### Documentation
 - `USER_DATA_INTEGRATION.md` (new)
